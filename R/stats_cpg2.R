@@ -76,7 +76,7 @@ stats_cpg2 <- function(X, varselect = 2) {
   perc.complete <- no.complete / rows * 100L
 
   # Number and percentage of incomplete individuals
-  cat("Calculating missing values per individual ...", "\n")
+  cat("Calculating missing values per individual ...\n")
   no.incomplete <- X[[varselect]] %>% as_tibble(X[[varselect]])%>%
     summarise_all(funs(sum(is.na(.))))
 
@@ -103,14 +103,14 @@ stats_cpg2 <- function(X, varselect = 2) {
   ###
 
   # Missingness per variable
-  cat("Calculating missing values per variable ...", "\n")
+  cat("Calculating missing values per variable ...\n")
   missfrac_per_X <- sum(is.na(X[[varselect]]))/(nrow(X[[varselect]]) * ncol(X[[varselect]]))
   missfrac_per_var <- colMeans(is.na(X[[varselect]]))
   na_per_X <- sum(is.na(X[[varselect]]))
   na_per_var <- sapply(X[[varselect]], function(x) sum(length(which(is.na(x)))))
 
   # Missing data pattern
-  cat("Computing missing data pattern per variable ...", "\n")
+  cat("Computing missing data pattern per variable ...\n")
   mdpat <- mice::md.pattern(X[[varselect]], plot = FALSE)     # this funciton returns
   # a matrix with \code{ncol(x)+1} columns, in which each row corresponds
   # to a missing data pattern (1=observed, 0=missing).
@@ -129,14 +129,14 @@ stats_cpg2 <- function(X, varselect = 2) {
   mdpat_count <- as.matrix(mdpat_count)
 
   # Linear Pearson correlation calculation (between the obeserved values)
-  cat("Computing the linear correlation matrix ...", "\n")
+  cat("Computing the linear correlation matrix ...\n")
   cormat.lin<- matrix(nrow = cols, ncol = cols)   # I put rows because from function stat_cpg cpg are the rows
   colnames(cormat.lin) <- colnames(Y)
   rownames(cormat.lin) <- colnames(Y)
 
   cormat.lin <- stats::cor(Y, use = "pairwise.complete.obs", method = "pearson")
 
-  cat("Converting results ...", "\n")
+  cat("Converting results ...\n")
   long_cormat.lin <- cbind(expand.grid(dimnames(cormat.lin)), value = as.vector(cormat.lin))
 
 

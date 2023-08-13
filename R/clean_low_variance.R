@@ -50,7 +50,7 @@ clean_low_variance <- function(X, sd_quantile=0.05, max_na = 0.25, varselect=2) 
   #dim(l)[1]
 
   if(dim(l)[1] !=0) {
-    cat(paste(dim(l), " rows have been removed with zero variance."), "\n")
+    cat(paste(dim(l)[1], " rows have been removed with zero variance.\n"))
   }
 
   qa = quantile(unique(row_sd), sd_quantile, na.rm = TRUE)
@@ -58,7 +58,7 @@ clean_low_variance <- function(X, sd_quantile=0.05, max_na = 0.25, varselect=2) 
   l2 <- as.matrix(l2)
 
   if(dim(l2)[1] !=0) {
-    cat(paste(dim(l2), " rows have been removed with too low variance (sd <= ", sd_quantile, " quantile)"), "\n")
+    cat(paste(dim(l2)[1], " rows have been removed with too low variance (sd <= ", sd_quantile, " quantile).\n"))
   }
 
 
@@ -67,6 +67,11 @@ clean_low_variance <- function(X, sd_quantile=0.05, max_na = 0.25, varselect=2) 
 
   throw<- which(is.na(rowMeans(X3, na.rm = T)))
   X4 <- X3[-throw,]
+
+  throw <- as.matrix(throw)
+  if(dim(throw)[1] !=0) {
+    cat(paste(dim(throw)[1], " rows have been removed because all entries were NAs.\n"))
+   }
 
   #rownames(X3) <- sites_filtered2
   return(X4)
