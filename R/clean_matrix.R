@@ -162,6 +162,10 @@ clean_matrix <- function(X, Y, Z, max_na_cpg=0.5, max_na_ind=0.2,
     rownames(M)<- rownames(X4)
     cat("M matrix computed ...", "\n")
 
+    # rownames were not assigned before this step
+    X4 <- as.data.frame(X4)
+    colnames(X4)<- colnames(M)
+    rownames(X4)<- sites_filtered2
 
 
     # Results
