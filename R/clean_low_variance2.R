@@ -13,8 +13,8 @@
 #' @name clean_low_variance2
 #'
 #' @return
-#' #' list with 7 datasets:
-#'  \item{list.cleaned2}{cleaned matrices list according to max_na and sd_quantile parameters}
+#' #' list with 4 datasets:
+#'  \item{list.cleaned2}{cleaned matrices list according to max_na and sd_quantile parameters, contsaining cleaned methylated counts, unmethylated counts, beta and M values matrices}
 #
 #'
 #'
