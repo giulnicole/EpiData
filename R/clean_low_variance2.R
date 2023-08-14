@@ -14,7 +14,7 @@
 #'
 #' @return
 #' #' list with 4 datasets:
-#'  \item{list.cleaned2}{cleaned matrices list according to max_na and sd_quantile parameters, contsaining cleaned methylated counts, unmethylated counts, beta and M values matrices}
+#'  \item{list.cleaned2}{cleaned matrices list according to max_na and sd_quantile parameters, containing cleaned methylated counts, unmethylated counts, beta and M values matrices}
 #
 #'
 #'
