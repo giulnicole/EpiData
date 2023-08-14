@@ -99,9 +99,12 @@ clean_low_variance2 <- function(list.cleaned, sd_quantile=0.05, max_na = 0.25, v
   clean.m <- clean.m[rownames(clean.m) %in% rownames(clean.met),]
   #dim(clean.m)
 
+  clean.cov <- list.cleaned[[1]]
+  clean.cov <- clean.cov[rownames(clean.cov) %in% rownames(clean.met),]
 
-  list.cleaned2 <- list(met.mat2 = clean.met, unmet.mat2 = clean.unmet,
-                        beta.mat2 = clean.beta, m.mat2 = clean.m)
+  list.cleaned2 <- list(Coverage_matrix2 = clean.cov, Met_matrix2 = clean.met,
+                        Unmet_matrix2 = clean.unmet,
+                        Beta_matrix2 = clean.beta, M_matrix2 = clean.m)
 
 
 
