@@ -12,7 +12,7 @@
 #' @param max_na_cpg threshold of missing values per each CpG in the coverage counts matrix
 #' @param max_na_ind threshold of missing values per each individual
 #' @param cpg_removal_threshold minimum threshold of coverage counts (across all individuals) for a CpG to be kept
-#' @param p offset parameter to compute Beta matrix and M matrix
+#' @param p offset parameter to compute regularizatio of Beta matrix and M matrix
 #'
 #' @name clean_matrix
 #'
