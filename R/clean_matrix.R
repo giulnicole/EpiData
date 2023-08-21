@@ -123,7 +123,7 @@ clean_matrix <- function(X, Y, Z, max_na_cpg=0.5, max_na_ind=0.2,
         meth <- as.numeric(Y[[j,i]])
         unmeth <- as.numeric(Z[[j,i]])
 
-        beta <- meth/(meth+unmeth+p)
+        beta <- max(meth, 0)/(max(meth,0) + max(unmeth,0) + p)
         B[j,i] <- beta
 
 
@@ -148,7 +148,7 @@ clean_matrix <- function(X, Y, Z, max_na_cpg=0.5, max_na_ind=0.2,
         meth <- as.numeric(Y[[j,i]])
         unmeth <-  unmeth <- as.numeric(Z[[j,i]])
 
-        m <- log2(meth+p/unmeth+p)
+        m <- log2(max (meth,0) + p/ max(unmeth,0) +p)
         M[j,i] <- m
 
 
