@@ -102,12 +102,19 @@ clean_matrix <- function(X, Y, Z, max_na_cpg=0.5, max_na_ind=0.2,
     # Return meth and unmeth counts
     Y <- Y[rownames(Y) %in% rownames(X4),]
     Y <- Y[, colnames(Y) %in% colnames(X4)]
-    Y <- Y %>% mutate_all(~na_if(., 0))
+    #Y <- Y %>% mutate_all(~na_if(., 0))
 
     cat("Computing selection of CpGs in unmethylated counts matrix ...", "\n")
     Z <- Z[rownames(Z) %in% rownames(X4),]
     Z <- Z[, colnames(Z) %in% colnames(X4)]
-    Z <- Z %>% mutate_all(~na_if(., 0))
+    #Z <- Z %>% mutate_all(~na_if(., 0))
+
+    cat("Adjusting the NAs in methylated and unmethylated counts' matrices ...", "\n")
+    # Adjusting the zeros in methylated and unmethylated counts
+    res <- adjust_counts(coverage = X4, methylated = Y, unmethylated = Z)
+
+    Y <- res[[1]]
+    Z <- res[[2]]
 
     # Calculating beta values matrix and M values on cleaned data
     cat("Calculating beta values and M values ...", "\n")

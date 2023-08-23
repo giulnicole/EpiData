@@ -64,14 +64,21 @@ clean_low_variance2 <- function(list.cleaned, sd_quantile=0.05, max_na = 0.25, v
     cat(paste(dim(l2)[1], " rows have been removed with too low variance (sd <= ", sd_quantile, " quantile).\n"))
   }
 
-
   X3 <- X2[-l2,]
   filtered2<- rownames(X3)
 
   throw<- which(is.na(rowMeans(X3, na.rm = T)))
-  X4 <- X3[-throw,]
-
   throw <- as.matrix(throw)
+
+  if(is.null(dim(throw)[1])) {
+    X4 <- X3[-throw,]
+
+  } else {
+    X4 <- X3
+
+  }
+
+
   if(dim(throw)[1] !=0) {
     cat(paste(dim(throw)[1], " rows have been removed because all entries were NAs.\n"))
   }
