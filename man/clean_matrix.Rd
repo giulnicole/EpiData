@@ -28,7 +28,7 @@ clean_matrix(
 
 \item{cpg_removal_threshold}{minimum threshold of coverage counts (across all individuals) for a CpG to be kept}
 
-\item{p}{offset parameter to compute Beta matrix and M matrix}
+\item{p}{offset parameter to compute regularizatio of Beta matrix and M matrix}
 }
 \value{
 #' list with 7 datasets:
