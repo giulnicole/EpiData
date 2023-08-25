@@ -1,8 +1,8 @@
-#' @title Data matrix cleaning for missing values after RRBS
+#' @title Data matrix cleaning for missing values after RRBS experiment
 #' and computation of beta and M coefficients
 #'
 #' @description
-#' \code{\link{clean_matrix}} helps in the conversion of missing values (0->NA),
+#' \code{\link{clean_matrix}} helps in the conversion of missing values (0->NA) in the coverage matrix,
 #' variable types and removes rows and columns above pre-specified missingness threshold
 #'
 #'
