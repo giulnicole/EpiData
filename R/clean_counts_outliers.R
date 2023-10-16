@@ -1,4 +1,4 @@
-#'
+#' @title clean_counts_outliers
 #' @description
 #' \code{\link{clean_counts_outliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
 #' coverage cleaning and outlier values in the conversion
@@ -17,7 +17,7 @@
 #'
 #'
 #'
-#'@examples
+#'
 #'
 #'
 #' @export
@@ -70,11 +70,10 @@ which_matrix2 <- function(list.cleaned) {
   return(res)
 
 
-
-
 }
 
-clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_outlier_percentage=2) {
+
+clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_outlier_percentage=2){
 
 
   mat1 <- list.cleaned[[2]]
@@ -134,47 +133,29 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
 
   m3 <- list()
 
+
   for (k in 1:length(list.mat2)){
 
     m <- list.mat2[[k]]
 
-    for (i in 1:nrow(m)) {
-
-      row_values <- m[i,]
-
-
-      # Calculate the mean and standard deviation of the column
-      mean_value <- mean(row_values, na.rm=T)
-      sd_value <- sd(row_values, na.rm=T)
-
-      # The threshold for outliers is 5 by default (discarded values beyond 5 standard deviations)
-
-      # Calculate the percentage of rows with values beyond the threshold
-      outlier_percentage <- mean(abs(row_values - mean_value) > outlier_threshold * sd_value, na.rm = T) * 100
-
-
-      for (j in 1:ncol(m)) {
-
-        if(!is.na(m[i,j])){
-
-          if(abs(m[i,j] - mean_value) > outlier_threshold * sd_value) {
-
-
-            if(outlier_percentage <= unreliable_outlier_percentage) {
-
-              m[i,j] <- NA
-            }    #  3 if
-
-          }   #  2 if
-        }    #  1 if
-
-
-      }
+    remove_outlier <- function(row) {
+      mean_row <- mean(row)
+      sd_row <- sd(row)
+      is_outlier <- abs(row - mean_row) > 5 * sd_row
+      row[is_outlier] <- NA  # Imposta gli outlier a NA
+      return(row)
 
     }
 
-    m3[[k]] <- m
+    # Apply the function
+    data_without_outliers <- as.data.frame(t(apply(m, 1, remove_outlier)))
+
+    m3[[k]] <- data_without_outliers
+
+
   }
+
+
 
 
   clean.met<- m3[[1]]
@@ -189,6 +170,7 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
   # Calculating beta values matrix and M values on cleaned data
   cat("Calculating beta values and M values ...", "\n")
   p <- 100  # offset parameter
+
 
   # B values' matrix
   B <- matrix(0, nrow(clean.met2), ncol(clean.met2))
@@ -269,7 +251,4 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
   return(results)
 
 }
-
-
-
 
