@@ -142,7 +142,7 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
       mean_row <- mean(row)
       sd_row <- sd(row)
       is_outlier <- abs(row - mean_row) > 5 * sd_row
-      row[is_outlier] <- NA  # Imposta gli outlier a NA
+      row[is_outlier] <- NA  # outliers as NA
       return(row)
 
     }
