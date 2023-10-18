@@ -70,10 +70,12 @@ which_matrix2 <- function(list.cleaned) {
   return(res)
 
 
-}
+}  # function 1
 
 
-clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_outlier_percentage=2){
+
+
+clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
 
 
   mat1 <- list.cleaned[[2]]
@@ -127,43 +129,51 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
 
   # SECOND PART: cleaning outliers
 
-  cat("Converting outliers into NAs ...\n")
+  if (remove_outliers ==TRUE) {
 
-  list.mat2 <- m2
+    cat("Converting outliers into NAs ...\n")
 
-  m3 <- list()
+    list.mat2 <- m2
+
+    m3 <- list()
 
 
-  for (k in 1:length(list.mat2)){
+    for (k in 1:length(list.mat2)){
 
-    m <- list.mat2[[k]]
+      m <- list.mat2[[k]]
 
-    remove_outlier <- function(row) {
-      mean_row <- mean(row)
-      sd_row <- sd(row)
-      is_outlier <- abs(row - mean_row) > 5 * sd_row
-      row[is_outlier] <- NA  # outliers as NA
-      return(row)
+      remove_outlier <- function(row) {
+        mean_row <- mean(row)
+        sd_row <- sd(row)
+        is_outlier <- abs(row - mean_row) > 5 * sd_row
+        row[is_outlier] <- NA  # Imposta gli outlier a NA
+        return(row)
+
+      }
+
+      # Apply the function
+      data_without_outliers <- as.data.frame(t(apply(m, 1, remove_outlier)))
+
+      m3[[k]] <- data_without_outliers
+
 
     }
 
-    # Apply the function
-    data_without_outliers <- as.data.frame(t(apply(m, 1, remove_outlier)))
 
-    m3[[k]] <- data_without_outliers
 
+    clean.met<- m3[[1]]
+    clean.unmet <- m3[[2]]
+
+    clean.met2 <- clean.met[rownames(clean.met) %in% rownames(clean.unmet) ,]
+    clean.unmet2 <-  clean.unmet[rownames(clean.unmet) %in% rownames(clean.met2) ,]
+
+
+  } else{
+
+    clean.met2 <- list.cleaned[[2]]
+    clean.unmet2 <- list.cleaned[[3]]
 
   }
-
-
-
-
-  clean.met<- m3[[1]]
-  clean.unmet <- m3[[2]]
-
-  clean.met2 <- clean.met[rownames(clean.met) %in% rownames(clean.unmet) ,]
-  clean.unmet2 <-  clean.unmet[rownames(clean.unmet) %in% rownames(clean.met2) ,]
-
 
   # THIRD PART: calculating ratios
 
@@ -189,6 +199,8 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
     } # for i
 
   } # for j
+
+
 
 
   B <- as.data.frame(B)
@@ -250,5 +262,11 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  unreliable_
 
   return(results)
 
-}
+}  # function2 (main function)
+
+
+
+
+
+
 
