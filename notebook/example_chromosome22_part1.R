@@ -17,18 +17,20 @@ load("data/chr22.RData")
 
 
 #------  Example clean_matrix
-source("R/clean_matrix.R")
+source("R/clean_matrix_cov.R")
 
 # Cleaning the coverage matrix
-clean.coverage2 <- clean_matrix(X, Y, Z, max_na_cpg = 0.5, max_na_ind = 0.2)
-
+X2 <- X %>% replace(is.na(.), 0)
+Y2 <- Y %>% replace(is.na(.), 0)
+Z2 <- Z %>% replace(is.na(.), 0)
+clean.coverage2 <- clean_matrix_cov(X2, Y2, Z2, max_na_cpg = 0.5, max_na_ind = 0.2)
 
 
 #------  Example clean_low_coverage fopr methylated counts
-source("R/clean_low_variance2.R")
+source("R/clean_counts_outliers.R")
 
 # Cleaning for low variance of the methylated counts (excessive NAs that occurr after clean low coverage)
-clean.new <- clean_low_variance2(list.cleaned=clean.coverage2, sd_quantile=0.05, max_na = 0.25, 2)
+clean.new <- clean_counts_outliers(list.cleaned=clean.coverage2$Cleaned1, outlier_threshold=5, remove_outliers = TRUE)
 
 
 # match added to the function
