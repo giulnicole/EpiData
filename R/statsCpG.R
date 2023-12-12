@@ -1,7 +1,7 @@
 #' @title Calculating statistics and missing values patterns
 #'
 #' @description
-#' \code{\link{stats_cpg2}} computes the statistics on missing values per dataset, highlighting the
+#' \code{\link{statsCpG}} computes the statistics on missing values per dataset, highlighting the
 #' pattern of missing values per each CpG
 #'
 #'
@@ -24,7 +24,7 @@
 #'  \item{Linear_correlation}{}
 #'  \item{long_correlation_matrix}{}
 #'
-#'@examples
+#'
 #'
 #'
 #'
@@ -33,7 +33,7 @@
 #' @export
 #'
 #'
-stats_cpg2 <- function(X, varselect = 2) {
+stats_cpg2 <- function(X, varselect = 5) {
 
 
   options(error = expression(NULL))

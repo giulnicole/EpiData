@@ -1,6 +1,6 @@
-#' @title clean_counts_outliers
+#' @title cleanOutliers
 #' @description
-#' \code{\link{clean_counts_outliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
+#' \code{\link{cleanOutliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
 #' coverage cleaning and outlier values in the conversion
 #'
 #'
@@ -8,7 +8,7 @@
 #' @param outlier_threshold threshold for considering a value of the counts an outlier
 #' @param unreliable_outlier_percentage that we want to tolerate (also considering the sample size we have)
 #'
-#' @name clean_counts_outliers
+#' @name cleanOutliers
 #'
 #' @return
 #' #' list with 2 elements:
@@ -75,7 +75,7 @@ which_matrix2 <- function(list.cleaned) {
 
 
 
-clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
+cleanOutliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
 
 
   mat1 <- list.cleaned[[2]]
@@ -179,7 +179,7 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  remove_outl
 
   # Calculating beta values matrix and M values on cleaned data
   cat("Calculating beta values and M values ...", "\n")
-  p <- 100  # offset parameter
+  p <- 1  # offset parameter
 
 
   # B values' matrix
@@ -247,11 +247,11 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  remove_outl
   list.cleaned[[1]] <- clean.cov
 
 
-  list.cleaned2 <- list(Coverage_matrix2 = list.cleaned[[1]],
-                        Met_matrix2 = list.cleaned[[2]],
-                        Unmet_matrix2 = list.cleaned[[3]],
-                        Beta_matrix2 = as.matrix.data.frame(list.cleaned[[4]]),
-                        M_matrix2 = as.matrix.data.frame(list.cleaned[[5]]))
+  list.cleaned2 <- list(Coverage_matrix = list.cleaned[[1]],
+                        Met_matrix = list.cleaned[[2]],
+                        Unmet_matrix = list.cleaned[[3]],
+                        Beta_matrix = as.matrix.data.frame(list.cleaned[[4]]),
+                        M_matrix = as.matrix.data.frame(list.cleaned[[5]]))
 
 
 
@@ -260,7 +260,9 @@ clean_counts_outliers<- function(list.cleaned, outlier_threshold=5,  remove_outl
 
   results<- list(Cleaned2 = list.cleaned2, Plots= plots)
 
+ # objGR<- GRconversion(cleaned.list = results$Cleaned2)
   return(results)
+
 
 }  # function2 (main function)
 
