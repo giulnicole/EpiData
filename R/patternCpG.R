@@ -6,7 +6,6 @@
 #'
 #' @param rownum
 #' @param colnum
-#' @param cormat
 #' @param meanval = rep(mean(dataset, na.rm=TRUE), colnum)
 #' @param sdval = rep(sd(dataset, na.rm=TRUE), colnum)
 #' @param dataset
@@ -41,6 +40,7 @@ patternCpG <- function(rownum, colnum,
   mu <- meanval
   stddev <- sdval
 
+  cat("Computing covariance matrix ...\n")
   covMat <- as.data.frame(as.vector(stddev) %*% t(as.vector(stddev))) * pd_corr_matrix
   covMat[is.na(covMat)] <- 0
 
@@ -50,12 +50,13 @@ patternCpG <- function(rownum, colnum,
   eigenvalues <- eigen_decomp$values
   eigenvalues[eigenvalues < 0] <- 0
 
+  cat("Generating values ...\n")
   covMat2 <- eigen_decomp$vectors %*% diag(eigenvalues) %*% t(eigen_decomp$vectors)
   covMat2 <- as.matrix(covMat2)
 
   X_hat <- MASS::mvrnorm(n = rownum, mu = mu, Sigma = covMat2)  # Simulated values
 
-  original_sample <- cormat[1:colnum, 1:colnum]
+  original_sample <- pd_corr_matrix[1:colnum, 1:colnum]
 
   #nearPD_sample <- stats::cor(X_hat)[1:colnum, 1:colnum]
 
@@ -67,7 +68,7 @@ patternCpG <- function(rownum, colnum,
 
   }
 
-
+  cat("Converting results ...\n")
   simulated <- list(Simulated_matrix = X_hat, Original_correlation_sample = original_sample)
 
   return(simulated)

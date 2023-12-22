@@ -8,7 +8,7 @@
 #' @param X Cleaned matrix list from coverage cleaning (clean_matrix)
 #' @param varselect is the index of the dataset to be used in the output from clean_matrix (numeric value 1-5)
 
-#' @name stats_cpg2
+#' @name statsCpG
 #'
 #' @return
 #' #' list with 7 datasets:
@@ -33,7 +33,7 @@
 #' @export
 #'
 #'
-stats_cpg2 <- function(X, varselect = 5) {
+statsCpG <- function(X, varselect = 5) {
 
 
   options(error = expression(NULL))
