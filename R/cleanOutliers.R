@@ -1,33 +1,34 @@
 #' @title cleanOutliers
 #' @description
 #' \code{\link{cleanOutliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
-#' coverage cleaning and outlier values in the conversion
+#' coverage cleaning and outlier values in the conversion.
 #'
 #'
-#' @param list.cleaned list deriving from clean_matrix_cov
-#' @param outlier_threshold threshold for considering a value of the counts an outlier
-#' @param unreliable_outlier_percentage that we want to tolerate (also considering the sample size we have)
+#' @param filtered.obj SummarizedExperiment object deriving from cleanMatCov.
+#' @param outlier_threshold Threshold for considering a value of the counts' matrices as an outlier.
+#' @param remove_outliers TRUE/FALSE whether removing of outliers should be performed or not.
 #'
 #' @name cleanOutliers
 #'
 #' @return
-#' #' list with 2 elements:
-#'  \item{Cleaned2}{list with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+#' SummarizedExperiment object with 2 elements:
+#'  \item{Output_filtered}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
 #'  \item{Plots}{Barplot with missing values rates after second cleaning}
 #'
 #'
 #' @examples
-#' #clean.new <- cleanOutliers(list.cleaned=clean.coverage2$Cleaned1, outlier_threshold=5, remove_outliers = TRUE)
+#' # data("matrices")
+#' # clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
 #'
 #'
 #' @export
 #'
 #'
-cleanOutliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
+cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
 
-
-  mat1 <- list.cleaned[[2]]
-  mat2 <- list.cleaned[[3]]
+  mat1<- filtered.obj$Output_filtered@assays@data@listData$Met_matrix
+  mat2<- filtered.obj$Output_filtered@assays@data@listData$Unmet_matrix
 
   list.mat <- list(mat1, mat2)
   # Adjust this threshold as needed
@@ -118,8 +119,8 @@ cleanOutliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
 
   } else{
 
-    clean.met2 <- list.cleaned[[2]]
-    clean.unmet2 <- list.cleaned[[3]]
+    clean.met2 <- m2[[1]]
+    clean.unmet2 <- m2[[2]]
 
   }
 
@@ -133,6 +134,9 @@ cleanOutliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
   # B values' matrix
   B <- matrix(0, nrow(clean.met2), ncol(clean.met2))
 
+  # M values' matrix
+  M <- matrix(0, nrow(clean.met2), ncol(clean.met2))
+
   for (j in 1:nrow(clean.met2)){
 
     for (i in 1:ncol(clean.met2)) {
@@ -143,6 +147,8 @@ cleanOutliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
       beta <- max(meth, 0)/(max(meth,0) + max(unmeth,0) + p)
       B[j,i] <- beta
 
+      m <- log2((max (meth,0) + p)/ (max(unmeth,0) +p))
+      M[j,i] <- m
 
     } # for i
 
@@ -151,64 +157,44 @@ cleanOutliers<- function(list.cleaned, outlier_threshold=5,  remove_outliers){
 
 
 
-  B <- as.data.frame(B)
   colnames(B)<- colnames(clean.met2)
   rownames(B)<- rownames(clean.met2)
   cat("Beta matrix computed ...", "\n")
-
-  # M values' matrix
-  M <- matrix(0, nrow(clean.met2), ncol(clean.met2))
-
-  for (j in 1:nrow(clean.met2)){
-
-    for (i in 1:ncol(clean.met2)) {
-
-
-      meth <- as.numeric(clean.met2[[j,i]])
-      unmeth <-  unmeth <- as.numeric(clean.unmet2[[j,i]])
-
-      m <- log2((max (meth,0) + p)/ (max(unmeth,0) +p))
-      M[j,i] <- m
-      M[j,i] <- m
-
-
-    } # for i
-
-  } # for j
-
-  M <- as.data.frame(M)
 
   colnames(M)<- colnames(clean.met2)
   rownames(M)<- rownames(clean.met2)
   cat("M matrix computed ...", "\n")
 
 
-  list.cleaned[[4]] <- B
-  list.cleaned[[5]] <- M
+
+  #list.cleaned[[4]] <- B
+  #list.cleaned[[5]] <- M
 
 
 
   #dim(clean.m)
 
-  clean.cov <- list.cleaned[[1]]
-  clean.cov <- clean.cov[rownames(clean.cov) %in% rownames(clean.met2),]
-  list.cleaned[[1]] <- clean.cov
+  clean.cov <- filtered.obj$Output_filtered@assays@data@listData$Coverage_matrix
+  clean.cov <- as.data.frame(clean.cov[rownames(clean.cov) %in% rownames(clean.met2),])
 
 
-  list.cleaned2 <- list(Coverage_matrix = list.cleaned[[1]],
-                        Met_matrix = list.cleaned[[2]],
-                        Unmet_matrix = list.cleaned[[3]],
-                        Beta_matrix = as.matrix.data.frame(list.cleaned[[4]]),
-                        M_matrix = as.matrix.data.frame(list.cleaned[[5]]))
+  list.cleaned2 <- list(Coverage_matrix = as.data.frame(clean.cov),
+                        Met_matrix = as.data.frame(clean.met2),
+                        Unmet_matrix = as.data.frame(clean.unmet2),
+                        Beta_matrix = as.data.frame(B),
+                        M_matrix = as.data.frame(M))
 
 
 
   plots<- whichMatrix2(list.cleaned2)
 
+  filtered.obj2 <-  filtered.obj
+  filtered.obj2$Output_filtered@assays@data@listData <- list.cleaned2
 
-  results<- list(Cleaned2 = list.cleaned2, Plots= plots)
+  results<- list(Output_outliers = filtered.obj2$Output_filtered, Plots= plots)
 
- # objGR<- GRconversion(cleaned.list = results$Cleaned2)
+
+  # objGR<- GRconversion(cleaned.list = results$Cleaned2)
   return(results)
 
 

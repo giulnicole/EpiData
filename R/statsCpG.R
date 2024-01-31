@@ -1,40 +1,41 @@
-#' @title Calculating statistics and missing values patterns
+#' @title statsCpG
 #'
-#' @description
+#' @description A function for calculating statistics of missing values of one of the dataset collected in the SummarizedExperiment object.
+#'
 #' \code{\link{statsCpG}} computes the statistics on missing values per dataset, highlighting the
-#' pattern of missing values per each CpG
+#' pattern of missing values, mean and standard deviation per each CpG.
 #'
 #'
-#' @param X Cleaned matrix list from coverage cleaning (clean_matrix)
-#' @param varselect is the index of the dataset to be used in the output from clean_matrix (numeric value 1-5)
-
+#' @param cleaned.obj SummarizedExperiment object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers).
+#' @param varselect Index of the dataset to be used (numeric value 1-5) to extract the information related to the CpGs' pattern. 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
 #' @name statsCpG
 #'
 #' @return
-#' #' list with 7 datasets:
-#'  \item{Rows}{}
-#'  \item{Columns}{}
-#'  \item{Table_missing}{}
-#'  \item{Total_NA}{}
-#'  \item{NA_per_variable}{}
-#'  \item{Fraction_missingness}{}
-#'  \item{K_table}{}
-#'  \item{MD_Pattern}{}
-#'  \item{MD_Pattern_count}{}
-#'  \item{Linear_correlation}{}
-#'  \item{long_correlation_matrix}{}
+#'  SummarizedExperiment object and metadata statistics:
+#'  \item{Individuals}{Subject passing filters}
+#'  \item{CpGs}{Filtered CpGs}
+#'  \item{Table_missing}{Table with NAs statistics per CpG with 5 columns: CpG's id, nObs, percObs, nNA, percNA}
+#'  \item{Fraction_missingness}{Fraction of NAs in total}
+#'  \item{K_table}{Table K table extra for table_missing}
+#'  \item{Linear_correlation}{Matrix with liean correlation}
+#'  \item{long_correlation_matrix}{Matrix  with linear correlation in longitudinal format}
+#'  \item{means}{Mean per CpG}
+#'  \item{sds}{Standard deviation per CpG}
 #'
-#'
-#'
-#'
-#'
+#' @examples
+#' # data("matrices")
+#' # clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
+#' # stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
 #'
 #'
 #' @export
 #'
 #'
-statsCpG <- function(X, varselect = 5) {
+statsCpG <- function(cleaned.obj, varselect = 5) {
 
+
+  X <- cleaned.obj$Output_outliers@assays@data
 
   options(error = expression(NULL))
 
@@ -136,19 +137,26 @@ statsCpG <- function(X, varselect = 5) {
 
   cormat.lin <- stats::cor(Y, use = "pairwise.complete.obs", method = "pearson")
 
-  cat("Converting results ...\n")
+
   long_cormat.lin <- cbind(expand.grid(dimnames(cormat.lin)), value = as.vector(cormat.lin))
+
+  cat("Computing means and standard deviations per CpG ...\n")
+  Y<- t(Y)
+  means <- rowMeans(Y, na.rm=TRUE)
+  sds <- apply(Y, 1, sd, na.rm=T)
 
 
   # Results
-  res<- list(Rows = rows, Columns = cols, Table_missing = table_missing,
-             Total_NA = na_per_X, NA_per_variable = na_per_var,
-             Fraction_missingness =  missfrac_per_X,  K_table = table_k,
-             MD_Pattern = mdpat, MD_Pattern_count = mdpat_count,
+  cat("Converting results ...\n")
+  res<- list(Individuals = rows, CpGs = cols, Table_missing = table_missing,
+             Fraction_missingnessp =  missfrac_per_X,  K_table = table_k,
              Linear_correlation = cormat.lin,
-             long_correlation_matrix = long_cormat.lin)
+             long_correlation_matrix = long_cormat.lin,
+             means=means, sds= sds)
+
+  cleaned.obj$Output_outliers@metadata$statistics <- res
 
 
-  return(res)
+  return(cleaned.obj)
 
 }

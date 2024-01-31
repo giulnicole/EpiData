@@ -2,24 +2,30 @@
 % Please edit documentation in R/cleanOutliers.R
 \name{cleanOutliers}
 \alias{cleanOutliers}
-\alias{which_matrix2}
 \title{cleanOutliers}
 \usage{
-which_matrix2(list.cleaned)
+cleanOutliers(filtered.obj, outlier_threshold, remove_outliers)
 }
 \arguments{
-\item{list.cleaned}{list deriving from clean_matrix_cov}
+\item{filtered.obj}{SummarizedExperiment object deriving from cleanMatCov.}
 
-\item{outlier_threshold}{threshold for considering a value of the counts an outlier}
+\item{outlier_threshold}{Threshold for considering a value of the counts' matrices as an outlier.}
 
-\item{unreliable_outlier_percentage}{that we want to tolerate (also considering the sample size we have)}
+\item{remove_outliers}{TRUE/FALSE whether removing of outliers should be performed or not.}
 }
 \value{
-#' list with 2 elements:
-\item{Cleaned2}{list with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+SummarizedExperiment object with 2 elements:
+\item{Output_filtered}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
 \item{Plots}{Barplot with missing values rates after second cleaning}
 }
 \description{
 \code{\link{cleanOutliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
-coverage cleaning and outlier values in the conversion
+coverage cleaning and outlier values in the conversion.
+}
+\examples{
+# data("matrices")
+# clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+# clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
+
+
 }

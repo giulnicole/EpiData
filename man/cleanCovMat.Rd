@@ -2,32 +2,36 @@
 % Please edit documentation in R/cleanCovMat.R
 \name{cleanCovMat}
 \alias{cleanCovMat}
-\alias{adjust_counts}
-\title{clencOVMat}
+\title{clenCovMat}
 \usage{
-adjust_counts(coverage, methylated, unmethylated)
+cleanCovMat(
+  input.obj,
+  max_na_cpg = 0.5,
+  max_na_ind = 0.2,
+  cpg_removal_threshold = 10
+)
 }
 \arguments{
-\item{X}{Original Coverage dataframe with individuals in columns and CpGs in rows}
+\item{input.obj}{SummarizedExperiment object as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).}
 
-\item{Y}{Original Methylated counts dataframe with individuals in columns and CpGs in rows}
+\item{max_na_cpg}{Threshold of missing values per each CpG in the coverage counts matrix.}
 
-\item{Z}{Original Unmethylated counts dataframe with individuals in rows and CpG as columns}
+\item{max_na_ind}{Threshold of missing values per each individual.}
 
-\item{max_na_cpg}{threshold of missing values per each CpG in the coverage counts matrix}
-
-\item{max_na_ind}{threshold of missing values per each individual}
-
-\item{cpg_removal_threshold}{minimum threshold of coverage counts (across all individuals) for a CpG to be kept}
-
-\item{p}{offset parameter to compute regularization of Beta matrix and M matrix}
+\item{cpg_removal_threshold}{Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.}
 }
 \value{
-#' list with 2 elements:
-\item{Cleaned1}{list with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+SummarizedExperiment object with 2 elements:
+\item{Output_filtered}{SummarizedExperiment object with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
 \item{Plots}{Barplot with missing values rates after first cleaning}
 }
 \description{
 \code{\link{cleanCovMat}} helps in the conversion of missing values (0->NA) in the coverage matrix,
-variable types and removes rows and columns above pre-specified missingness threshold
+removing rows and columns above pre-specified missingness threshold.
+}
+\examples{
+data("matrices")
+#clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+
+
 }

@@ -1,34 +1,34 @@
 #' @title clenCovMat
 #' @description
 #' \code{\link{cleanCovMat}} helps in the conversion of missing values (0->NA) in the coverage matrix,
-#' variable types and removes rows and columns above pre-specified missingness threshold
+#'  removing rows and columns above pre-specified missingness threshold.
 #'
 #'
-#' @param X Original Coverage dataframe with individuals in columns and CpGs in rows
-#' @param Y Original Methylated counts dataframe with individuals in columns and CpGs in rows
-#' @param Z Original Unmethylated counts dataframe with individuals in rows and CpG as columns
-#' @param max_na_cpg threshold of missing values per each CpG in the coverage counts matrix
-#' @param max_na_ind threshold of missing values per each individual
-#' @param cpg_removal_threshold minimum threshold of coverage counts (across all individuals) for a CpG to be kept
+#' @param input.obj SummarizedExperiment object as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).
+#' @param max_na_cpg Threshold of missing values per each CpG in the coverage counts matrix.
+#' @param max_na_ind Threshold of missing values per each individual.
+#' @param cpg_removal_threshold Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.
 #'
 #' @name cleanCovMat
 #'
 #' @return
-#' #' list with 2 elements:
-#'  \item{Cleaned1}{list with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+#'  SummarizedExperiment object with 2 elements:
+#'  \item{Output_filtered}{SummarizedExperiment object with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
 #'  \item{Plots}{Barplot with missing values rates after first cleaning}
 #'
 #' @examples
 #' data("matrices")
-#' #clean.coverage2 <- cleanCovMat(X2, Y2, Z2, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' #clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'
 #'
 #' @export
 #'
 #'
+cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_threshold=10) {
 
-cleanCovMat <- function(X, Y, Z, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_threshold=10) {
-
+  X<- input.obj@assays@data@listData$Coverage_matrix
+  Y<- input.obj@assays@data@listData$Met_matrix
+  Z<- input.obj@assays@data@listData$Unmet_matrix
 
   sites <- rownames(X)
   stopifnot("Input must be numeric dataframe" =is.data.frame(X), all(sapply(X, is.numeric)))
@@ -116,10 +116,16 @@ cleanCovMat <- function(X, Y, Z, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_thr
   res2<- lapply(res, as.matrix.data.frame)
 
 
+  input.obj@assays@data@listData$Coverage_matrix <- res2$Coverage_matrix
+  input.obj@assays@data@listData$Met_matrix <- res2$Met_matrix
+  input.obj@assays@data@listData$Unmet_matrix <- res2$Unmet_matrix
+
+  res3 <- input.obj
+
   # Plots
   plots<- whichMatrix(res2)
 
-  results<- list(Cleaned1 = res2, Plots= plots)
+  results<- list(Output_filtered = res3, Plots= plots)
 
   #objGR<- GRconversion2(cleaned.list = results$Cleaned1)
   return(results)
@@ -320,9 +326,4 @@ GRconversion2<- function(cleaned.list){
 
 
 }  # function 3
-
-
-
-
-
 
