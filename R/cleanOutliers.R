@@ -188,14 +188,11 @@ cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
 
   plots<- whichMatrix2(list.cleaned2)
 
-  filtered.obj2 <-  filtered.obj
-  filtered.obj2$Output_filtered@assays@data@listData <- list.cleaned2
+  obj<- GRconversion2(list.cleaned2)
 
-  results<- list(Output_outliers = filtered.obj2$Output_filtered, Plots= plots)
+  objGR<- list(Output_outliers = obj, Plots= plots)
 
-
-  # objGR<- GRconversion(cleaned.list = results$Cleaned2)
-  return(results)
+  return(objGR)
 
 
 }  # (main function)

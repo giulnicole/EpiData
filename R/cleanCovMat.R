@@ -115,20 +115,15 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
   cat("Coverting results to matrices ...", "\n")
   res2<- lapply(res, as.matrix.data.frame)
 
-
-  input.obj@assays@data@listData$Coverage_matrix <- res2$Coverage_matrix
-  input.obj@assays@data@listData$Met_matrix <- res2$Met_matrix
-  input.obj@assays@data@listData$Unmet_matrix <- res2$Unmet_matrix
-
-  res3 <- input.obj
-
   # Plots
   plots<- whichMatrix(res2)
 
-  results<- list(Output_filtered = res3, Plots= plots)
+  obj<- GRconversion2(res2)
+
+  objGR<- list(Output_filtered = obj, Plots= plots)
 
   #objGR<- GRconversion2(cleaned.list = results$Cleaned1)
-  return(results)
+  return(objGR)
 
 }  # (main function)
 
@@ -167,6 +162,7 @@ whichMatrix <- function(list.cleaned) {
     geom_bar(stat = "identity") +
     labs(title = "Missing Value Comparison", y = "Pecrentage Missing Values") +
     theme_minimal() + scale_fill_manual(values = c("Coverage_counts" = "#fdbf6f", "Methylated_counts" = "#c5b0d5", "Unmethylated_counts" = "#a1d99b"))
+
 
   res <- list(NA_summary = na_summary, NA_plot = na_plot)
 
@@ -303,7 +299,6 @@ GRconversion2<- function(cleaned.list){
   nrows <- dim(cleaned.list[["Coverage_matrix"]])[1]
   ncols <- dim(cleaned.list[["Coverage_matrix"]])[2]
   counts <- cleaned.list[["Coverage_matrix"]]
-  counts2 <- cleaned.list[["Met_matrix"]]
 
   names_cpg<-rownames(counts)
 
