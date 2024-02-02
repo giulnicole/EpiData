@@ -2,6 +2,11 @@
 
 
 
+
+
+
+
+
 #'@export
 GRconversion2<- function(input.list){
 
@@ -13,25 +18,25 @@ GRconversion2<- function(input.list){
 
   names_cpg<-rownames(counts)
 
-  chr<- gsub("-.*", "", rownames(counts))
-  chr<- unique(chr)
-  freq <- length(chr)
+  chr.whole<- gsub("-.*", "", rownames(counts))
+  chr<- unique(chr.whole)
+  #freq <- length(chr)
   positions <-  gsub(".*-", "", rownames(counts))
 
 
   list.new<- lapply(input.list, as.data.frame)
 
 
- for (i in 1:length(list.new)){
+  for (i in 1:length(list.new)){
 
 
-   rownames(list.new[[i]]) <- names_cpg
+    rownames(list.new[[i]]) <- names_cpg
 
 
- }
+  }
 
 
-  rowRanges <- GRanges(rep(chr,freq),
+  rowRanges <- GRanges(chr.whole,
                        IRanges(positions),
                        feature_id=names_cpg)
 
@@ -49,5 +54,4 @@ GRconversion2<- function(input.list){
 
 
 }
-
 
