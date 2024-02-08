@@ -1,42 +1,64 @@
-#' @title patternCpG
+#' @title ParallSimu
 #'
 #' @description A function for computing the non-negative definite matrix of covariance matrix, by eigenvectors' decompisition and
-#' and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset.
-#' \code{\link{patternCpG}} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
+#' and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset (Parallelized version)
+#' \code{\link{ParallSimu}} computes the imputation based on correlation pattern between CpGs
 #'
-#' @name patternCpG
 #'
-#' @param cleaned.obj SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (statsCpG output).
-#' @param matrix Matrix on which computing the correlation matrix; "M" as default.
-#' @param varselect Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
+#' @param stats.obj list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)
+#' @param matrix matrix on which computing the correlation matrix; "M" as default
+#' @param varselect index of the dataset to be used (numeric value 1-5)
+#'
+#'
+#'
+#' @name ParallSimu
 #'
 #' @return
-#' dataset imputed:
-#' \item{Simulated_matrix}{Matrix of imputed CpGs via eigenvalue decomposition of covariance matrix and generation of values from a distribution similar per each CpG.}
-#'
+#'  list with SummarizedExperiment objects and imputed datasets in metadata:
+#' \item{imputed}{Matrix of CpG imputed}
 #'
 #' @examples
-#' # data("matrices")
-#' # clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-#' # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
-#' # stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
-#' # simu3 <- patternCpG(cleaned.obj=stats, matrix="M", varselect)
+#' # data('clean.out')
+#' # list.cleaned1<- clean.out
+#' # list.cleaned2<- clean.out
+#' # list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
+#' # input.stats<- list()
+#' # for (i in 1:length(list.cleaned)){
+#' #
+#' #  input.stats[[i]] <- GRconversion2(list.cleaned[[i]])
+#' #
+#' #  names(input.stats)[[i]] <- names(list.cleaned)[[i]]
+#' #  }
+#'
+#' # stats2 <- ParallStats(input.stats)
+#' # simu.mix2 <- ParallSimu(list.stats = stats2)
+#'
 #'
 #' @export
-#'
-#'
+ParallSimu <- function(list.stats){
+
+  library(stats)
+  meta.simu <- bplapply(list.stats, patternCpG)
+
+  return(meta.simu)
+
+}# parallSimu
+
+
+
+#' @noRd
 patternCpG <- function(cleaned.obj,
                        matrix="M",
                        varselect=5) {
 
 
-  rownum <- cleaned.obj[[1]]@metadata[["statistics"]][["Individuals"]]
-  colnum <- cleaned.obj[[1]]@metadata[["statistics"]][["CpGs"]]
-  meanval <- cleaned.obj[[1]]@metadata[["statistics"]][["means"]]
-  sdval <- cleaned.obj[[1]]@metadata[["statistics"]][["sds"]]
+  rownum <- cleaned.obj@metadata[["statistics"]][["Individuals"]]
+  colnum <- cleaned.obj@metadata[["statistics"]][["CpGs"]]
+  meanval <- cleaned.obj@metadata[["statistics"]][["means"]]
+  sdval <- cleaned.obj@metadata[["statistics"]][["sds"]]
 
 
-  dataset <- as.data.frame(cleaned.obj$Output_outliers@assays@data@listData[[varselect]])   # add
+  dataset <- as.data.frame(cleaned.obj@assays@data@listData[[varselect]])   # add
 
   #Row.means <- rowMeans(dataset, na.rm = T)
 
@@ -97,6 +119,12 @@ patternCpG <- function(cleaned.obj,
   simu.mix2 <- as.data.frame(mat.m)
 
 
-  return(simu.mix2)
+  cleaned.obj@metadata$imputed <- simu.mix2
+
+
+  return(cleaned.obj)
 
 }
+
+
+
