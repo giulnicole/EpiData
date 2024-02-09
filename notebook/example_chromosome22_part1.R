@@ -18,11 +18,14 @@
 #-------           Data        ----------------------------
 
 data("matrices")
-
 #save(dati, file = "data/matrices.rda")
+
 
 # Sources until functions are not installed
 devtools::load_all()
+input.list<- list(X, Y, Z)
+names(input.list)<- c("Coverage_matrix", "Met_matrix", "Unmet_matrix")
+dati2<- GRconversion2(input.list)
 
 
 #------  Example cleanMatCov   -----------------------------
@@ -54,11 +57,60 @@ stats<- statsCpG(cleaned.obj= clean.out, varselect = 5)
 # library(latentcor)
 # library(propagate)
 
+# correlation pattern via blocks adn submatrices (bigcor)
 simu3 <- patternCpG(cleaned.obj=stats,
                     matrix="M",
                     varselect = 5)
+
+
 
 #save to rda file
 #save(simu3, file = "data/simulated.rda")
 
 #---------------------------------------------------------------------------
+
+############################ Parallelization
+
+#save(clean.out, file="data/clean.out.rda")
+
+data('clean.out')
+
+# Data
+list.cleaned1<- clean.out
+list.cleaned2<- clean.out
+list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
+
+# Filtering coverage matrix
+# Cleaning outliers (0->NA)
+
+char <- c(1,2)
+
+names(list.cleaned) <- char
+
+input.stats<- list()
+
+for (i in 1:length(list.cleaned)){
+
+  input.stats[[i]] <- GRconversion2(list.cleaned[[i]])
+
+  names(input.stats)[[i]] <- names(list.cleaned)[[i]]
+}
+
+
+# Statistics
+
+stats2<- ParallStats(input.stats)
+
+# Imputation
+
+simu.mix2 <- ParallSimu(list.stats = stats2)
+
+
+
+
+
+
+
+
+
+
