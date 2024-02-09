@@ -4,7 +4,7 @@
 \alias{patternCpG}
 \title{patternCpG}
 \usage{
-patternCpG(cleaned.obj, matrix = "M", varselect)
+patternCpG(cleaned.obj, matrix = "M", varselect = 5)
 }
 \arguments{
 \item{cleaned.obj}{SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (statsCpG output).}
