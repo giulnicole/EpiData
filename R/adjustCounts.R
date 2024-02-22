@@ -1,4 +1,28 @@
-
+#' @title adjustCounts
+#' @description
+#' \code{\link{adjustCounts}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
+#'
+#'
+#' @param coverage filtered matrix from the SummarizedExperiment object.
+#' @param methylated counts' matrix to be adjusted from the SummarizedExperiment object.
+#' @param unmethylated counts'matrix to be adjusted from the SummarizedExperiment object.
+#'
+#' @name adjustCounts
+#'
+#' @return
+#' a list with 2 elements:
+#'  \item{methylated}{filtered methylated counts matrix}
+#'  \item{unmethylated}{filtered unmethylated counts matrix}
+#'
+#'
+#' @examples
+#' # data("matrices")
+#' # C<- assay(dati, 1)
+#' # M<- assay(dati, 2)
+#' # U<- assay(dati, 3)
+#' # res <- adjustCounts(coverage = C, methylated = M, unmethylated = U)
+#'
+#'
 #' @noRd
 #'
 adjustCounts <- function(coverage, methylated, unmethylated){
