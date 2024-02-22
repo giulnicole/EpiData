@@ -29,4 +29,10 @@ and simulate new values drawn from the same distribution to impute remaining mis
 # stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
 # simu3 <- patternCpG(cleaned.obj=stats, matrix="M", varselect)
 
+
+
+
+
+
+
 }
