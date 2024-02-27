@@ -5,13 +5,16 @@
 #' \code{\link{statsCpG}} computes the statistics on missing values per dataset, highlighting the
 #' pattern of missing values, mean and standard deviation per each CpG.
 #'
+#' @import kableExtra
 #'
-#' @param cleaned.obj SummarizedExperiment object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers).
+#' @param cleaned.obj SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers).
 #' @param varselect Index of the dataset to be used (numeric value 1-5) to extract the information related to the CpGs' pattern. 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
+#' @param plot Barplot of missing values. Default = FALSE.
 #' @name statsCpG
 #'
 #' @return
-#'  SummarizedExperiment object and metadata statistics:
+#'  Object and with statistics on missing data:
+#'  \item{Matrix}{Matrix on which missing data pattern is explored}
 #'  \item{Individuals}{Subject passing filters}
 #'  \item{CpGs}{Filtered CpGs}
 #'  \item{Table_missing}{Table with NAs statistics per CpG with 5 columns: CpG's id, nObs, percObs, nNA, percNA}
@@ -21,6 +24,7 @@
 #'  \item{long_correlation_matrix}{Matrix  with linear correlation in longitudinal format}
 #'  \item{means}{Mean per CpG}
 #'  \item{sds}{Standard deviation per CpG}
+#'  \item{Barplot}{Barplot with proportion of missing data per matrix}
 #'
 #' @examples
 #' # data("matrices")
@@ -32,10 +36,10 @@
 #' @export
 #'
 #'
-statsCpG <- function(cleaned.obj, varselect = 5) {
+statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
 
-  X <- cleaned.obj$Output_outliers@assays@data
+  X <- cleaned.obj
 
   options(error = expression(NULL))
 
@@ -64,7 +68,7 @@ statsCpG <- function(cleaned.obj, varselect = 5) {
                sep = ""))
 
   }
-  ### MODULE 1: table of statistics on observed values and NAs and statistics on msising values
+  ### MODULE 1: table of statistics on observed values and NAs and statistics on missing values
 
   # Statistics on selected variable values
   # Extraction of statistics (complete observations and NAs)
@@ -95,11 +99,10 @@ statsCpG <- function(cleaned.obj, varselect = 5) {
                                       stringsAsFactors = FALSE)
 
 
-  # Kable extra object
-  table_k <- kable(table_missing, row.names = F)  %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "bordered"),
-                  full_width = T)
-
+# Kable extra object
+# table_k <- kable(table_missing, row.names = F)  %>%
+#   kable_styling(bootstrap_options = c("striped", "hover", "bordered"),
+#                  full_width = T)
 
   ###
 
@@ -111,23 +114,23 @@ statsCpG <- function(cleaned.obj, varselect = 5) {
   na_per_var <- sapply(X[[varselect]], function(x) sum(length(which(is.na(x)))))
 
   # Missing data pattern
-  cat("Computing missing data pattern per variable ...\n")
-  mdpat <- mice::md.pattern(X[[varselect]], plot = FALSE)     # this funciton returns
+  #cat("Computing missing data pattern per variable ...\n")
+  # mdpat <- mice::md.pattern(X[[varselect]], plot = FALSE)     # this funciton returns
   # a matrix with \code{ncol(x)+1} columns, in which each row corresponds
   # to a missing data pattern (1=observed, 0=missing).
 
-  mdpat <- mdpat[, colnames(mdpat) %in% cpg]
+  #mdpat <- mdpat[, colnames(mdpat) %in% cpg]
 
   # Removing counts for leaving only the missing pattern coded as 1,0
-  mdpat_count <- mdpat[-c(1, ncol(mdpat)), ] # removing
+  # mdpat_count <- mdpat[-c(1, ncol(mdpat)), ] # removing
   #rownames(mdpat_count) <- names
 
 
   ### MODULE 2: correlation between NAs and observed selected variable
 
   # Complete cases to calculate correlation
-  comp <- sum(stats::complete.cases(Y))
-  mdpat_count <- as.matrix(mdpat_count)
+  #comp <- sum(stats::complete.cases(Y))
+  #mdpat_count <- as.matrix(mdpat_count)
 
   # Linear Pearson correlation calculation (between the obeserved values)
   cat("Computing the linear correlation matrix ...\n")
@@ -146,17 +149,37 @@ statsCpG <- function(cleaned.obj, varselect = 5) {
   sds <- apply(Y, 1, sd, na.rm=T)
 
 
+
+   if (plot == TRUE){
+
+  ### MODULE 3: plots
+  plots<- PlotStats(cleaned.obj)
+
+  cat("Converting results ...\n")
+  res<- list(Matrix=as.data.frame(Y), Individuals = rows, CpGs = cols, Table_missing = table_missing,
+             Fraction_missingnessp =  missfrac_per_X,  #K_table = table_k,
+             Linear_correlation = cormat.lin,
+             long_correlation_matrix = long_cormat.lin,
+             means=means, sds= sds, Barplot = plots)
+
+     }  else{
+
+
+  # Results
   # Results
   cat("Converting results ...\n")
-  res<- list(Individuals = rows, CpGs = cols, Table_missing = table_missing,
-             Fraction_missingnessp =  missfrac_per_X,  K_table = table_k,
+  res<- list(Matrix=as.data.frame(Y), Individuals = rows, CpGs = cols, Table_missing = table_missing,
+             Fraction_missingnessp =  missfrac_per_X,  #K_table = table_k,
              Linear_correlation = cormat.lin,
              long_correlation_matrix = long_cormat.lin,
              means=means, sds= sds)
 
-  cleaned.obj$Output_outliers@metadata$statistics <- res
+
+     }
+  #cleaned.obj@metadata$statistics <- res
 
 
-  return(cleaned.obj)
+
+  return(res)
 
 }
