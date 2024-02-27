@@ -12,7 +12,7 @@ cleanCovMat(
 )
 }
 \arguments{
-\item{input.obj}{SummarizedExperiment object as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).}
+\item{input.obj}{SummarizedExperiment assay object (list) as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).}
 
 \item{max_na_cpg}{Threshold of missing values per each CpG in the coverage counts matrix.}
 
@@ -21,9 +21,7 @@ cleanCovMat(
 \item{cpg_removal_threshold}{Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.}
 }
 \value{
-SummarizedExperiment object with 2 elements:
-\item{Output_filtered}{SummarizedExperiment object with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
-\item{Plots}{Barplot with missing values rates after first cleaning}
+\item{List bject with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
 }
 \description{
 \code{\link{cleanCovMat}} helps in the conversion of missing values (0->NA) in the coverage matrix,
@@ -31,7 +29,10 @@ removing rows and columns above pre-specified missingness threshold.
 }
 \examples{
 # data("matrices")
-# clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+# splitted<- split3MatXChrom(assays(dati))
+# final<- splitted$final
+# Cleaning low counts for coverage
+# clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 
 
 }

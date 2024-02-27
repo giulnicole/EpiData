@@ -5,7 +5,7 @@
 \title{RepNA}
 \usage{
 RepNA(
-  cleaned.obj,
+  list.cleaned,
   varselect = 5,
   missing_prop = 0.3,
   scale = TRUE,
@@ -19,8 +19,6 @@ RepNA(
 )
 }
 \arguments{
-\item{cleaned.obj}{description}
-
 \item{varselect}{Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.}
 
 \item{missing_prop}{description}
@@ -40,6 +38,8 @@ RepNA(
 \item{ncomp}{description}
 
 \item{plots}{description}
+
+\item{cleaned.obj}{description}
 }
 \value{
 list with dataset iimputed from selected method and relative accuracy measures and KS test results.

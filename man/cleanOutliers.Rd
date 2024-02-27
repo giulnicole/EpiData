@@ -4,10 +4,10 @@
 \alias{cleanOutliers}
 \title{cleanOutliers}
 \usage{
-cleanOutliers(filtered.obj, outlier_threshold, remove_outliers)
+cleanOutliers(filtered.obj, outlier_threshold = 5, remove_outliers = F)
 }
 \arguments{
-\item{filtered.obj}{SummarizedExperiment object deriving from cleanMatCov.}
+\item{filtered.obj}{List object deriving from cleanMatCov.}
 
 \item{outlier_threshold}{Threshold for considering a value of the counts' matrices as an outlier.}
 
@@ -15,8 +15,7 @@ cleanOutliers(filtered.obj, outlier_threshold, remove_outliers)
 }
 \value{
 SummarizedExperiment object with 2 elements:
-\item{Output_filtered}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
-\item{Plots}{Barplot with missing values rates after second cleaning}
+\item{List bject with 5 elements}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
 }
 \description{
 \code{\link{cleanOutliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
@@ -24,7 +23,11 @@ coverage cleaning and outlier values in the conversion.
 }
 \examples{
 # data("matrices")
-# clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+# splitted<- split3MatXChrom(assays(dati))
+# final<- splitted$final
+# Cleaning low counts for coverage
+# clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+# Cleaning outliers in methylated and unmethylated counts
 # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
 
 

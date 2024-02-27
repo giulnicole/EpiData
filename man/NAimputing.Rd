@@ -6,7 +6,7 @@
 \usage{
 NAimputing(
   cleaned.obj,
-  varselect,
+  varselect = 5,
   scale = TRUE,
   sel_method = 1,
   matrix = "M",
