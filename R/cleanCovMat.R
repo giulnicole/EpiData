@@ -3,8 +3,15 @@
 #' \code{\link{cleanCovMat}} helps in the conversion of missing values (0->NA) in the coverage matrix,
 #'  removing rows and columns above pre-specified missingness threshold.
 #'
+#' @import magrittr
+#' @import tidyverse
+#' @import GenomicRanges
+#' @import SummarizedExperiment
+#' @import ggplot2
 #'
-#' @param input.obj SummarizedExperiment object as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).
+#'
+#'
+#' @param input.obj SummarizedExperiment assay object (list) as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).
 #' @param max_na_cpg Threshold of missing values per each CpG in the coverage counts matrix.
 #' @param max_na_ind Threshold of missing values per each individual.
 #' @param cpg_removal_threshold Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.
@@ -12,13 +19,15 @@
 #' @name cleanCovMat
 #'
 #' @return
-#'  SummarizedExperiment object with 2 elements:
-#'  \item{Output_filtered}{SummarizedExperiment object with cleaned matrices: coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
-#'  \item{Plots}{Barplot with missing values rates after first cleaning}
+#'  \item{List bject with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+#'
 #'
 #' @examples
-#' data("matrices")
-#' #clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' # data("matrices")
+#' # splitted<- split3MatXChrom(assays(dati))
+#' # final<- splitted$final
+#' # Cleaning low counts for coverage
+#' # clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'
 #'
 #' @export
@@ -26,20 +35,24 @@
 #'
 cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_threshold=10) {
 
-  X<- input.obj@assays@data@listData$Coverage_matrix
-  Y<- input.obj@assays@data@listData$Met_matrix
-  Z<- input.obj@assays@data@listData$Unmet_matrix
+  X<- input.obj$Coverage_matrix
+  Y<- input.obj$Met_matrix
+  Z<- input.obj$Unmet_matrix
 
   sites <- rownames(X)
   stopifnot("Input must be numeric dataframe" =is.data.frame(X), all(sapply(X, is.numeric)))
   cat("Converting 0s in NAs for coverage counts ...", "\n")
   X <- X %>% mutate_all(~na_if(., 0))
 
+
   # Convert the object to a matrix (if needed)
   is_matrix <- is.matrix(X)
   if (!is_matrix) {
     X <- as.matrix(X)
   }
+
+
+  # FIRST PART: discard CpGs with high percentage of missing (coverage)
 
   # Calculate the maximum allowed missing values for rows and columns
   max_missing_rows <- ncol(X) * max_na_cpg
@@ -61,6 +74,8 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
                   max_na_cpg * 100, "%) for missingness.", sep = "")) }
 
 
+  # SECOND PART: discard individuals with high percentage of missing (coverage)
+
   # Discard individuals with > max_na_ind % missing values
   col_indices_to_keep <- colSums(is.na(X2)) <= max_missing_cols
   X3 <- X2[, col_indices_to_keep]
@@ -72,6 +87,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
     message(paste(eliminated2, " individual(s) removed due to exceeding the pre-defined removal threshold (>",
                   max_na_ind * 100, "%) for missingness.", sep = "")) }
 
+  # THIRD PART: discard CpGs with less than 10 counts per individuals
   # Remove counts below 10 each
   index_above_threshold <- which(apply(X3, 1, median, na.rm=T)  > cpg_removal_threshold)
   X4 <- X3[index_above_threshold, ]
@@ -113,181 +129,18 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
   res<- list(Coverage_matrix = X4, Met_matrix = Y, Unmet_matrix = Z)
 
   cat("Coverting results to matrices ...", "\n")
-  res2<- lapply(res, as.matrix.data.frame)
+  res2<- lapply(res, as.data.frame)
 
-  # Plots
-  plots<- whichMatrix(res2)
 
-  obj<- GRconversion2(res2)
-
-  objGR<- list(Output_filtered = obj, Plots= plots)
+  objGR<- res2
 
   #objGR<- GRconversion2(cleaned.list = results$Cleaned1)
+
   return(objGR)
 
 }  # (main function)
 
 
 
-
-#' @noRd
-#'
-whichMatrix <- function(list.cleaned) {
-
-
-  mat1  <- list.cleaned[[1]]
-  mat2 <- list.cleaned[[2]]
-  mat3 <-  list.cleaned[[3]]
-
-  # Calculate missing value counts
-  na_count_mat1 <- colSums(is.na(mat1))
-  na_count_mat2 <- colSums(is.na(mat2))
-  na_count_mat3 <- colSums(is.na(mat3))
-
-  tot <- dim(mat1)[1]*dim(mat1)[2]
-
-
-  # Compare missing value counts
-  na_summary <- data.frame(
-    Dataset = c("Coverage_counts", "Methylated_counts", "Unmethylated_counts"),
-    TotalMissingValues = c(sum(na_count_mat1), sum(na_count_mat2), sum(na_count_mat3)),
-    PercentageNA = c(sum(na_count_mat1), sum(na_count_mat2), sum(na_count_mat3))/tot)
-
-
-
-  # Or create a bar plot to visualize missing value counts
-  library(ggplot2)
-
-  na_plot <- ggplot(na_summary, aes(x = Dataset, y = PercentageNA, fill = Dataset)) +
-    geom_bar(stat = "identity") +
-    labs(title = "Missing Value Comparison", y = "Pecrentage Missing Values") +
-    theme_minimal() + scale_fill_manual(values = c("Coverage_counts" = "#fdbf6f", "Methylated_counts" = "#c5b0d5", "Unmethylated_counts" = "#a1d99b"))
-
-
-  res <- list(NA_summary = na_summary, NA_plot = na_plot)
-
-
-  return(res)
-
-
-}  # function 1
-
-
-
-#' @noRd
-#'
-adjustCounts <- function(coverage, methylated, unmethylated){
-
-
-  # NA
-  # Create a new matrix based on conditions
-
-  # Initialize
-  met2 <- methylated
-  co <- coverage
-  un <- unmethylated
-
-  for (i in 1:nrow(met2)) {
-    for (j in 1:ncol(met2)) {
-      if (is.na(co[i, j]) && un[i, j] == 0) {
-        met2[i, j] <- NA
-      } else {
-        met2[i, j] <-  methylated[i, j]
-      }
-    }
-  }
-
-
-  # Initialize
-  unmet2 <- unmethylated
-
-  for (i in 1:nrow(unmet2)) {
-    for (j in 1:ncol(unmet2)) {
-      if (is.na(co[i, j]) && is.na(met2[i, j])) {
-        unmet2[i, j] <- NA
-      } else {
-        unmet2[i, j] <-  unmethylated[i, j]
-      }
-    }
-  }
-
-
-  # Initialize
-  met3 <- met2
-
-  for (i in 1:nrow(met3)) {
-
-    for (j in 1:ncol(met3)) {
-
-      if (!is.na(co[i, j]) && co[i, j] == unmet2[i, j]) {
-        #if (met3[i, j] == 0) {
-
-        cpg <- as.numeric(met3[i,])
-        wil <- wilcox.test(cpg, mu = 0, alternative = "greater")
-        pval <- wil$p.value
-
-
-        if (pval< 0.01) {
-          # cat("NA \n")
-          met3[i, j] <- NA
-
-
-        }   else {
-          # cat("not NA \n")
-          met3[i, j] <- 0
-
-        }
-
-
-      } else {
-        met3[i, j] <-  met2[i, j]
-      }
-    }
-  }
-
-
-  # Initialize
-  unmet3 <- unmet2
-
-  for (i in 1:nrow(unmet3)) {
-
-    for (j in 1:ncol(unmet3)) {
-
-      if (!is.na(co[i, j]) && !is.na(met3[i, j]) && co[i, j] == met3[i, j]) {
-        #if (met3[i, j] == 0) {
-
-        cpg <- as.numeric(unmet3[i,])
-        wil <- wilcox.test(cpg, mu = 0, alternative = "greater")
-        pval <- wil$p.value
-
-
-        if (pval< 0.01) {
-          # cat("NA \n")
-          unmet3[i, j] <- NA
-
-
-        }   else {
-          # cat("not NA \n")
-          unmet3[i, j] <- 0
-
-        }
-
-
-      } else {
-        unmet3[i, j] <-  unmet2[i, j]
-      }
-    }
-  }
-
-  methylated <- met3
-  unmethylated <- unmet3
-
-  res <- list(methylated, unmethylated)
-
-  return(res)
-
-
-
-}  # function 2
 
 

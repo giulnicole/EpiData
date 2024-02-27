@@ -4,7 +4,7 @@
 #' coverage cleaning and outlier values in the conversion.
 #'
 #'
-#' @param filtered.obj SummarizedExperiment object deriving from cleanMatCov.
+#' @param filtered.obj List object deriving from cleanMatCov.
 #' @param outlier_threshold Threshold for considering a value of the counts' matrices as an outlier.
 #' @param remove_outliers TRUE/FALSE whether removing of outliers should be performed or not.
 #'
@@ -12,30 +12,37 @@
 #'
 #' @return
 #' SummarizedExperiment object with 2 elements:
-#'  \item{Output_filtered}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
-#'  \item{Plots}{Barplot with missing values rates after second cleaning}
+#'  \item{List bject with 5 elements}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
+#'
 #'
 #'
 #' @examples
 #' # data("matrices")
-#' # clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' # splitted<- split3MatXChrom(assays(dati))
+#' # final<- splitted$final
+#' # Cleaning low counts for coverage
+#' # clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' # Cleaning outliers in methylated and unmethylated counts
 #' # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
 #'
 #'
 #' @export
 #'
 #'
-cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
+cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
 
-  mat1<- filtered.obj$Output_filtered@assays@data@listData$Met_matrix
-  mat2<- filtered.obj$Output_filtered@assays@data@listData$Unmet_matrix
+  mat1<- filtered.obj$Met_matrix
+  mat2<- filtered.obj$Unmet_matrix
+
 
   list.mat <- list(mat1, mat2)
+  names(list.mat) <- c("Methylated", "Unmethylated")
+
   # Adjust this threshold as needed
 
   ##########
 
-  # FIRST PART: cleaning CpGs that have still high percentage of missing
+  # FIRST PART: cleaning CpGs that have still high percentage of missing (met, unmet)
   m2 <- list()
 
   cat("Excluding CpGs that still have too many NAs from in methylated and unmethylated counts' matrices\n")
@@ -66,7 +73,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
 
     }
 
-    cat(paste(dim(throw)[1], " rows have been removed because all entries were NAs.\n"))
+    cat(paste(dim(throw)[1], " rows have been removed because all entries were NAs in", names(list.mat)[[k]],"\n"))
 
 
     m2[[k]] <- X2
@@ -76,7 +83,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
 
   #######
 
-  # SECOND PART: cleaning outliers
+  # SECOND PART: cleaning outliers (met, unmet)
 
   if (remove_outliers ==TRUE) {
 
@@ -172,9 +179,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
 
 
 
-  #dim(clean.m)
-
-  clean.cov <- filtered.obj$Output_filtered@assays@data@listData$Coverage_matrix
+  clean.cov <- filtered.obj$Coverage_matrix
   clean.cov <- as.data.frame(clean.cov[rownames(clean.cov) %in% rownames(clean.met2),])
 
 
@@ -185,74 +190,13 @@ cleanOutliers<- function(filtered.obj, outlier_threshold,  remove_outliers){
                         M_matrix = as.data.frame(M))
 
 
+  #obj<- GRconversion2(list.cleaned2)
 
-  plots<- whichMatrix2(list.cleaned2)
 
-  obj<- GRconversion2(list.cleaned2)
-
-  objGR<- list(Output_outliers = obj, Plots= plots)
-
-  return(objGR)
+  return(list.cleaned2)
 
 
 }  # (main function)
-
-
-
-#' @noRd
-#'
-whichMatrix2 <- function(list.cleaned) {
-
-  mat1  <- list.cleaned[[1]]
-  mat2 <- list.cleaned[[2]]
-  mat3 <-  list.cleaned[[3]]
-  mat4<-  list.cleaned[[4]]
-  mat5 <- list.cleaned[[5]]
-
-  # Calculate missing value counts
-  na_count_mat1 <- colSums(is.na(mat1))
-  na_count_mat2 <- colSums(is.na(mat2))
-  na_count_mat3 <- colSums(is.na(mat3))
-  na_count_mat4 <- colSums(is.na(mat4))
-  na_count_mat5 <- colSums(is.na(mat5))
-
-
-  tot <- dim(mat1)[1]*dim(mat1)[2]
-
-
-  # Compare missing value counts
-  na_summary <- data.frame(
-    Dataset = c("Coverage_counts", "Methylated_counts", "Unmethylated_counts",
-                "Beta_values", "M_values"),
-    TotalMissingValues = c(sum(na_count_mat1), sum(na_count_mat2), sum(na_count_mat3),
-                           sum(na_count_mat4), sum(na_count_mat5)),
-    PercentageNA = c(sum(na_count_mat1), sum(na_count_mat2), sum(na_count_mat3),
-                     sum(na_count_mat4), sum(na_count_mat5))/tot)
-
-
-
-  # Or create a bar plot to visualize missing value counts
-  library(ggplot2)
-
-  na_plot <- ggplot(na_summary, aes(x = Dataset, y = PercentageNA, fill = Dataset)) +
-    geom_bar(stat = "identity") +
-    labs(title = "Missing Value Comparison", y = "Pecrentage Missing Values") +
-    theme_minimal() + scale_fill_manual(values = c("Coverage_counts" = "#fdbf6f",
-                                                   "Methylated_counts" = "#c5b0d5",
-                                                   "Unmethylated_counts" = "#a1d99b",
-                                                   "Beta_values" = "#FFFF66", "M_values"= "#B0E0E6"))
-
-  res <- list(NA_summary = na_summary, NA_plot = na_plot)
-
-
-  return(res)
-
-
-} # function 1
-
-
-
-
 
 
 

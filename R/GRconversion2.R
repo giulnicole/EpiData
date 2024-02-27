@@ -1,12 +1,29 @@
-
-
-
-
-
-
-
-
-
+#' @title GRconversion2
+#' @description
+#' \code{\link{GRconversion2}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
+#'
+#'
+#' @param input.list with the three experimental matrices from the SummarizedExperiment object: coverage filtered matrix, methylated counts' matrix, unmethylated counts'matrix.
+#'
+#'
+#' @name GRconversion2
+#'
+#' @return
+#' a SummarizedExperiment object with three matrices in the assays:
+#'  \item{coverage matrix}{methylated counts matrix}
+#'  \item{methylated matrix}{methylated counts matrix}
+#'  \item{unmethylated matrix}{unmethylated counts matrix}
+#'
+#'
+#' @examples
+#' # data("matrices")
+#' # coverage<- assay(dati,1)
+#' # met <- assay(dati,2)
+#' # unmet <- assay(dati,3)
+#' # input.list= list(Cov=coverage, Met=met, Unmet=unmet)
+#' # gr.object <- GRconversion2(input.list)
+#'
+#'
 #'@export
 GRconversion2<- function(input.list){
 
