@@ -16,13 +16,14 @@
 #'
 #'
 #' @examples
-#' # data("matrices")
-#' # coverage<- assay(dati,1)
-#' # met <- assay(dati,2)
-#' # unmet <- assay(dati,3)
-#' # input.list= list(Cov=coverage, Met=met, Unmet=unmet)
-#' # gr.object <- GRconversion2(input.list)
-#'
+#' \dontrun{
+#' data("matrices")
+#' coverage<- assay(dati,1)
+#' met <- assay(dati,2)
+#' unmet <- assay(dati,3)
+#' input.list= list(Cov=coverage, Met=met, Unmet=unmet)
+#' gr.object <- GRconversion2(input.list)
+#'  }
 #'
 #'@export
 GRconversion2<- function(input.list){
