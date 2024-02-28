@@ -22,11 +22,12 @@ a list with 2 elements:
 \code{\link{adjustCounts}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 }
 \examples{
-# data("matrices")
-# C<- assay(dati, 1)
-# M<- assay(dati, 2)
-# U<- assay(dati, 3)
-# res <- adjustCounts(coverage = C, methylated = M, unmethylated = U)
-
+\dontrun{
+ data("matrices")
+ C<- assay(dati, 1)
+ M<- assay(dati, 2)
+ U<- assay(dati, 3)
+ res <- adjustCounts(coverage = C, methylated = M, unmethylated = U)
+}
 
 }

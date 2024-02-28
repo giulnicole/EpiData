@@ -29,20 +29,21 @@ A function for calculating statistics and missing values patterns
 \code{\link{ParallStats}} computes the statistics on missing values per dataset, highlighting the pattern of missing values per each CpG (Parallelized version)
 }
 \examples{
-# data('clean.out')
-# list.cleaned1<- clean.out
-# list.cleaned2<- clean.out
-# list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
-# input.stats<- list()
-# for (i in 1:length(list.cleaned)){
-#
-#  input.stats[[i]] <- GRconversion2(list.cleaned[[i]])
-#
-#  names(input.stats)[[i]] <- names(list.cleaned)[[i]]
-#  }
+\dontrun{
+ data('clean.out')
+ list.cleaned1<- clean.out
+ list.cleaned2<- clean.out
+ list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
+ input.stats<- list()
+ for (i in 1:length(list.cleaned)){
 
-# stats2 <- ParallStats(input.stats)
+  input.stats[[i]] <- GRconversion2(list.cleaned[[i]])
 
+  names(input.stats)[[i]] <- names(list.cleaned)[[i]]
+  }
+
+ stats2 <- ParallStats(input.stats)
+}
 
 
 

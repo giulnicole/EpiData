@@ -19,12 +19,13 @@ a SummarizedExperiment object with three matrices in the assays:
 \code{\link{GRconversion2}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 }
 \examples{
-# data("matrices")
-# coverage<- assay(dati,1)
-# met <- assay(dati,2)
-# unmet <- assay(dati,3)
-# input.list= list(Cov=coverage, Met=met, Unmet=unmet)
-# gr.object <- GRconversion2(input.list)
-
+\dontrun{
+data("matrices")
+coverage<- assay(dati,1)
+met <- assay(dati,2)
+unmet <- assay(dati,3)
+input.list= list(Cov=coverage, Met=met, Unmet=unmet)
+gr.object <- GRconversion2(input.list)
+ }
 
 }
