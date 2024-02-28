@@ -18,8 +18,10 @@
 #'
 #'
 #' @examples
-#' # data("matrices")
-#' # splitted<- split3MatXChrom(assays(dati))
+#' \dontrun{
+#'  data("matrices")
+#'  splitted<- split3MatXChrom(assays(dati))
+#' }
 #'
 #' @export
 #'
