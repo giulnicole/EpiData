@@ -27,11 +27,12 @@
 #'  \item{Barplot}{Barplot with proportion of missing data per matrix}
 #'
 #' @examples
-#' # data("matrices")
-#' # clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-#' # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
-#' # stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
-#'
+#' \dontrun{
+#'  data("matrices")
+#'  clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
+#'  stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
+#' }
 #'
 #' @export
 #'

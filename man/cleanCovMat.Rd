@@ -28,11 +28,12 @@ cleanCovMat(
 removing rows and columns above pre-specified missingness threshold.
 }
 \examples{
-# data("matrices")
-# splitted<- split3MatXChrom(assays(dati))
-# final<- splitted$final
-# Cleaning low counts for coverage
-# clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-
+\dontrun{
+ data("matrices")
+ splitted<- split3MatXChrom(assays(dati))
+ final<- splitted$final
+ # Cleaning low counts for coverage
+ clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+}
 
 }

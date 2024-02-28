@@ -23,12 +23,13 @@ and simulate new values drawn from the same distribution to impute remaining mis
 \code{\link{patternCpG}} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 }
 \examples{
-# data("matrices")
-# clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-# clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
-# stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
-# simu3 <- patternCpG(cleaned.obj=stats, matrix="M", varselect)
-
+\dontrun{
+ data("matrices")
+ clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+ clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
+ stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
+ simu3 <- patternCpG(cleaned.obj=stats, matrix="M", varselect)
+ }
 
 
 
