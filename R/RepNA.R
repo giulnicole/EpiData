@@ -1,7 +1,7 @@
-#' @title RepNA
+#' @title repNA
 #'
 #' @description A function for computing the comparisong between imputation methods, compute accuracy measure with replications and Kolmogorov-Smirnov test on CpG
-#' \code{\link{RepNA}} computes the imputation based on standard methods and correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
+#' \code{\link{repNA}} computes the imputation based on standard methods and correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
 #' @import latentcor
 #' @import propagate
@@ -11,49 +11,53 @@
 #' @import pcaMethods
 #' @import softImpute
 #' @import impute
+#' @import apcluster
 #'
-#' @name RepNA
+#' @name repNA
 #'
-#' @param cleaned.obj description
-#' @param missing_prop description
-#' @param sel_method description
+#' @param cleaned.obj cleaned dataset from cleaning part 1 (coverage cleaning) and cleaning part 2 (outliers).
+#' @param missing_prop missing proportion to be tested at each replication.
+#' @param sel_method method for imputation to be selected.
 #' @param matrix Matrix on which computing the correlation matrix; "M" as default.
 #' @param varselect Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
-#' @param n.iter description
-#' @param nb description
-#' @param ncomp description
-#' @param trees description
-#' @param plots description
-#' @param scale description
+#' @param n.iter number of replication.
+#' @param nb number of nearest neighbors for KNN method.
+#' @param ncomp number of components for PCA methods.
+#' @param trees number of tree for miss forest regression method.
+#' @param plots plots for KS test on CpGs.
+#'
 #'
 #' @return
-#' list with dataset iimputed from selected method and relative accuracy measures and KS test results.
+#' list with dataset imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.
 #'
 #' @examples
-#' # data("matrices")
-#' # clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-#' # clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
-#' # list.new<- lapply(clean.out$Output_outliers@assays@data, na.omit)
-#' #
-#' # clean.out$Output_outliers@assays@data@listData<- list.new
-#' # imp.M <- RepNA(cleaned.obj=stats3, missing_prop= 0.2, varselect=5, scale= TRUE, n.iter= 2, sel_method= 11, trees= 50, nb= 10, ncomp= 2, matrix="M"
-#'
-#'
+#'  \dontrun{
+#'  data("matrices")
+#'  clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
+#'  stats3<- lapply(clean.out, na.omit)
+#'  imp.M2 <- repNA(list.cleaned=stats3,
+#'                 missing_prop= 0.2,
+#'                 varselect=5,
+#'                 n.iter= 10,
+#'                 sel_method=c(1:10),
+#'                 trees= 50, nb= 10, ncomp= 2,
+#'                  matrix="M")
+#' }
 #'
 #'
 #'
 #'
 #' @export
-RepNA <- function(cleaned.obj,varselect=5,
+repNA <- function(list.cleaned,varselect=5,
                   missing_prop= 0.3,
-                  scale= TRUE, n.iter= 2,
+                  n.iter= 2,
                   sel_method, matrix="M",
                   trees= 50, nb= 10, ncomp= 2, plots=FALSE) {
 
 
 
   # original cleaned data
-  list.cleaned <- cleaned.obj[["Output_outliers"]]@assays@data@listData
 
   mat1<- list.cleaned[[varselect]]
 
@@ -580,7 +584,7 @@ RepNA <- function(cleaned.obj,varselect=5,
 
 
 # - - - - - - - - - - - - -  - - - - - - - - - - - - -
-  #  # Method 8 = knn2 imputation
+  #  # Method 8 = knn imputation
 
   if (8 %in% sel_method) {
 
@@ -588,11 +592,11 @@ RepNA <- function(cleaned.obj,varselect=5,
 
     cat("Knn imputation - in progress\n")
 
-    knn2.mat1 <- list()
-    rmse.knn2.mat1 <- NULL
-    mae.knn2.mat1 <- NULL
-    time.knn2 <- NULL
-    KStest.knn2 <- NULL
+    knn.mat1 <- list()
+    rmse.knn.mat1 <- NULL
+    mae.knn.mat1 <- NULL
+    time.knn <- NULL
+    KStest.knn <- NULL
 
     # Repeat the process n_iterations times
     for (i in 1:n.iter) {
@@ -611,9 +615,9 @@ RepNA <- function(cleaned.obj,varselect=5,
       imputed_data.mat1<- impute::impute.knn(data = as.matrix(masked_data.mat1), k = nb, rowmax = 100)
       imputed_data.mat1 <- imputed_data.mat1$data
 
-      #time.knn2[i] <-t[[3]]
+      #time.knn[i] <-t[[3]]
 
-      knn2.mat1[[i]] <- imputed_data.mat1
+      knn.mat1[[i]] <- imputed_data.mat1
       masked_data.mat1 <- as.data.frame(t(imputed_data.mat1))
 
       err <- Errors(origmat1, masked_data.mat1, na_positions)
@@ -621,117 +625,42 @@ RepNA <- function(cleaned.obj,varselect=5,
       S3 <- err[1]
       M3 <- err[2]
 
-      rmse.knn2.mat1[i]  <- S3
-      mae.knn2.mat1[i]  <- M3
+      rmse.knn.mat1[i]  <- S3
+      mae.knn.mat1[i]  <- M3
 
       KS_test <- KStesCpG(origmat1, masked_data.mat1, plots = F)
 
-      KStest.knn2 <- KS_test
+      KStest.knn <- KS_test
 
       #cat("Time elapsed at iteration:\n")
       #print(t[[3]])
       #cat("\n")
 
 
-      results.knn2 <- list(imputed.knn2.mat1 =  knn2.mat1,
-                           RMSE.knn2.mat1 = rmse.knn2.mat1,
-                           MAE.knn2.mat1 = mae.knn2.mat1,
-                           #Comp_time = time.knn2,
-                           KS_statsitics = KStest.knn2
+      results.knn <- list(imputed.knn.mat1 =  knn.mat1,
+                           RMSE.knn.mat1 = rmse.knn.mat1,
+                           MAE.knn.mat1 = mae.knn.mat1,
+                           #Comp_time = time.knn,
+                           KS_statsitics = KStest.knn
       )
 
 
-   }# knn2
+   }# knn
 
 
 
-  }  else results.knn2 <- NULL
+  }  else results.knn <- NULL
 
 
 
 # - - - - - - - - - - - - -  - - - - - - - - - - - - -
-  # Method 9 = imputation based on linear corr
+  # Method 9 = imputation based on cor
 
   if (9 %in% sel_method) {
 
     origmat1 <- as.data.frame(mat1)
 
-    cat("Linear corr imputation - in progress\n")
-
-    corr2.mat1 <- list()
-    rmse.corr2.mat1 <- NULL
-    mae.corr2.mat1 <- NULL
-    time.corr2 <- NULL
-    KStest.corr2 <- NULL
-
-    # Repeat the process n_iterations times
-    for (i in 1:n.iter) {
-
-      start.time <- Sys.time()
-      cat("Iteration:", i, "\n")
-
-      # Mask the missing values
-      masked_data.mat1 <- origmat1
-      masked_data.mat1<- prodNA(masked_data.mat1, missing_prop) # Mask some values
-
-      # Assign NA values to the mat1
-      na_positions <- is.na(masked_data.mat1)
-
-      cleaned.obj$Output_outliers@assays@data@listData[[varselect]] <-  t(masked_data.mat1)
-
-      stats.m <-statsCpG(cleaned.obj = cleaned.obj, varselect)
-
-      simu3 <- patternCorCpG(cleaned.obj=stats.m,
-                             matrix="M",
-                             varselect)
-
-
-      imputed_data.mat1 <- simu3$Imputed
-      corr2.mat1[[i]] <- imputed_data.mat1
-      masked_data.mat1 <- imputed_data.mat1
-
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
-
-
-      S3 <- err[1]
-      M3 <- err[2]
-
-      rmse.corr2.mat1[i]  <- S3
-      mae.corr2.mat1[i]  <- M3
-
-      KS_test <- KStesCpG(origmat1, masked_data.mat1, plots = F)
-
-      KStest.corr2 <- KS_test
-
-      #cat("Time elapsed at iteration:\n")
-      #print(t[[3]])
-      #cat("\n")
-
-
-      results.corr2 <- list(imputed.corr2.mat1 =  corr2.mat1,
-                            RMSE.corr2.mat1 = rmse.corr2.mat1,
-                            MAE.corr2.mat1 = mae.corr2.mat1,
-                            #Comp_time = time.corr2,
-                            KS_statsitics = KStest.corr2
-      )
-
-
-
-    }# corr2
-
-
-
-  }  else results.corr2 <- NULL
-
-
-# - - - - - - - - - - - - -  - - - - - - - - - - - - -
-  # Method 10 = imputation based on bigcor
-
-  if (10 %in% sel_method) {
-
-    origmat1 <- as.data.frame(mat1)
-
-    cat("Bigcor imputation - in progress\n")
+    cat("Correlation-based imputation - in progress\n")
 
     corr.mat1 <- list()
     rmse.corr.mat1 <- NULL
@@ -752,11 +681,11 @@ RepNA <- function(cleaned.obj,varselect=5,
       # Assign NA values to the mat1
       na_positions <- is.na(masked_data.mat1)
 
-      cleaned.obj$Output_outliers@assays@data@listData[[varselect]] <-  t(masked_data.mat1)
+      list.cleaned[[varselect]] <-  t(masked_data.mat1)
 
-      stats.m <-statsCpG(cleaned.obj = cleaned.obj, varselect)
+      stats.m <-statsCpG(cleaned.obj = list.cleaned, varselect)
 
-      simu3 <- patternCpG(cleaned.obj=stats.m,
+      simu3 <- imputeCorr(cleaned.obj=stats.m,
                              matrix="M",
                              varselect)
 
@@ -800,19 +729,19 @@ RepNA <- function(cleaned.obj,varselect=5,
 
 
   # - - - - - - - - - - - - -  - - - - - - - - - - - - -
-  # Method 11 = imputation based on consensus partition
+  # Method 10 = imputation based on consensus partition
 
-  if (11 %in% sel_method) {
+  if (10 %in% sel_method) {
 
     origmat1 <- as.data.frame(mat1)
 
     cat("Consensus partition imputation - in progress\n")
 
-    clust.mat1 <- list()
-    rmse.clust.mat1 <- NULL
-    mae.clust.mat1 <- NULL
-    time.clust <- NULL
-    KStest.clust <- NULL
+    cpart.mat1 <- list()
+    rmse.cpart.mat1 <- NULL
+    mae.cpart.mat1 <- NULL
+    time.cpart <- NULL
+    KStest.cpart <- NULL
 
     # Repeat the process n_iterations times
     for (i in 1:n.iter) {
@@ -829,16 +758,16 @@ RepNA <- function(cleaned.obj,varselect=5,
 
 
       # Impute the missing values
-      #time.clust.knn[i] <- system.time(
+      #time.cpart.knn[i] <- system.time(
       imputed_data.mat1<- consensusPart(data1 = masked_data.mat1,
                                                 dataset.simulated=origmat1,
                                                 partition_method = "pam", top_rows = "ATC",
                                                 k_to_test = 2:8, top_n = 100)
 
 
-      clust_data.mat1 <-  t(imputed_data.mat1$dataset.cluster)
-      clust.mat1[[i]] <- clust_data.mat1
-      masked_data.mat1[na_positions] <- clust_data.mat1[na_positions]
+      cpart_data.mat1 <-  t(imputed_data.mat1$dataset.cluster)
+      cpart.mat1[[i]] <- cpart_data.mat1
+      masked_data.mat1[na_positions] <- cpart_data.mat1[na_positions]
 
       err <- Errors(origmat1, masked_data.mat1, na_positions)
 
@@ -846,32 +775,32 @@ RepNA <- function(cleaned.obj,varselect=5,
       S3 <- err[1]
       M3 <- err[2]
 
-      rmse.clust.mat1[i]  <- S3
-      mae.clust.mat1[i]  <- M3
+      rmse.cpart.mat1[i]  <- S3
+      mae.cpart.mat1[i]  <- M3
 
       KS_test <- KStesCpG(origmat1, masked_data.mat1, plots = F)
 
-      KStest.clust <- KS_test
+      KStest.cpart <- KS_test
 
       #cat("Time elapsed at iteration:\n")
       #print(t[[3]])
       #cat("\n")
 
 
-      results.clust <- list(imputed.clust.mat1 = clust.mat1,
-                            RMSE.clust.mat1 = rmse.clust.mat1,
-                            MAE.clust.mat1 = mae.clust.mat1,
-                            #Comp_time = time.clust,
-                            KS_statsitics = KStest.clust
+      results.cpart <- list(imputed.cpart.mat1 = cpart.mat1,
+                            RMSE.cpart.mat1 = rmse.cpart.mat1,
+                            MAE.cpart.mat1 = mae.cpart.mat1,
+                            #Comp_time = time.cpart,
+                            KS_statsitics = KStest.cpart
       )
 
 
 
-    }#clust
+    }#cpart
 
 
 
-  }  else results.clust <- NULL
+  }  else results.cpart <- NULL
 
 
 
@@ -885,10 +814,9 @@ RepNA <- function(cleaned.obj,varselect=5,
               SVD_imputation = results.svd,
               MISSMDA_imputation = results.missmda,
               MISSEM_imputation = results.missem,
-              KNN2_imputation = results.knn2,
+              KNN_imputation = results.knn,
               CORR_imputation = results.corr,
-              CORR2_imputation = results.corr2,
-              CLUST_imputation = results.clust))
+              CPART_imputation = results.cpart))
 
 
 

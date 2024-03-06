@@ -51,7 +51,7 @@ A function for computing the comparisong between imputation methods, compute acc
  clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
  clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
  stats3<- lapply(clean.out, na.omit)
- imp.M2 <- RepNA(list.cleaned=stats3,
+ imp.M2 <- repNA(list.cleaned=stats3,
                 missing_prop= 0.2,
                 varselect=5,
                 n.iter= 10,

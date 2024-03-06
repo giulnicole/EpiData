@@ -1,12 +1,12 @@
-#' @title PlotStats
+#' @title plotStats
 #' @description
-#' \code{\link{PlotStats}} internal function which helps in visualizing the percentage of missing values after computation of beta and M values' matrices
+#' \code{\link{plotStats}} internal function which helps in visualizing the percentage of missing values after computation of beta and M values' matrices
 #'
 #'
 #' @param list.cleaned list containing the cleaned datasets which have been cleaned and filtered for outliers.
 #'
 #'
-#' @name PlotStats
+#' @name plotStats
 #'
 #' @return
 #' a list with 2 elements:
@@ -15,21 +15,23 @@
 #'
 #'
 #' @examples
-#' # data("matrices")
-#' # C<- assay(dati, 1)
-#' # M<- assay(dati, 2)
-#' # U<- assay(dati, 3)
-#' # C[C==0]<- NA
-#' # M[M==0]<- NA
-#' # U[U==0]<- NA
-#' # B <- M/C
-#' # M.val <- log2(M/U)
-#' # list2 <- list(coverage=C, meth=M, unmeth=M, beta.val=B, m.val=M.val)
-#' # statistics2 <- PlotStats(list2)
+#' \dontrun{
+#'  data("matrices")
+#'  C<- assay(dati, 1)
+#'  M<- assay(dati, 2)
+#'  U<- assay(dati, 3)
+#'  C[C==0]<- NA
+#'  M[M==0]<- NA
+#'  U[U==0]<- NA
+#'  B <- M/C
+#'  M.val <- log2(M/U)
+#'  list2 <- list(coverage=C, meth=M, unmeth=M, beta.val=B, m.val=M.val)
+#'  statistics2 <- PlotStats(list2)
+#' }
 #'
 #' @noRd
 #'
-PlotStats <- function(list.cleaned) {
+plotStats <- function(list.cleaned) {
 
   mat1  <- list.cleaned[[1]]
   mat2 <- list.cleaned[[2]]
