@@ -1,30 +1,61 @@
 Package: EpiData
-Title: Package for investigating patterns and structure of missing data from Bisulphite Sequencing experiments
+Title: A package for enhancing reliability in DNA methylation analysis and propose a novel approach for imputing missing data from bisulfite sequencing experiments
 Version: 4.3.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+       c(person(given = "Giulia Nicole",
+       family = "Baldrighi",
+       role = c("aut", "cre"),
+       email = "giulianicole.baldrighi01@universitadipavia.it",
+       comment = c(ORCID = "0000-0001-8538-4768")))  
+Description: EpiData: R functions to study missing data pattern from bisulphite sequencing experiments and impute values (e.g. M values) without changing correlation between CpGs via simulation of data drawn from distributions with the same covariance matrix as the original one. 
 License: use_mit_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports:
     dplyr,
     magrittr,
+    GenomicFeatures,
+    GenomicRanges,
+    SummarizedExperiment,
+    psych,
+    stats,
     ggplot2,
     mice,
     dcov,
     tidyr,
     data.table,
     kableExtra,
-    tidyverse, 
+    tidyverse,
     matrixStats,
-    impute,
+    cola,
     corrplot,
     mice,
     RColorBrewer,
-    dcov, 
-    ape, 
-    circlize, 
-    EnvStats
+    dcov,
+    ape,
+    EnvStats,
+    latentcor,
+    apcluster,
+    propagate,
+    missForest,
+    FNN,
+    pcaMethods,
+    softImpute,
+    impute,
+    BiocStyle,
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
+    AnnotationHub,
+    BiocIO
+Suggests: 
+    knitr,
+    RefManageR,
+    rmarkdown,
+    sessioninfo,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: 
+    R (>= 2.10)
+LazyData: true
+VignetteBuilder: knitr
+biocViews: 
