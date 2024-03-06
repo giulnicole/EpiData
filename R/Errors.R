@@ -22,9 +22,6 @@
 #'
 #' @noRd
 
-
-
-#' @noRd
 Errors <- function(origmat1, masked_data.mat1, na_positions) {
 
 

@@ -154,7 +154,7 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
    if (plot == TRUE){
 
   ### MODULE 3: plots
-  plots<- PlotStats(cleaned.obj)
+  plots<- plotStats(cleaned.obj)
 
   cat("Converting results ...\n")
   res<- list(Matrix=as.data.frame(Y), Individuals = rows, CpGs = cols, Table_missing = table_missing,

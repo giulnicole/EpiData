@@ -20,7 +20,9 @@ a list object with four elements:
 \code{\link{split3MatXChrom}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 }
 \examples{
-# data("matrices")
-# splitted<- split3MatXChrom(assays(dati))
+\dontrun{
+ data("matrices")
+ splitted<- split3MatXChrom(assays(dati))
+}
 
 }
