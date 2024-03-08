@@ -1,20 +1,20 @@
 
 #' @title split3MatXChrom
 #' @description
-#' \code{\link{split3MatXChrom}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
+#' \code{}A function for splitting the cleaned list per each chromosome.
 #'
 #'
-#' @param list.cleaned list with the three counts' matrices filtered from the cleanCovMat and cleanOutliers functions.
+#' @param list.input list with the three counts' matrices filtered from the `cleanCovMat` and `cleanOutliers` functions.
 #'
 #'
 #' @name split3MatXChrom
 #'
 #' @return
-#' a list object with four elements:
-#'  \item{final}{coverage, methylated and unmethylated counts splitted per each chromosome}
-#'  \item{coverage}{coverage with all chromosomes}
-#'  \item{methylated}{methylated counts matrix with all chromosomes}
-#'  \item{unmethylated}{unmethylated counts matrix with all chromosomes}
+#' List with 4 elements:
+#'  \item{final}{coverage, methylated and unmethylated counts splitted per each chromosome.}
+#'  \item{coverage}{coverage with all chromosomes.}
+#'  \item{methylated}{methylated counts matrix with all chromosomes.}
+#'  \item{unmethylated}{unmethylated counts matrix with all chromosomes.}
 #'
 #'
 #' @examples
@@ -25,13 +25,13 @@
 #'
 #' @export
 #'
-split3MatXChrom <- function(list.cleaned)   {
+split3MatXChrom <- function(list.input)   {
 
   # split the chromosome
 
-  cov.cleaned <- list.cleaned[[1]]
-  met.cleaned <- list.cleaned[[2]]
-  unmet.cleaned <- list.cleaned[[3]]
+  cov.cleaned <- list.input[[1]]
+  met.cleaned <- list.input[[2]]
+  unmet.cleaned <- list.input[[3]]
 
   chr <- rownames(met.cleaned)
   chr <- gsub("-.*", "", chr)
