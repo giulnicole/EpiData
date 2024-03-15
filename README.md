@@ -2,6 +2,20 @@
 Welcome to our EpiData project! This is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. 
 We hope you enjoy and we look forward to your contributions!
 
+
+##Installing
+Please install devtools if you haven't yet.
+```{r setup}
+install.packages("devtools")
+```
+
+Required Bioconductor packages:
+```{r setup}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+```
+BiocManager::install(c("qvalue", "rain", "limma"))
+
 ## Contributing
 We welcome any and all contributions. Here are some ways you can get started:
 
