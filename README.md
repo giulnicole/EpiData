@@ -73,13 +73,13 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 ```{r message=FALSE, warning = FALSE}
 input.list<- assays(dati)
 
-clean.coverage2 <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
 **Cleaning step 2**
 
 ```{r message=FALSE, warning = FALSE}
-clean.out<- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=0, remove_outliers = T)
+clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
 ```
 After cleaning the data, the pipeline follows with studying each chromosome seprately.the following function helps in separating the information of BS experiment per each chromosome. 
 
@@ -96,9 +96,9 @@ Here is shown the example pipeline through each one of the chromosomes.
 **Statistics** 
 
 ```{r message=FALSE, warning = FALSE}
-divided<- splitted$final
+final2<- splitted$final
 
-stats<- statsCpG(cleaned.obj= divided[[1]], varselect = 5, plot = TRUE)
+stats<- statsCpG(cleaned.obj= final2[[1]], varselect = 5, plot = TRUE)
 stats$Barplot
 ```
 
@@ -127,7 +127,7 @@ By applying the following function the imputation methods are compared and their
 ```{r, message=FALSE, warning=FALSE}
 stats3<- lapply(clean.out, na.omit)
 
-imp.M2 <- repNA(list.cleaned=stats3,
+imp.M <- repNA(list.cleaned=stats3,
                        missing_prop= 0.2, varselect=5,
                        n.iter= 10, sel_method=c(1:10),
                        trees= 50, nb= 10, ncomp= 2, matrix="M")
@@ -136,7 +136,7 @@ imp.M2 <- repNA(list.cleaned=stats3,
 
 **Measure accuracy**
 ```{r, warning=FALSE, message=FALSE}
-measure_imp_m <- accuracy_measure2(imp.M2)
+measure_imp_m <- accuracy_measure2(imp.M)
 measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
 ```
