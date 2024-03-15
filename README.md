@@ -110,7 +110,7 @@ obj.correlation2 <- imputeCorr(cleaned.obj=stats,
 ```
 
 ## Comparison of imputation methods
-
+By applying the following function the imputation methods are compared and their accuracy and performance are evaluated. 
 ```{r, message=FALSE, warning=FALSE}
 stats3<- lapply(clean.out, na.omit)
 
