@@ -141,3 +141,43 @@ measure_imp_m <- accuracy_measure2(imp.M)
 measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
 ```
+
+
+
+## Parallelization
+
+```{r warning=FALSE, message=FALSE}
+library(BiocParallel)
+library(matrixcalc)
+```
+
+The input data is the same as shown in Pipeline section:
+```{r message=FALSE, warning = FALSE}
+input.list<- assays(dati)
+
+clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+```
+
+Split the 5 cleaned matrices per each chromosome:
+```{r warning=FALSE}
+splitted.list <- split5MatXChrom(clean.out)
+```
+
+
+Calculating statistics
+```{r warning=FALSE}
+input.stats<- splitted.list$final
+
+# Statistics
+stats2<- ParallStats(input.stats)
+```
+
+Imputing data based on correlation
+```{r  warning=FALSE}
+simu2<- ParallSimu(stats2)
+```
+
+```{r}
+imputed.mat <- extractFinalMat(list.imputed=simu2)
+```
+
