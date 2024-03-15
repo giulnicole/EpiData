@@ -89,3 +89,24 @@ divided<- splitted$final
 stats<- statsCpG(cleaned.obj= divided[[1]], varselect = 5, plot = TRUE)
 stats$Barplot
 ```
+
+The default missing values' investigation is performed for M values. Note that percentage of missing values in M values are higher than counts' missing value percentages.
+
+
+**Imputation based on correlation structure**
+```{r message=FALSE, warning = FALSE}
+library(matrixcalc)
+
+obj.correlation <- imputeCorr(cleaned.obj=stats,
+                    matrix="M",
+                    varselect = 5,
+                    correlation.type="pairwise")
+
+
+obj.correlation2 <- imputeCorr(cleaned.obj=stats,
+                    matrix="M",
+                    varselect = 5,
+                    correlation.type="meanCpG")
+
+
+```
