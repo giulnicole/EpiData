@@ -5,14 +5,13 @@ We hope you enjoy and we look forward to your contributions!
 ## Contributing
 We welcome any and all contributions. Here are some ways you can get started:
 
-**Report bugs**: If you encounter any bugs, please let us know. Open up an issue and let us know the problem.
+**Report bugs**: please, feel free to report, if you encounter any bugs. Open up an issue and let us know the problem.
 
-**Contribute code**: If you are a developer and want to contribute, follow the instructions below to get started!
+**Contribute code**: if you are a developer and want to contribute, follow the instructions below to get started!
 
-**Suggestions**: If you don't want to code but have some awesome ideas, open up an issue explaining some updates or imporvements you would like to see!
+**Suggestions**: if you don't want to code but have some awesome ideas, open up an issue explaining some updates or imporvements you would like to see!
 
 **Documentation**: If you see the need for some additional documentation, feel free to add some!
-Instructions
 
 ## Fork this repository
 Clone the forked repository
@@ -20,7 +19,7 @@ Add your contributions (code or documentation)
 Commit and push
 Wait for pull request to be merged
 
-## Get started
+## Get started with the analysis
 
 **Epidata**
 ```{r setup}
@@ -108,5 +107,23 @@ obj.correlation2 <- imputeCorr(cleaned.obj=stats,
                     varselect = 5,
                     correlation.type="meanCpG")
 
+```
 
+## Comparison of imputation methods
+
+```{r, message=FALSE, warning=FALSE}
+stats3<- lapply(clean.out, na.omit)
+
+imp.M2 <- repNA(list.cleaned=stats3,
+                       missing_prop= 0.2, varselect=5,
+                       n.iter= 10, sel_method=c(1:10),
+                       trees= 50, nb= 10, ncomp= 2, matrix="M")
+
+```
+
+**Measure accuracy**
+```{r, warning=FALSE, message=FALSE}
+measure_imp_m <- accuracy_measure2(imp.M2)
+measure_imp_m$Boxplot.rmse
+measure_imp_m$Boxplot.mae
 ```
