@@ -64,4 +64,28 @@ input.list<- assays(dati)
 clean.coverage2 <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
+**Cleaning step 2**
 
+```{r message=FALSE, warning = FALSE}
+clean.out<- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=0, remove_outliers = T)
+```
+After cleaning the data, the pipeline follows with studying each chromosome seprately.the following function helps in separating the information of BS experiment per each chromosome. 
+
+**Splitting dataset per chromosomes**
+
+The input should be the assay method of the SummarizedExperiment object, if present. Otherwise a list with the three matrices described before.
+```{r}
+splitted<- split5MatXChrom(clean.out)
+```
+The result is a list where we have the total coverage matrix, methylated maytrix and unmethylated matrix with all chromoeomse, but also a list called *final* which contains all these three matrices already divided per each chromosome. 
+
+Here is shown the example pipeline through each one of the chromosomes. 
+
+**Statistics** 
+
+```{r message=FALSE, warning = FALSE}
+divided<- splitted$final
+
+stats<- statsCpG(cleaned.obj= divided[[1]], varselect = 5, plot = TRUE)
+stats$Barplot
+```
