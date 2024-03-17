@@ -4,18 +4,18 @@ Welcome to our EpiData project! This is a package for enhancing reliability in D
 We hope you enjoy and we look forward to your contributions!
 
 
-##Installing
+## Installing the package
 Please install devtools if you haven't yet.
 ```{r setup}
-install.packages("devtools")
+BiocManager::install(c("Epidata"))
 ```
 
-Required Bioconductor packages:
+Required Bioconductor/devtools packages:
 ```{r setup}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install(c("Epidata"))
+install.packages("devtools")
 ```
 
 
