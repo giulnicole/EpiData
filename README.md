@@ -14,8 +14,10 @@ Required Bioconductor packages:
 ```{r setup}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
+
+BiocManager::install(c("Epidata"))
 ```
-BiocManager::install(c("qvalue", "rain", "limma"))
+
 
 ## Contributing
 We welcome any and all contributions. Here are some ways you can get started:
