@@ -1,7 +1,7 @@
 #' @title clenCovMat
 #' @description
-#' \code{\link{cleanCovMat}} helps in the conversion of missing values (0->NA) in the coverage matrix,
-#'  removing rows and columns above pre-specified missingness threshold.
+#' \code{}First part of CpGs' cleaning. `cleanCovMat` helps in the conversion of zeroes into missing values (0->NA) in the coverage matrix,
+#'  removing rows (CpGs) and columns (individuals) above pre-specified missingness threshold.
 #'
 #' @import magrittr
 #' @import tidyverse
@@ -19,7 +19,7 @@
 #' @name cleanCovMat
 #'
 #' @return
-#'  \item{List bject with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+#'  \item{List with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed.}
 #'
 #'
 #' @examples
@@ -30,6 +30,8 @@
 #'  # Cleaning low counts for coverage
 #'  clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #' }
+#'
+#'
 #'
 #' @export
 #'
@@ -124,7 +126,6 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
   Y <- res[[1]]
   Z <- res[[2]]
   X4 <- as.data.frame(X4)
-  rownames(X4)<- sites_filtered2
 
   # Results
   res<- list(Coverage_matrix = X4, Met_matrix = Y, Unmet_matrix = Z)

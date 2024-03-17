@@ -1,6 +1,6 @@
 #' @title cleanOutliers
 #' @description
-#' \code{\link{cleanOutliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
+#' \code{} Second part of CpGs' cleaning. `cleanOutliers` helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
 #' coverage cleaning and outlier values in the conversion.
 #'
 #'
@@ -12,7 +12,7 @@
 #'
 #' @return
 #' SummarizedExperiment object with 2 elements:
-#'  \item{List bject with 5 elements}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
+#'  \item{List with 5 elements}{cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
 #'
 #'
 #'

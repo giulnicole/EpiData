@@ -14,13 +14,13 @@ ParallSimu(list.stats)
 \item{varselect}{index of the dataset to be used (numeric value 1-5)}
 }
 \value{
-list with SummarizedExperiment objects and imputed datasets in metadata:
+List with SummarizedExperiment objects and imputed datasets in metadata:
 \item{imputed}{Matrix of CpG imputed}
 }
 \description{
 A function for computing the non-negative definite matrix of covariance matrix, by eigenvectors' decompisition and
 and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset (Parallelized version)
-\code{\link{ParallSimu}} computes the imputation based on correlation pattern between CpGs
+\code{} computes the imputation based on correlation pattern between CpGs
 }
 \examples{
 \dontrun{
@@ -28,15 +28,7 @@ and simulate new values drawn from the same distribution to impute remaining mis
  list.cleaned1<- clean.out
  list.cleaned2<- clean.out
  list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
- input.stats<- list()
- for (i in 1:length(list.cleaned)){
-
-  input.stats[[i]] <- GRconversion2(list.cleaned[[i]])
-
-  names(input.stats)[[i]] <- names(list.cleaned)[[i]]
-  }
-
- stats2 <- ParallStats(input.stats)
+ stats2 <- ParallStats(list.cleaned)
  simu.mix2 <- ParallSimu(list.stats = stats2)
 }
 

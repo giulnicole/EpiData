@@ -18,7 +18,13 @@ consensusPart(
 
 \item{dataset.simulated}{Simulated dataset with impute.corr.}
 
-\item{top_n}{}
+\item{partition_method}{Method to perform partition (see cola package for further details).}
+
+\item{top_rows}{Method to use for finding top rows. (see cola package for further details).}
+
+\item{k_to_test}{Number of partitions to perform to divide CpGs. Default is 2:8.}
+
+\item{top_n}{Top rows (number) on which perform partition. Default value is 100.}
 }
 \value{
 dataset imputed:
@@ -27,7 +33,7 @@ dataset imputed:
 \description{
 A function for computing the non-negative definite matrix of covariance matrix, by eigenvectors' decompisition and
 and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset.
-\code{\link{consensusPart}} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
+\code{} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 }
 \examples{
 \dontrun{

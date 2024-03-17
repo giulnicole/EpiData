@@ -1,6 +1,6 @@
 #' @title plotStats
 #' @description
-#' \code{\link{plotStats}} internal function which helps in visualizing the percentage of missing values after computation of beta and M values' matrices
+#' \code{} internal function which helps in visualizing the percentage of missing values after computation of beta and M values' matrices
 #'
 #'
 #' @param list.cleaned list containing the cleaned datasets which have been cleaned and filtered for outliers.
@@ -11,7 +11,7 @@
 #' @return
 #' a list with 2 elements:
 #'  \item{NA_summary}{summary statistics of missing data}
-#'  \item{NA_plot}{barplot for percentages of missing data}
+#'  \item{NA_plot}{barplot for percentages of missing data.}
 #'
 #'
 #' @examples

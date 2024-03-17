@@ -1,6 +1,6 @@
 #' @title KStestCpG
 #' @description
-#' \code{\link{KStestCpG}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
+#' \code{} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 #'
 #'
 #' @param origmat filtered matrix from the SummarizedExperiment object but without missing
@@ -12,12 +12,16 @@
 #' @return
 #' a data frame with 2 elements per each iteration:
 #'  \item{KS.statistics}{KS test statistics value per each CpG}
-#'  \item{Pval}{P value per each test}
+#'  \item{Pval}{P value per each test.}
 #'
 #'
 #' @examples
-#' #
 #'
+#'  \dontrun{
+#'
+#'  KS_test <- KStesCpG(origmat1, masked_data.mat1)
+#'
+#'  }
 #'
 #'
 #' @noRd

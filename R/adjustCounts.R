@@ -1,18 +1,16 @@
 #' @title adjustCounts
 #' @description
-#' \code{\link{adjustCounts}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
+#' \code{}Filtering step of methylated and unmethylated matrices. `adjustCounts` is a function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 #'
 #'
-#' @param coverage filtered matrix from the SummarizedExperiment object.
-#' @param methylated counts' matrix to be adjusted from the SummarizedExperiment object.
-#' @param unmethylated counts'matrix to be adjusted from the SummarizedExperiment object.
+#' @param coverage filtered matrix of coverage counts from the list of assays of the SummarizedExperiment object.
+#' @param methylated matrix of methylated counts not already adjusted from the list of assays of the SummarizedExperiment object.
+#' @param unmethylated matrix of unmethylated counts not already adjusted from the list of assays of the SummarizedExperiment object.
 #'
 #' @name adjustCounts
 #'
 #' @return
-#' a list with 2 elements:
-#'  \item{methylated}{filtered methylated counts matrix}
-#'  \item{unmethylated}{filtered unmethylated counts matrix}
+#'  \item{List with 2 elements}{filtered methylated counts matrix and filtered unmethylated counts matrix.}
 #'
 #'
 #' @examples
@@ -34,103 +32,23 @@ adjustCounts <- function(coverage, methylated, unmethylated){
 
   # Initialize
   met2 <- methylated
-  co <- coverage
-  un <- unmethylated
+  co<- coverage
+  # Identify the indices where the condition is met
+  indices <- which(is.na(co) & unmethylated == 0, arr.ind = TRUE)
 
-  for (i in 1:nrow(met2)) {
-    for (j in 1:ncol(met2)) {
-      if (is.na(co[i, j]) && un[i, j] == 0) {
-        met2[i, j] <- NA
-      } else {
-        met2[i, j] <-  methylated[i, j]
-      }
-    }
-  }
+  # Replace values at identified indices with NA
+  met2[indices] <- NA
 
 
   # Initialize
   unmet2 <- unmethylated
 
-  for (i in 1:nrow(unmet2)) {
-    for (j in 1:ncol(unmet2)) {
-      if (is.na(co[i, j]) && is.na(met2[i, j])) {
-        unmet2[i, j] <- NA
-      } else {
-        unmet2[i, j] <-  unmethylated[i, j]
-      }
-    }
-  }
+  indices2 <- which(is.na(co) & is.na(met2), arr.ind = TRUE)
+  unmet2[indices2] <- NA
 
 
-  # Initialize
-  met3 <- met2
-
-  for (i in 1:nrow(met3)) {
-
-    for (j in 1:ncol(met3)) {
-
-      if (!is.na(co[i, j]) && co[i, j] == unmet2[i, j]) {
-        #if (met3[i, j] == 0) {
-
-        cpg <- as.numeric(met3[i,])
-        wil <- wilcox.test(cpg, mu = 0, alternative = "greater")
-        pval <- wil$p.value
-
-
-        if (pval< 0.01) {
-          # cat("NA \n")
-          met3[i, j] <- NA
-
-
-        }   else {
-          # cat("not NA \n")
-          met3[i, j] <- 0
-
-        }
-
-
-      } else {
-        met3[i, j] <-  met2[i, j]
-      }
-    }
-  }
-
-
-  # Initialize
-  unmet3 <- unmet2
-
-  for (i in 1:nrow(unmet3)) {
-
-    for (j in 1:ncol(unmet3)) {
-
-      if (!is.na(co[i, j]) && !is.na(met3[i, j]) && co[i, j] == met3[i, j]) {
-        #if (met3[i, j] == 0) {
-
-        cpg <- as.numeric(unmet3[i,])
-        wil <- wilcox.test(cpg, mu = 0, alternative = "greater")
-        pval <- wil$p.value
-
-
-        if (pval< 0.01) {
-          # cat("NA \n")
-          unmet3[i, j] <- NA
-
-
-        }   else {
-          # cat("not NA \n")
-          unmet3[i, j] <- 0
-
-        }
-
-
-      } else {
-        unmet3[i, j] <-  unmet2[i, j]
-      }
-    }
-  }
-
-  methylated <- met3
-  unmethylated <- unmet3
+  methylated <- met2
+  unmethylated <- unmet2
 
   res <- list(methylated, unmethylated)
 

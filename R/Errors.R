@@ -1,9 +1,9 @@
 #' @title Errors
 #' @description
-#' \code{\link{Errors}} internal function which perform the accuracy measure with RMSE, MAE
+#' \code{} internal function which perform the accuracy measure with RMSE, MAE
 #'
 #'
-#' @param origmat filtered matrix from the SummarizedExperiment object but without missing
+#' @param origmat1 filtered matrix from the SummarizedExperiment object but without missing
 #' @param masked_data.mat1 matrix which has been imputed
 #' @param na_positiond position in the matrix with replicate NAs
 #'
@@ -12,16 +12,20 @@
 #' @return
 #' a vector with errors per each iteration:
 #'  \item{S3}{Root mean square error (RMSE)}
-#'  \item{M3}{Mean absolute error (MAE)}
+#'  \item{M3}{Mean absolute error (MAE).}
 #'
 #'
 #' @examples
-#' #
 #'
+#' \dontrun{
+#'  err <- Errors(origmat1, masked_data.mat1, na_positions)
+#'
+#' }
 #'
 #'
 #' @noRd
-
+#'
+#'
 Errors <- function(origmat1, masked_data.mat1, na_positions) {
 
 

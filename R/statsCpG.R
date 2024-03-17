@@ -14,17 +14,17 @@
 #'
 #' @return
 #'  Object and with statistics on missing data:
-#'  \item{Matrix}{Matrix on which missing data pattern is explored}
-#'  \item{Individuals}{Subject passing filters}
-#'  \item{CpGs}{Filtered CpGs}
-#'  \item{Table_missing}{Table with NAs statistics per CpG with 5 columns: CpG's id, nObs, percObs, nNA, percNA}
-#'  \item{Fraction_missingness}{Fraction of NAs in total}
-#'  \item{K_table}{Table K table extra for table_missing}
-#'  \item{Linear_correlation}{Matrix with liean correlation}
-#'  \item{long_correlation_matrix}{Matrix  with linear correlation in longitudinal format}
-#'  \item{means}{Mean per CpG}
-#'  \item{sds}{Standard deviation per CpG}
-#'  \item{Barplot}{Barplot with proportion of missing data per matrix}
+#'  \item{Matrix}{Matrix on which missing data pattern is explored.}
+#'  \item{Individuals}{Subject passing filters.}
+#'  \item{CpGs}{Filtered CpGs.}
+#'  \item{Table_missing}{Table with NAs statistics per CpG with 5 columns: CpG's id, nObs, percObs, nNA, percNA.}
+#'  \item{Fraction_missingness}{Fraction of NAs in total.}
+#'  \item{K_table}{Table K table extra for table_missing.}
+#'  \item{Linear_correlation}{Matrix with liean correlation.}
+#'  \item{long_correlation_matrix}{Matrix  with linear correlation in longitudinal format.}
+#'  \item{means}{Mean per CpG.}
+#'  \item{sds}{Standard deviation per CpG.}
+#'  \item{Barplot}{Barplot with proportion of missing data per matrix.}
 #'
 #' @examples
 #' \dontrun{
@@ -140,15 +140,16 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
   rownames(cormat.lin) <- colnames(Y)
 
   cormat.lin <- stats::cor(Y, use = "pairwise.complete.obs", method = "pearson")
+  colnames(cormat.lin) <- cpg
+  rownames(cormat.lin) <- cpg
 
-
-  long_cormat.lin <- cbind(expand.grid(dimnames(cormat.lin)), value = as.vector(cormat.lin))
 
   cat("Computing means and standard deviations per CpG ...\n")
   Y<- t(Y)
   means <- rowMeans(Y, na.rm=TRUE)
   sds <- apply(Y, 1, sd, na.rm=T)
 
+  long_cormat.lin <- cbind(expand.grid(dimnames(cormat.lin)), value = as.vector(cormat.lin))
 
 
    if (plot == TRUE){

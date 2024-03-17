@@ -28,7 +28,7 @@
 #'
 #'
 #' @return
-#' list with dataset imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.
+#' list with datasets imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.
 #'
 #' @examples
 #'  \dontrun{
@@ -759,7 +759,7 @@ repNA <- function(list.cleaned,varselect=5,
 
       # Impute the missing values
       #time.cpart.knn[i] <- system.time(
-      imputed_data.mat1<- consensusPart(data1 = masked_data.mat1,
+      imputed_data.mat1<- consensusPart(data = masked_data.mat1,
                                                 dataset.simulated=origmat1,
                                                 partition_method = "pam", top_rows = "ATC",
                                                 k_to_test = 2:8, top_n = 100)

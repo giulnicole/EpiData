@@ -7,19 +7,17 @@
 adjustCounts(coverage, methylated, unmethylated)
 }
 \arguments{
-\item{coverage}{filtered matrix from the SummarizedExperiment object.}
+\item{coverage}{filtered matrix of coverage counts from the list of assays of the SummarizedExperiment object.}
 
-\item{methylated}{counts' matrix to be adjusted from the SummarizedExperiment object.}
+\item{methylated}{matrix of methylated counts not already adjusted from the list of assays of the SummarizedExperiment object.}
 
-\item{unmethylated}{counts'matrix to be adjusted from the SummarizedExperiment object.}
+\item{unmethylated}{matrix of unmethylated counts not already adjusted from the list of assays of the SummarizedExperiment object.}
 }
 \value{
-a list with 2 elements:
-\item{methylated}{filtered methylated counts matrix}
-\item{unmethylated}{filtered unmethylated counts matrix}
+\item{List with 2 elements}{filtered methylated counts matrix and filtered unmethylated counts matrix.}
 }
 \description{
-\code{\link{adjustCounts}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
+\code{}Filtering step of methylated and unmethylated matrices. \code{adjustCounts} is a function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 }
 \examples{
 \dontrun{

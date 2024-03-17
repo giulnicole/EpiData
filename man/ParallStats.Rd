@@ -12,7 +12,7 @@ ParallStats(list.cleaned)
 \item{varselect}{is the index of the dataset to be used (numeric value 1-5) to extract the information related to the CpGs' pattern. 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.}
 }
 \value{
-list with SummarizedExperiment objects and metadata statistics:
+List with SummarizedExperiment objects and metadata statistics:
 \item{Rows}{Subject passing filters}
 \item{Columns}{Filtered CpGs}
 \item{Table_missing}{Table with NAs statistics per CpG with 5 columns: CpG's id, nObs, percObs, nNA, percNA}
@@ -26,7 +26,7 @@ list with SummarizedExperiment objects and metadata statistics:
 \description{
 A function for calculating statistics and missing values patterns
 
-\code{\link{ParallStats}} computes the statistics on missing values per dataset, highlighting the pattern of missing values per each CpG (Parallelized version)
+\code{} computes the statistics on missing values per dataset, highlighting the pattern of missing values per each CpG (Parallelized version)
 }
 \examples{
 \dontrun{
@@ -34,15 +34,7 @@ A function for calculating statistics and missing values patterns
  list.cleaned1<- clean.out
  list.cleaned2<- clean.out
  list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
- input.stats<- list()
- for (i in 1:length(list.cleaned)){
-
-  input.stats[[i]] <- GRconversion2(list.cleaned[[i]])
-
-  names(input.stats)[[i]] <- names(list.cleaned)[[i]]
-  }
-
- stats2 <- ParallStats(input.stats)
+ stats2 <- ParallStats(list.cleaned)
 }
 
 

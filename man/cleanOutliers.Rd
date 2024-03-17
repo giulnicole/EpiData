@@ -15,10 +15,10 @@ cleanOutliers(filtered.obj, outlier_threshold = 5, remove_outliers = F)
 }
 \value{
 SummarizedExperiment object with 2 elements:
-\item{List bject with 5 elements}{SummarizedExperiment object with cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
+\item{List with 5 elements}{cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
 }
 \description{
-\code{\link{cleanOutliers}} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
+\code{} Second part of CpGs' cleaning. \code{cleanOutliers} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
 coverage cleaning and outlier values in the conversion.
 }
 \examples{

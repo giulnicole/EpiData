@@ -21,11 +21,11 @@ cleanCovMat(
 \item{cpg_removal_threshold}{Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.}
 }
 \value{
-\item{List bject with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed}
+\item{List with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed.}
 }
 \description{
-\code{\link{cleanCovMat}} helps in the conversion of missing values (0->NA) in the coverage matrix,
-removing rows and columns above pre-specified missingness threshold.
+\code{}First part of CpGs' cleaning. \code{cleanCovMat} helps in the conversion of zeroes into missing values (0->NA) in the coverage matrix,
+removing rows (CpGs) and columns (individuals) above pre-specified missingness threshold.
 }
 \examples{
 \dontrun{
@@ -35,5 +35,7 @@ removing rows and columns above pre-specified missingness threshold.
  # Cleaning low counts for coverage
  clean.coverage2 <- cleanCovMat(input.obj = final[[1]], max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 }
+
+
 
 }

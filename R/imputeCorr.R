@@ -2,10 +2,11 @@
 #'
 #' @description A function for computing the non-negative definite matrix of covariance matrix, by eigenvectors' decompisition and
 #' and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset.
-#' \code{\link{imputeCorr}} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
+#' \code{} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
 #' @import latentcor
 #' @import propagate
+#' @importFrom matrixcalc is.positive.semi.definite
 #'
 #' @name imputeCorr
 #'
@@ -92,7 +93,7 @@ imputeCorr <- function(cleaned.obj,
   #covMat <- covMat + epsilon * diag(length(mu))
 
 
-  if (is.positive.semi.definite(as.matrix(covMat)) !=TRUE | isSymmetric.matrix(as.matrix(covMat)) != TRUE){
+  if (matrixcalc::is.positive.semi.definite(as.matrix(covMat)) !=TRUE | isSymmetric.matrix(as.matrix(covMat)) != TRUE){
 
     cat("Eigen decomposition...\n")
     # Transforming in a semi-positive definite matrix

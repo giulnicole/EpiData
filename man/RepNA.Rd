@@ -39,7 +39,7 @@ repNA(
 \item{cleaned.obj}{cleaned dataset from cleaning part 1 (coverage cleaning) and cleaning part 2 (outliers).}
 }
 \value{
-list with dataset imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.
+list with datasets imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.
 }
 \description{
 A function for computing the comparisong between imputation methods, compute accuracy measure with replications and Kolmogorov-Smirnov test on CpG

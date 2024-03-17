@@ -2,19 +2,18 @@
 #'
 #' @description A function for computing the non-negative definite matrix of covariance matrix, by eigenvectors' decompisition and
 #' and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset.
-#' \code{\link{consensusPart}} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
+#' \code{} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
-#' @import latentcor
-#' @import propagate
+#' @import cola
 #'
 #' @name consensusPart
 #'
 #' @param data SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (statsCpG output).
 #' @param dataset.simulated Simulated dataset with impute.corr.
-#' @param partition_method
-#' @param top_rows
-#' @param k_to_test
-#' @param top_n
+#' @param partition_method Method to perform partition (see cola package for further details).
+#' @param top_rows Method to use for finding top rows. (see cola package for further details).
+#' @param k_to_test Number of partitions to perform to divide CpGs. Default is 2:8.
+#' @param top_n Top rows (number) on which perform partition. Default value is 100.
 #'
 #'
 #'
