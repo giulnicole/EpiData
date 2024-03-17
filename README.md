@@ -160,9 +160,9 @@ The default missing values' investigation is performed for M values. Note that p
 # Comparison of imputation methods
 
 ```{r, message=FALSE, warning=FALSE}
-stats3<- lapply(clean.out, na.omit)
+data.missing <- lapply(clean.out, na.omit)
 
-imp.M <- repNA(list.cleaned=stats3,
+imp.M <- repNA(list.cleaned=data.missing ,
                        missing_prop= 0.2, varselect=5,
                        n.iter= 2, sel_method=c(1:10),
                        trees= 50, nb= 10, ncomp= 2, matrix="M")
