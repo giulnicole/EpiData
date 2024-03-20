@@ -151,6 +151,7 @@ obj.imp.mean <- imputeCorr(cleaned.obj=stats,
 
 ```
 
+**Extraction of final matriximputed for all chromosomes**
 ```{r}
 imputed.mat <- extractFinalMat(list.imputed=simu2)
 ```
@@ -171,6 +172,7 @@ imp.M <- repNA(list.cleaned=data.missing ,
 
 ```
 
+## Measuring and visualizing the accuracy of teh imputation methods
 
 ```{r, warning=FALSE, message=FALSE}
 measure_imp_m <- measureAccuracy(imp.M)
