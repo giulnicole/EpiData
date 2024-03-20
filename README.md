@@ -48,6 +48,7 @@ library(EpiData)
 ```{r, warning=FALSE, message=FALSE}
 library(devtools)
 library(magrittr)
+library(purrr)
 library(dplyr)
 library(psych)
 library(GenomicRanges)
