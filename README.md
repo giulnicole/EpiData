@@ -1,22 +1,6 @@
-## Description
-Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis with a novel approach for imputing missing data from bisulfite sequencing experiments. 
-
+## Description of the package
+Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. 
 We hope you enjoy and we look forward to your contributions!
-
-## Installing the package
-Please install devtools if you haven't yet.
-```{r setup}
-BiocManager::install(c("Epidata"))
-```
-
-Required Bioconductor/devtools packages:
-```{r setup}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-install.packages("devtools")
-```
-
 
 ## Contributing
 We welcome any and all contributions. Here are some ways you can get started:
@@ -28,6 +12,24 @@ We welcome any and all contributions. Here are some ways you can get started:
 **Suggestions**: if you don't want to code but have some awesome ideas, open up an issue explaining some updates or imporvements you would like to see!
 
 **Documentation**: If you see the need for some additional documentation, feel free to add some!
+
+
+## Installing the package
+Please install devtools and Bioconductor if you haven't them yet.
+
+Required Bioconductor/devtools packages:
+```{r setup}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+install.packages("devtools")
+```
+Installing EpiData package:
+```{r setup}
+BiocManager::install(c("Epidata"))
+```
+
+
 
 ## Fork this repository
 Clone the forked repository
@@ -46,6 +48,7 @@ library(EpiData)
 ```{r, warning=FALSE, message=FALSE}
 library(devtools)
 library(magrittr)
+library(purrr)
 library(dplyr)
 library(psych)
 library(GenomicRanges)
@@ -103,7 +106,6 @@ library(BiocParallel)
 library(matrixcalc)
 ```
 
-
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
 input.stats<- splitted$final
@@ -148,6 +150,7 @@ obj.imp.mean <- imputeCorr(cleaned.obj=stats,
 
 ```
 
+**Extraction of final matriximputed for all chromosomes**
 ```{r}
 imputed.mat <- extractFinalMat(list.imputed=simu2)
 ```
@@ -157,9 +160,7 @@ The default missing values' investigation is performed for M values. Note that p
 
 
 # Comparison of imputation methods
-## Comparison of algorithms for imputation
 
-A subset with complete data is extracted. Then replication of missing data and imputation are performed `n.iter` times. 
 ```{r, message=FALSE, warning=FALSE}
 data.missing <- lapply(clean.out, na.omit)
 
@@ -170,8 +171,8 @@ imp.M <- repNA(list.cleaned=data.missing ,
 
 ```
 
+## Measuring and visualizing the accuracy of teh imputation methods
 
-## Measuring and visualizing accuracy
 ```{r, warning=FALSE, message=FALSE}
 measure_imp_m <- measureAccuracy(imp.M)
 measure_imp_m$Boxplot.rmse
