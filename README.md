@@ -18,14 +18,14 @@ We welcome any and all contributions. Here are some ways you can get started:
 Please install devtools and Bioconductor if you haven't them yet.
 
 Required Bioconductor/devtools packages:
-```{r setup}
+```{r}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 install.packages("devtools")
 ```
 Installing EpiData package:
-```{r setup}
+```{r}
 BiocManager::install(c("Epidata"))
 ```
 
@@ -40,12 +40,12 @@ Wait for pull request to be merged
 ## Get started with the analysis
 
 **Epidata**
-```{r setup}
+```{r}
 library(EpiData)
 ```
 
 **Required packages**
-```{r, warning=FALSE, message=FALSE}
+```{r}
 library(devtools)
 library(magrittr)
 library(purrr)
@@ -75,7 +75,7 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 
 **Cleaning step 1**
 
-```{r message=FALSE, warning = FALSE}
+```{r}
 input.list<- assays(dati)
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
@@ -83,7 +83,7 @@ clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_i
 
 **Cleaning step 2**
 
-```{r message=FALSE, warning = FALSE}
+```{r}
 clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
 ```
 After cleaning the data, the pipeline follows with studying each chromosome seprately.the following function helps in separating the information of BS experiment per each chromosome. 
@@ -101,13 +101,13 @@ Here is shown the example pipeline through each one of the chromosomes.
 ## Parallelization
 After cleaning steps, CpGs' matrices are divided per each chromosome with the function
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 library(BiocParallel)
 library(matrixcalc)
 ```
 
 ### Calculating statistics per CpG 
-```{r warning=FALSE}
+```{r}
 input.stats<- splitted$final
 
 # Statistics
@@ -117,7 +117,7 @@ stats2<- ParallStats(input.stats)
 
 Here is shown the example of `statsCpG` function (used by ParallStats) through each one of the chromosomes. 
 
-```{r message=FALSE, warning = FALSE}
+```{r}
 final2<- splitted$final
 
 stats<- statsCpG(cleaned.obj= final2[[1]], varselect = 5, plot = TRUE)
@@ -127,7 +127,7 @@ stats$Barplot
 
 
 ### Imputing data based on correlation
-```{r  warning=FALSE}
+```{r}
 simu2<- ParallSimu(stats2)
 ```
 
@@ -135,7 +135,7 @@ Here is shown the example of `imputeCorr` function (used by ParallSimu) through 
 
 
 Imputation based on correlation structure 
-```{r message=FALSE, warning = FALSE}
+```{r}
 obj.imp.pairw <- imputeCorr(cleaned.obj=stats,
                     matrix="M",
                     varselect = 5,
@@ -161,7 +161,7 @@ The default missing values' investigation is performed for M values. Note that p
 
 # Comparison of imputation methods
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 data.missing <- lapply(clean.out, na.omit)
 
 imp.M <- repNA(list.cleaned=data.missing ,
@@ -173,7 +173,7 @@ imp.M <- repNA(list.cleaned=data.missing ,
 
 ## Measuring and visualizing the accuracy of teh imputation methods
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 measure_imp_m <- measureAccuracy(imp.M)
 measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
