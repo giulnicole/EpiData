@@ -171,7 +171,7 @@ imp.M <- repNA(list.cleaned=data.missing ,
 
 ```
 
-## Measuring and visualizing the accuracy of teh imputation methods
+## Measuring and visualizing the accuracy of the imputation methods
 
 ```{r}
 measure_imp_m <- measureAccuracy(imp.M)
