@@ -31,8 +31,9 @@ ParallSimu <- function(list.stats){
 
 
   meta.simu <- bplapply(list.stats, imputeCorr)
+  simulated.mat <- extractFinalMat(meta.simu)
 
-  return(meta.simu)
+  return(simulated.mat)
 
 }# parallSimu
 

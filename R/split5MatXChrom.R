@@ -2,7 +2,7 @@
 #'
 #' @description A function for splitting the 5 matrices per each chromosome.
 #'
-#'
+#' @import purrr
 #' @name split5MatChrom
 #'
 #' @param list.cleaned List cleaned by filtering steps, with all the 3 matrices with counts (coverage, methylated, unmethylated counts) and matrices of beta and M values.

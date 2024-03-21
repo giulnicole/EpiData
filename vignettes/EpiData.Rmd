@@ -25,6 +25,7 @@ library(EpiData)
 ```{r, warning=FALSE, message=FALSE}
 library(devtools)
 library(magrittr)
+library(purrr)
 library(dplyr)
 library(psych)
 library(kableExtra)
@@ -154,10 +155,6 @@ obj.imp.mean <- imputeCorr(cleaned.obj=stats,
                     correlation.type="meanCpG")
 
 
-```
-
-```{r}
-imputed.mat <- extractFinalMat(list.imputed=simu2)
 ```
 
 

@@ -28,6 +28,10 @@ names(input.list)<- c("Coverage_matrix", "Met_matrix", "Unmet_matrix")
 dati2<- GRconversion2(input.list)
 
 
+splitted<- split3MatXChrom2(dati2@assays@data@listData)
+
+
+
 #------  Example cleanMatCov   -----------------------------
 
 # Cleaning low counts for coverage
@@ -87,7 +91,7 @@ char <- c(1,2)
 
 names(list.cleaned) <- char
 
-input.stats<- list()
+input.stats<- list.cleaned
 
 for (i in 1:length(list.cleaned)){
 
@@ -98,7 +102,7 @@ for (i in 1:length(list.cleaned)){
 
 
 # Statistics
-
+library(BiocParallel)
 stats2<- ParallStats(input.stats)
 
 # Imputation
@@ -107,10 +111,42 @@ simu.mix2 <- ParallSimu(list.stats = stats2)
 
 
 
+# ---------------------------------------------------------
+# Dataset for paralellization
+
+# dati with more than one chromosome
+
+#load("C:/Users/gnbal/Desktop/GitHub/METHimpute/data/Real_data/chr_new/chr3-chr17/chr3-chr17.RData")
+
+list1<- list(trans$chr3$Coverage_matrix3, trans$chr3$Meth_matrix3, trans$chr3$Unmeth_matrix3)
+names(list1) <- c("Coverage_matrix", "Met_matrix", "Unmet_matrix")
+list1$Coverage_matrix[is.na(list1$Coverage_matrix)] <- 0
+list1$Met_matrix[is.na(list1$Met_matrix)] <- 0
+list1$Unmet_matrix[is.na(list1$Unmet_matrix)] <- 0
+
+list2<- list(trans$chr17$Coverage_matrix3, trans$chr17$Meth_matrix3, trans$chr17$Unmeth_matrix3)
+names(list2) <- c("Coverage_matrix", "Met_matrix", "Unmet_matrix")
+list2$Coverage_matrix[is.na(list2$Coverage_matrix)] <- 0
+list2$Met_matrix[is.na(list2$Met_matrix)] <- 0
+list2$Unmet_matrix[is.na(list2$Unmet_matrix)] <- 0
 
 
+Coverage_matrix<- rbind(list1$Coverage_matrix, list2$Coverage_matrix)
+Met_matrix<- rbind(list1$Met_matrix, list2$Met_matrix)
+Unmet_matrix<- rbind(list1$Unmet_matrix, list2$Unmet_matrix)
 
 
+list3<- list(Coverage_matrix, Met_matrix, Unmet_matrix)
+splitted <-split3MatXChrom2(list3)
 
 
+list4<- splitted$final
+
+library(foreach)
+library(parallel)
+library(doParallel)
+
+
+source("R/ParallClean1.R")
+clean1<- ParallClean1(list4)
 
