@@ -106,7 +106,6 @@ library(BiocParallel)
 library(matrixcalc)
 ```
 
-
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
 input.stats<- splitted$final
