@@ -27,10 +27,10 @@
 #' }
 #'
 #' @export
-ParallSimu <- function(list.stats){
+ParallSimu <- function(list.stats, correlation.type="meanCpG"){
 
 
-  meta.simu <- bplapply(list.stats, imputeCorr)
+  meta.simu <- bplapply(list.stats, imputeCorr, correlation.type)
   simulated.mat <- extractFinalMat(meta.simu)
 
   return(simulated.mat)

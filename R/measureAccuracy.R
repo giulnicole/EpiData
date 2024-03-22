@@ -3,6 +3,10 @@
 #' @description A function for computing accuracy measure (RMSE and MAE computation) and perform the Kolmogorov-Smirnov test per each CpG and produce boxplots for comaprison.
 #' \code{} computes the accuracy measure of imputation methods.
 #'
+#' @import ggplot2
+#' @import tidyverse
+#' @import hrbrthemes
+#' @import viridis
 #'
 #' @param output of imputed datasets performed by repNA.
 #'
@@ -34,11 +38,6 @@
 #' @export
 measureAccuracy <- function(list.imputed){
 
-  library(ggplot2)
-  library(tidyverse)
-  library(tidyverse)
-  library(hrbrthemes)
-  library(viridis)
 
   name <- NULL
   Method <- NULL
@@ -60,6 +59,7 @@ measureAccuracy <- function(list.imputed){
 
   # Initialize an empty data frame
   df <- data.frame()
+
 
   for (k in 1:length(list.imputed)) {
     call <- names(list.imputed)[k]
@@ -133,7 +133,6 @@ measureAccuracy <- function(list.imputed){
     return(results)
 
 }
-
 
 
 
