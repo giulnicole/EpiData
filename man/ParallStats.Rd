@@ -7,9 +7,7 @@
 ParallStats(list.cleaned)
 }
 \arguments{
-\item{cleaned.obj}{SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)}
-
-\item{varselect}{is the index of the dataset to be used (numeric value 1-5) to extract the information related to the CpGs' pattern. 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.}
+\item{list.cleaned}{SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)}
 }
 \value{
 List with SummarizedExperiment objects and metadata statistics:

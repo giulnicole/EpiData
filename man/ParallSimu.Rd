@@ -4,14 +4,12 @@
 \alias{ParallSimu}
 \title{ParallSimu}
 \usage{
-ParallSimu(list.stats)
+ParallSimu(list.stats, correlation.type = "meanCpG")
 }
 \arguments{
+\item{correlation.type}{Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).}
+
 \item{stats.obj}{list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)}
-
-\item{matrix}{matrix on which computing the correlation matrix; "M" as default}
-
-\item{varselect}{index of the dataset to be used (numeric value 1-5)}
 }
 \value{
 List with SummarizedExperiment objects and imputed datasets in metadata:

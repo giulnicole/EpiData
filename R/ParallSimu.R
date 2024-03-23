@@ -7,8 +7,8 @@
 #' @import matrixcalc
 #'
 #' @param stats.obj list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)
-#' @param matrix matrix on which computing the correlation matrix; "M" as default
-#' @param varselect index of the dataset to be used (numeric value 1-5)
+#' @param correlation.type Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).
+#'
 #'
 #' @name ParallSimu
 #'
