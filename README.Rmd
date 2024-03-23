@@ -72,8 +72,10 @@ As an example data derives from chromosome 22 (the same pipeline is applied to t
 
 In this objects exact locations and CpGs' names are present (labeled as chr:bp). 
 
+
 ## Pipeline
 
+### Part 1: cleaning the whole matrix of the CpGs
 **Cleaning step 1**
 
 ```{r}
@@ -89,6 +91,12 @@ clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remo
 ```
 After cleaning the data, the pipeline follows with studying each chromosome seprately.the following function helps in separating the information of BS experiment per each chromosome. 
 
+
+
+
+## Part2: parallelization per chromosome for imputation
+After cleaning steps, CpGs' matrices are divided per each chromosome with the function
+
 **Splitting dataset per chromosomes**
 
 The input should be the assay method of the SummarizedExperiment object, if present. Otherwise a list with the three matrices described before.
@@ -99,8 +107,6 @@ The result is a list where we have the total coverage matrix, methylated maytrix
 
 Here is shown the example pipeline through each one of the chromosomes. 
 
-## Parallelization
-After cleaning steps, CpGs' matrices are divided per each chromosome with the function
 
 ```{r}
 library(BiocParallel)
@@ -111,50 +117,17 @@ library(matrixcalc)
 ```{r}
 input.stats<- splitted$final
 
-# Statistics
+**Statistics**
 stats2<- ParallStats(input.stats)
 ```
 
-
-Here is shown the example of `statsCpG` function (used by ParallStats) through each one of the chromosomes. 
-
-```{r}
-final2<- splitted$final
-
-stats<- statsCpG(cleaned.obj= final2[[1]], varselect = 5, plot = TRUE)
-stats$Barplot
-```
-
-
-
-### Imputing data based on correlation
+**Imputing data based on correlation**
 ```{r}
 simu2<- ParallSimu(stats2)
 ```
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
 
-
-Imputation based on correlation structure 
-```{r}
-obj.imp.pairw <- imputeCorr(cleaned.obj=stats,
-                    matrix="M",
-                    varselect = 5,
-                    correlation.type="pairwise")
-
-
-obj.imp.mean <- imputeCorr(cleaned.obj=stats,
-                    matrix="M",
-                    varselect = 5,
-                    correlation.type="meanCpG")
-
-
-```
-
-**Extraction of final matriximputed for all chromosomes**
-```{r}
-imputed.mat <- extractFinalMat(list.imputed=simu2)
-```
 
 
 The default missing values' investigation is performed for M values. Note that percentage of missing values in M values are higher than counts' missing value percentages.
