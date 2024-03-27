@@ -117,7 +117,6 @@ library(matrixcalc)
 ```{r}
 input.stats<- splitted$final
 
-**Statistics**
 stats2<- ParallStats(input.stats)
 ```
 
