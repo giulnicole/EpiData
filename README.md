@@ -60,7 +60,11 @@ library(radiant.data)
 
 **Loading data** 
 ```{r}
+<<<<<<< HEAD
 data("rangedObject")
+=======
+data("rabgedObject")
+>>>>>>> 867aa43db0128c3a198ab4402cb0ab840d51b66e
 ```
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
 As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it s provided): 
@@ -80,7 +84,11 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 **Cleaning step 1**
 
 ```{r}
+<<<<<<< HEAD
 input.list<- assays(rangedObject)
+=======
+input.list<- assays(rabgedObject)
+>>>>>>> 867aa43db0128c3a198ab4402cb0ab840d51b66e
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
