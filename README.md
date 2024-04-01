@@ -25,6 +25,7 @@ if (!require("BiocManager", quietly = TRUE))
 
 install.packages("devtools")
 ```
+
 Installing EpiData package:
 ```{r}
 BiocManager::install(c("Epidata"))
@@ -95,15 +96,6 @@ After cleaning the data, the pipeline follows with studying each chromosome sepr
 
 
 ## Part2: parallelization per chromosome for imputation
-After cleaning steps, CpGs' matrices are divided per each chromosome with the function
-
-**Splitting dataset per chromosomes**
-
-The input should be the assay method of the SummarizedExperiment object, if present. Otherwise a list with the three matrices described before.
-```{r}
-splitted<- split5MatXChrom(clean.out)
-```
-The result is a list where we have the total coverage matrix, methylated maytrix and unmethylated matrix with all chromoeomse, but also a list called *final* which contains all these three matrices already divided per each chromosome. 
 
 Here is shown the example pipeline through each one of the chromosomes. 
 
@@ -113,16 +105,14 @@ library(BiocParallel)
 library(matrixcalc)
 ```
 
-### Calculating statistics per CpG 
+### Calculating statistics per CpG and imputing data
 ```{r}
-input.stats<- splitted$final
-
-stats2<- ParallStats(input.stats)
+stats<- ParallStats(clean.out)
 ```
 
-**Imputing data based on correlation**
+
 ```{r}
-simu2<- ParallSimu(stats2)
+simu<- ParallSimu(stats)
 ```
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.

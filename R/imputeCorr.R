@@ -22,11 +22,20 @@
 #'
 #' @examples
 #' \dontrun{
-#'  data("matrices")
-#'  clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
-#'  stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
-#'  simu3 <- imputeCorr(cleaned.obj=stats, matrix="M", varselect)
+#'  data("rangedObject")
+#'
+#'  # Cleaning low counts for coverage
+#'  input.list <- assays(data)
+#'  clean.coverage <- cleanCovMat(input.obj = input.list,
+#'                               max_na_cpg = 0.5, max_na_ind = 0.2,
+#'                              cpg_removal_threshold = 10)
+#'
+#' # Cleaning outliers in methylated and unmethylated counts
+#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage,
+#'                             outlier_threshold=5, remove_outliers = TRUE)
+#'
+#'  stats <- statsCpG(cleaned.obj=clean.out, varselect = 5)
+#'  simu <- imputeCorr(cleaned.obj=stats, matrix="M", varselect)
 #'  }
 #'
 #'

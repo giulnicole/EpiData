@@ -22,12 +22,25 @@ and simulate new values drawn from the same distribution to impute remaining mis
 }
 \examples{
 \dontrun{
- data('clean.out')
+
+ data("rangedObject")
+
+ # Cleaning low counts for coverage
+ input.list <- assays(data)
+ clean.coverage <- cleanCovMat(input.obj = input.list,
+                              max_na_cpg = 0.5, max_na_ind = 0.2,
+                             cpg_removal_threshold = 10)
+
+# Cleaning outliers in methylated and unmethylated counts
+ clean.out <- cleanOutliers(filtered.obj=clean.coverage,
+                            outlier_threshold=5, remove_outliers = TRUE)ù
+
  list.cleaned1<- clean.out
  list.cleaned2<- clean.out
- list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
- stats2 <- ParallStats(list.cleaned)
- simu.mix2 <- ParallSimu(list.stats = stats2)
+ list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData,
+                     list.cleaned2$Output_outliers@assays@data@listData)
+ stats <- ParallStats(list.cleaned)
+ simu.mix <- ParallSimu(list.stats = stats)
 }
 
 }

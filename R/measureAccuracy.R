@@ -21,13 +21,14 @@
 #'
 #' @examples
 #' \dontrun{
-#'  data('clean.out')
-#'  list.cleaned1<- clean.out
-#'  list.cleaned2<- clean.out
-#'  list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData, list.cleaned2$Output_outliers@assays@data@listData)
-#'  stats3<- lapply(clean.out, na.omit)
+#'  data("rangedObject")
+#'  clean.coverage <- cleanCovMat(input.obj=data, max_na_cpg = 0.5,
+#'                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
+#'                              remove_outliers = TRUE)
+#'  stats <- lapply(clean.out, na.omit)
 #'
-#'  imp.M <- repNA(list.cleaned=stats3,
+#'  imp.M <- repNA(list.cleaned=stats,
 #'               missing_prop= 0.2, varselect=5,
 #'               n.iter= 2, sel_method=c(1:10),
 #'               trees= 50, nb= 10, ncomp= 2, matrix="M")

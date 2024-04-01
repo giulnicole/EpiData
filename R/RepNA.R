@@ -12,6 +12,7 @@
 #' @import softImpute
 #' @import impute
 #' @import apcluster
+#' @import missMDA
 #'
 #' @name repNA
 #'
@@ -32,11 +33,13 @@
 #'
 #' @examples
 #'  \dontrun{
-#'  data("matrices")
-#'  clean.coverage2 <- cleanCovMat(input.obj=dati, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
-#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5, remove_outliers = TRUE)
-#'  stats3<- lapply(clean.out, na.omit)
-#'  imp.M2 <- repNA(list.cleaned=stats3,
+#'  data("rangedObject")
+#'  clean.coverage <- cleanCovMat(input.obj=data, max_na_cpg = 0.5,
+#'                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
+#'                              remove_outliers = TRUE)
+#'  stats <- lapply(clean.out, na.omit)
+#'  imp.M <- repNA(list.cleaned=stats,
 #'                 missing_prop= 0.2,
 #'                 varselect=5,
 #'                 n.iter= 10,
@@ -376,11 +379,11 @@ repNA <- function(list.cleaned,varselect=5,
 
     cat("MDA imputation - in progress\n")
 
-    missmda.mat1 <- list()
-    rmse.missmda.mat1 <- NULL
-    mae.missmda.mat1 <- NULL
-    time.missmda <- NULL
-    KStest.missmda <- NULL
+    mda.mat1 <- list()
+    rmse.mda.mat1 <- NULL
+    mae.mda.mat1 <- NULL
+    time.mda <- NULL
+    KStest.mda <- NULL
 
     # Repeat the process n_iterations times
     for (i in 1:n.iter) {
@@ -400,41 +403,41 @@ repNA <- function(list.cleaned,varselect=5,
       imputed_data.mat1 <- missMDA::imputePCA(masked_data.mat1, method = "Regularized")
       imputed_data.mat2 <- imputed_data.mat1$completeObs
       masked_data.mat1 <- as.data.frame(t(imputed_data.mat2))
-      #time.missmda[i] <-t[[3]]
+      #time.mda[i] <-t[[3]]
 
-      missmda.mat1[[i]] <- masked_data.mat1
+      mda.mat1[[i]] <- masked_data.mat1
 
       err <- Errors(origmat1, masked_data.mat1, na_positions)
 
       S3 <- err[1]
       M3 <- err[2]
 
-      rmse.missmda.mat1[i]  <- S3
-      mae.missmda.mat1[i]  <- M3
+      rmse.mda.mat1[i]  <- S3
+      mae.mda.mat1[i]  <- M3
 
       KS_test <- KStesCpG(origmat1, masked_data.mat1)
 
-      KStest.missmda <- KS_test
+      KStest.mda <- KS_test
 
       #cat("Time elapsed at iteration:\n")
       #print(t[[3]])
       #cat("\n")
 
 
-      results.missmda <- list(imputed.missmda.mat1 =  missmda.mat1,
-                              RMSE.missmda.mat1 = rmse.missmda.mat1,
-                              MAE.missmda.mat1 = mae.missmda.mat1,
-                              #Comp_time = time.missmda,
-                              KS_statsitics = KStest.missmda
+      results.mda <- list(imputed.mda.mat1 =  mda.mat1,
+                              RMSE.mda.mat1 = rmse.mda.mat1,
+                              MAE.mda.mat1 = mae.mda.mat1,
+                              #Comp_time = time.mda,
+                              KS_statsitics = KStest.mda
       )
 
 
 
-    }# missmda
+    }# mda
 
 
 
-  }  else results.missmda <- NULL
+  }  else results.mda <- NULL
 
 
 
@@ -448,11 +451,11 @@ repNA <- function(list.cleaned,varselect=5,
 
     cat("EM imputation - in progress\n")
 
-    missem.mat1 <- list()
-    rmse.missem.mat1 <- NULL
-    mae.missem.mat1 <- NULL
-    time.missem <- NULL
-    KStest.missem <- NULL
+    em.mat1 <- list()
+    rmse.em.mat1 <- NULL
+    mae.em.mat1 <- NULL
+    time.em <- NULL
+    KStest.em <- NULL
 
     # Repeat the process n_iterations times
     for (i in 1:n.iter) {
@@ -472,9 +475,9 @@ repNA <- function(list.cleaned,varselect=5,
       imputed_data.mat1 <- missMDA::imputePCA(masked_data.mat1, method = "EM")
       imputed_data.mat2 <- imputed_data.mat1$completeObs
       masked_data.mat1 <- as.data.frame(t(imputed_data.mat2))
-      #time.missem[i] <-t[[3]]
+      #time.em[i] <-t[[3]]
 
-      missem.mat1[[i]] <- masked_data.mat1
+      em.mat1[[i]] <- masked_data.mat1
 
       err <- Errors(origmat1, masked_data.mat1, na_positions)
 
@@ -482,32 +485,32 @@ repNA <- function(list.cleaned,varselect=5,
       S3 <- err[1]
       M3 <- err[2]
 
-      rmse.missem.mat1[i]  <- S3
-      mae.missem.mat1[i]  <- M3
+      rmse.em.mat1[i]  <- S3
+      mae.em.mat1[i]  <- M3
 
       KS_test <- KStesCpG(origmat1, masked_data.mat1)
 
-      KStest.missem <- KS_test
+      KStest.em <- KS_test
 
       #cat("Time elapsed at iteration:\n")
       #print(t[[3]])
       #cat("\n")
 
 
-      results.missem <- list(imputed.missem.mat1 =  missem.mat1,
-                             RMSE.missem.mat1 = rmse.missem.mat1,
-                             MAE.missem.mat1 = mae.missem.mat1,
-                             #Comp_time = time.missem,
-                             KS_statsitics = KStest.missem
+      results.em <- list(imputed.em.mat1 =  em.mat1,
+                             RMSE.em.mat1 = rmse.em.mat1,
+                             MAE.em.mat1 = mae.em.mat1,
+                             #Comp_time = time.em,
+                             KS_statsitics = KStest.em
       )
 
 
 
-    }# missem
+    }# em
 
 
 
-  }  else results.missem <- NULL
+  }  else results.em <- NULL
 
 
 
@@ -520,11 +523,11 @@ repNA <- function(list.cleaned,varselect=5,
 
     cat("MissForest imputation - in progress\n")
 
-    missforest.mat1 <- list()
-    rmse.missforest.mat1 <- NULL
-    mae.missforest.mat1 <- NULL
-    time.missforest <- NULL
-    KStest.missforest <- NULL
+    mf.mat1 <- list()
+    rmse.mf.mat1 <- NULL
+    mae.mf.mat1 <- NULL
+    time.mf <- NULL
+    KStest.mf <- NULL
 
     # Repeat the process n_iterations times
     for (i in 1:n.iter) {
@@ -543,9 +546,9 @@ repNA <- function(list.cleaned,varselect=5,
       imputed_data.mat1 <-  missForest(masked_data.mat1, ntree = 10, replace = TRUE)
       masked_data.mat1  <- as.data.frame(t(imputed_data.mat1[[1]]))
 
-      #time.missforest[i] <-t[[3]]
+      #time.mf[i] <-t[[3]]
 
-      missforest.mat1[[i]] <- masked_data.mat1
+      mf.mat1[[i]] <- masked_data.mat1
 
       err <- Errors(origmat1, masked_data.mat1, na_positions)
 
@@ -553,32 +556,32 @@ repNA <- function(list.cleaned,varselect=5,
       S3 <- err[1]
       M3 <- err[2]
 
-      rmse.missforest.mat1[i]  <- S3
-      mae.missforest.mat1[i]  <- M3
+      rmse.mf.mat1[i]  <- S3
+      mae.mf.mat1[i]  <- M3
 
       KS_test <- KStesCpG(origmat1, masked_data.mat1)
 
-      KStest.missforest <- KS_test
+      KStest.mf <- KS_test
 
       #cat("Time elapsed at iteration:\n")
       #print(t[[3]])
       #cat("\n")
 
 
-      results.missforest <- list(imputed.missforest.mat1 =  missforest.mat1,
-                                 RMSE.missforest.mat1 = rmse.missforest.mat1,
-                                 MAE.missforest.mat1 = mae.missforest.mat1,
-                                 #Comp_time = time.missforest,
-                                 KS_statsitics = KStest.missforest
+      results.mf <- list(imputed.mf.mat1 =  mf.mat1,
+                                 RMSE.mf.mat1 = rmse.mf.mat1,
+                                 MAE.mf.mat1 = mae.mf.mat1,
+                                 #Comp_time = time.mf,
+                                 KS_statsitics = KStest.mf
       )
 
 
 
-    }# missforest
+    }# mf
 
 
 
-  }  else results.missforest <- NULL
+  }  else results.mf <- NULL
 
 
 
@@ -810,10 +813,10 @@ repNA <- function(list.cleaned,varselect=5,
   return(list(MEAN_imputation = results.mean,
               PPCA_imputation = results.ppca,
               BPCA_imputation = results.bpca,
-              MISSFOREST_imputation = results.missforest,
+              MF_imputation = results.mf,
               SVD_imputation = results.svd,
-              MISSMDA_imputation = results.missmda,
-              MISSEM_imputation = results.missem,
+              MDA_imputation = results.mda,
+              EM_imputation = results.em,
               KNN_imputation = results.knn,
               CORR_imputation = results.corr,
               CPART_imputation = results.cpart))

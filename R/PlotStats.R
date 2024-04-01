@@ -62,7 +62,6 @@ plotStats <- function(list.cleaned) {
 
 
   # Or create a bar plot to visualize missing value counts
-  library(ggplot2)
 
   na_plot <- ggplot(na_summary, aes(x = Dataset, y = PercentageNA, fill = Dataset)) +
     geom_bar(stat = "identity") +

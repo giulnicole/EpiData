@@ -21,10 +21,10 @@ adjustCounts(coverage, methylated, unmethylated)
 }
 \examples{
 \dontrun{
- data("matrices")
- C<- assay(dati, 1)
- M<- assay(dati, 2)
- U<- assay(dati, 3)
+ data("rangedObject")
+ C<- assay(data, 1)
+ M<- assay(data, 2)
+ U<- assay(data, 3)
  res <- adjustCounts(coverage = C, methylated = M, unmethylated = U)
 }
 

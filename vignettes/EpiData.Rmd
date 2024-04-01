@@ -10,7 +10,12 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", 
+  ## edited options below
+  fig.width = 8,
+  fig.asp = 0.8,
+  out.width = "100%",
+  dpi = 300
 )
 ```
 
@@ -22,20 +27,20 @@ library(EpiData)
 
 
 ```{r, warning=FALSE, message=FALSE}
-library(devtools)
 library(magrittr)
 library(purrr)
 library(dplyr)
 library(psych)
 library(kableExtra)
 library(GenomicRanges)
+library(GenomicFeatures)
 library(SummarizedExperiment)
-library(radiant.data)
+library(MASS)
 ```
 
 ## Loading data 
 ```{r}
-data("matrices")
+data("rangedObject")
 ```
 
 
@@ -55,10 +60,11 @@ Assume that from the experiment we endend up with a dataset not only contanining
 
 # Pipeline
 
-## Cleaning step 1
+## First part: filtering
 
+### Filtering 1
 ```{r message=FALSE, warning = FALSE}
-input.list<- assays(dati)
+input.list<- assays(rangedObject)
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
@@ -73,8 +79,7 @@ Function `cleanCovMat` filters coverage matrix, consideriign the following assum
 
 3)	individuals (columns) with a missing percentage greater than 20% are removed.
 
-
-## Cleaning step 2
+### Filtering 2
 
 ```{r message=FALSE, warning = FALSE}
 clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
@@ -96,11 +101,11 @@ However, issues may arise when converting outliers to NAs, especially in studies
 A comparison can be performed on an experimental dataset from a subset of CpGs which have much complete data.   
 ```{r, message=FALSE, warning=FALSE}
 
-stats3<- lapply(clean.out, na.omit)
+stats<- lapply(clean.out, na.omit)
 
-imp.M <- repNA(list.cleaned=stats3,
+imp.M <- repNA(list.cleaned=stats,
                        missing_prop= 0.2, varselect=5,
-                       n.iter= 2, sel_method=c(1:10),
+                       n.iter= 1, sel_method=c(1:10),
                        trees= 50, nb= 10, ncomp= 2, matrix="M")
 
 ```
@@ -130,17 +135,14 @@ measure_imp_m$Boxplot.mae
 
 After cleaning the data, the pipeline follows with studying each chromosome seprately. The following function helps in separating the information of BS experiment per each chromosome. 
 
-### Splitting dataset per chromosomes
+### Computing statistics and imputation
 
 The input should be the assay method of the SummarizedExperiment object, if present. Otherwise a list with the three matrices described before.
-```{r}
-splitted<- split5MatXChrom(clean.out)
-```
 
 The result is a list where we have the total coverage matrix, methylated maytrix and unmethylated matrix with all chromoeomse, but also a list called *final* which contains all these three matrices already divided per each chromosome. 
 
 
-## Parallelization
+## Seconda part: imputation
 After cleaning steps, CpGs' matrices are divided per each chromosome with the function
 
 ```{r warning=FALSE, message=FALSE}
@@ -151,27 +153,15 @@ library(matrixcalc)
 
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
-input.stats<- splitted$final
-
 # Statistics
-stats2<- ParallStats(input.stats)
-```
-
-
-Here is shown the example of `statsCpG` function (used by ParallStats) through each one of the chromosomes. 
-
-```{r message=FALSE, warning = FALSE}
-final2<- splitted$final
-
-stats<- statsCpG(cleaned.obj= final2[[1]], varselect = 5, plot = TRUE)
-stats$Barplot
+stats<- ParallStats(clean.out)
 ```
 
 
 
 ### Imputing data based on correlation
 ```{r  warning=FALSE}
-simu2<- ParallSimu(stats2)
+simu<- ParallSimu(stats)
 ```
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
@@ -179,18 +169,3 @@ Here is shown the example of `imputeCorr` function (used by ParallSimu) through 
 When computing correlation matrix in presence of missing data, the correlation pattern behind the data may result affected by NAs presence. Since out aim is to impute the M values matrix, the  of CpGs' correlation can be reconstructed via computing the correlation matrix once imputed the mean vM value per each CpG, not to change the similarity between CpGs or via pairwise correlation. 
 
 
-Imputation based on correlation structure 
-```{r message=FALSE, warning = FALSE}
-obj.imp.pairw <- imputeCorr(cleaned.obj=stats,
-                    matrix="M",
-                    varselect = 5,
-                    correlation.type="pairwise")
-
-
-obj.imp.mean <- imputeCorr(cleaned.obj=stats,
-                    matrix="M",
-                    varselect = 5,
-                    correlation.type="meanCpG")
-
-
-```
