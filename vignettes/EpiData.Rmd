@@ -156,8 +156,8 @@ library(matrixcalc)
 ```{r warning=FALSE}
 # Statistics
 
-list.cleaned<- list(clean.out, clean.out)
-stats<- ParallStats(list.cleaned)
+clean.out2<- list(clean.out, clean.out)
+stats<- ParallStats(clean.out)
 ```
 
 

@@ -48,7 +48,7 @@ library(EpiData)
 
 **Required packages**
 ```{r}
-library(devtools)
+library(tidyverse)
 library(magrittr)
 library(purrr)
 library(dplyr)
@@ -60,7 +60,7 @@ library(radiant.data)
 
 **Loading data** 
 ```{r}
-data("matrices")
+data("rangedObject")
 ```
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
 As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it s provided): 
@@ -80,7 +80,7 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 **Cleaning step 1**
 
 ```{r}
-input.list<- assays(dati)
+input.list<- assays(rangedObject)
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
