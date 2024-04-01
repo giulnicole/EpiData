@@ -31,10 +31,8 @@
 #'  clean.out <- cleanOutliers(filtered.obj=clean.coverage,
 #'                             outlier_threshold=5, remove_outliers = TRUE)ù
 #'
-#'  list.cleaned1<- clean.out
-#'  list.cleaned2<- clean.out
-#'  list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData,
-#'                      list.cleaned2$Output_outliers@assays@data@listData)
+#'  list.cleaned<- list(clean.out, clean.out)
+#'
 #'  stats <- ParallStats(list.cleaned)
 #'  simu.mix <- ParallSimu(list.stats = stats)
 #' }

@@ -195,10 +195,12 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
                         M_matrix = as.data.frame(M))
 
 
+  list.cleaned3 <- split5MatXChrom(list.cleaned2)
+
   #obj<- GRconversion2(list.cleaned2)
 
 
-  return(list.cleaned2)
+  return(list.cleaned3)
 
 
 }  # (main function)

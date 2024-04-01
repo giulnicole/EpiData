@@ -36,11 +36,11 @@
 #'                              cpg_removal_threshold = 10)
 #'
 #' # Cleaning outliers in methylated and unmethylated counts
-#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage,
+#'   clean.out <- cleanOutliers(filtered.obj=clean.coverage,
 #'                             outlier_threshold=5, remove_outliers = TRUE)ù
 #'
-#'  list.cleaned<- list(list.cleaned1$Output_outliers@assays@data@listData,
-#'                      list.cleaned2$Output_outliers@assays@data@listData)
+#'  list.cleaned <- list(clean.out, clean.out)
+#'
 #'  stats <- ParallStats(list.cleaned)
 #' }
 #'
@@ -50,9 +50,7 @@
 #' @export
 ParallStats <- function(list.cleaned){
 
-  list2 <- split5MatXChrom(list.cleaned)
-  list3 <- list2$final
-  meta.stat <- bplapply(list3, statsCpG)
+  meta.stat <- bplapply(list.cleaned, statsCpG)
 
   return(meta.stat)
 

@@ -53,7 +53,7 @@
 statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
 
-  X <- cleaned.obj
+  X <- cleaned.obj[[varselect]]
 
   options(error = expression(NULL))
 

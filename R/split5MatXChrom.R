@@ -32,8 +32,8 @@ split5MatXChrom <- function(list.cleaned)   {
   beta.cleaned <- list.cleaned[[4]]
   m.cleaned <- list.cleaned[[5]]
 
-  chr <- rownames(met.cleaned)
-  chr <- gsub("-.*", "", chr)
+  cpg <- rownames(met.cleaned)
+  chr <- gsub("-.*", "", cpg)
   n <- ncol(met.cleaned)
 
   met.cleaned <- as.data.frame(cbind(met.cleaned, chr))
@@ -63,75 +63,68 @@ split5MatXChrom <- function(list.cleaned)   {
 
 
   # Met
-  split_met <- label.chr %>%
-    map(~ met.cleaned %>%
-          filter(chr == .x) %>%
-          select(-n) %>%  # Remove the last column
-          as.matrix() %>%
-          as.numeric() %>%
-          matrix(ncol = n))
+  split_met <- met.cleaned %>%
+    group_split(chr)%>%
+    purrr::map(~ as.data.frame(.))
 
   #
   split_met <- split_met %>%
     map(~ .[,-(n+1)])
 
+  split_met<- as.data.frame(split_met)
+  rownames(split_met)<- cpg
+
   # Unmet
-  split_unmet <- label.chr %>%
-    map(~ unmet.cleaned %>%
-          filter(chr == .x) %>%
-          select(-n) %>%  # Remove the last column
-          as.matrix() %>%
-          as.numeric() %>%
-          matrix(ncol = n))  # Assuming n is the desired number of columns
+  split_unmet <- unmet.cleaned %>%
+    group_split(chr)%>%
+    purrr::map(~ as.data.frame(.))
 
-
+  #
   split_unmet <- split_unmet %>%
     map(~ .[,-(n+1)])
 
+  split_unmet<- as.data.frame(split_unmet)
+  rownames(split_unmet)<- cpg
 
   # Coverage
-  split_cov <- label.chr %>%
-    map(~ cov.cleaned %>%
-          filter(chr == .x) %>%
-          select(-n) %>%  # Remove the last column
-          as.matrix() %>%
-          as.numeric() %>%
-          matrix(ncol = n))  # Assuming n is the desired number of columns
+  split_cov <- cov.cleaned %>%
+    group_split(chr)%>%
+    purrr::map(~ as.data.frame(.))
 
   #
   split_cov <- split_cov %>%
     map(~ .[,-(n+1)])
 
+  split_cov<- as.data.frame(split_cov)
+  rownames(split_cov)<- cpg
+
 
 
   # Beta
-  split_beta <- label.chr %>%
-    map(~ beta.cleaned %>%
-          filter(chr == .x) %>%
-          select(-n) %>%  # Remove the last column
-          as.matrix() %>%
-          as.numeric() %>%
-          matrix(ncol = n))  # Assuming n is the desired number of columns
+  split_beta <- beta.cleaned %>%
+    group_split(chr)%>%
+    purrr::map(~ as.data.frame(.))
 
   #
   split_beta <- split_beta %>%
     map(~ .[,-(n+1)])
 
+  split_beta<- as.data.frame(split_beta)
+  rownames(split_beta)<- cpg
+
 
 
   # M
-  split_m <- label.chr %>%
-    map(~ m.cleaned %>%
-          filter(chr == .x) %>%
-          select(-n) %>%  # Remove the last column
-          as.matrix() %>%
-          as.numeric() %>%
-          matrix(ncol = n))  # Assuming n is the desired number of columns
+  split_m <- m.cleaned %>%
+    group_split(chr)%>%
+    purrr::map(~ as.data.frame(.))
 
   #
   split_m <- split_m %>%
     map(~ .[,-(n+1)])
 
+  split_m<- as.data.frame(split_m)
+  rownames(split_m)<- cpg
 
  # unifying the 5 lists per each chromosome
 
@@ -141,21 +134,31 @@ split5MatXChrom <- function(list.cleaned)   {
                    Beta = split_beta, M = split_m)
 
 
+  if (length(label.chr)>1){
   for (i in 1:length(label.chr)){
 
     a <- as.numeric(i)
-    aa <- list(Coverage_matrix = as.data.frame(matrices[["Coverage"]][[a]]),
-               Met_matrix =  as.data.frame(matrices[["Methylated"]][[a]]),
-               Unmet_matrix =  as.data.frame(matrices[["Unmethylated"]][[a]]),
-               Beta_matrix = as.data.frame(matrices[["Beta"]][[a]]),
-               M_matrix = as.data.frame(matrices[["M"]][[a]]))
 
-    final[[i]]<- aa
+    aa <- list(Coverage_matrix = as.data.frame(matrices[[a]][["Coverage"]]),
+               Met_matrix =  as.data.frame(matrices[[a]][["Methylated"]]),
+               Unmet_matrix =  as.data.frame(matrices[[a]][["Unmethylated"]]),
+               Beta_matrix = as.data.frame(matrices[[a]][["Beta"]]),
+               M_matrix = as.data.frame(matrices[[a]][["M"]]))
 
-  }
+    final[[a]]<- aa
 
-  res <- list(final = final, coverage = split_cov, methylated = split_met,
-              unmethylated = split_unmet, beta = split_beta, m = split_m)
+    }
+
+    res <- list(final = final, coverage = split_cov, methylated = split_met,
+                unmethylated = split_unmet, beta = split_beta, m = split_m)
+
+  } else {
+
+    res <- list(coverage = split_cov, methylated = split_met,
+                unmethylated = split_unmet, beta = split_beta, m = split_m)
+
+    }
+
 
   return(res)
 

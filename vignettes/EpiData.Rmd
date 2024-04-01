@@ -21,13 +21,14 @@ knitr::opts_chunk$set(
 
 
 ## Loading the package and useful libraries
-```{r setup}
+```{r, warning=FALSE}
 library(EpiData)
 ```
 
 
 ```{r, warning=FALSE, message=FALSE}
 library(magrittr)
+library(tidyverse)
 library(purrr)
 library(dplyr)
 library(psych)
@@ -82,7 +83,8 @@ Function `cleanCovMat` filters coverage matrix, consideriign the following assum
 ### Filtering 2
 
 ```{r message=FALSE, warning = FALSE}
-clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
+clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
+
 
 ```
 
@@ -127,7 +129,6 @@ measure_imp_m$Boxplot.rmse
 **MAE**
 ```{r, warning=FALSE, message=FALSE}
 measure_imp_m$Boxplot.mae
-
 ```
 
 
@@ -154,7 +155,9 @@ library(matrixcalc)
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
 # Statistics
-stats<- ParallStats(clean.out)
+
+list.cleaned<- list(clean.out, clean.out)
+stats<- ParallStats(list.cleaned)
 ```
 
 
