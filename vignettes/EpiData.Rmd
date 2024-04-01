@@ -37,6 +37,7 @@ library(GenomicRanges)
 library(GenomicFeatures)
 library(SummarizedExperiment)
 library(MASS)
+library(stats)
 ```
 
 ## Loading data 
@@ -155,9 +156,8 @@ library(matrixcalc)
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
 # Statistics
-
 clean.out2<- list(clean.out, clean.out)
-stats<- ParallStats(clean.out)
+stats<- ParallStats(clean.out2)
 ```
 
 

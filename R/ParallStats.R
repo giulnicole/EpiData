@@ -5,7 +5,7 @@
 #' \code{} computes the statistics on missing values per dataset, highlighting the pattern of missing values per each CpG (Parallelized version)
 #'
 #' @import kableExtra
-#'
+#' @import stats
 #' @param list.cleaned SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)
 #'
 #' @name ParallStats

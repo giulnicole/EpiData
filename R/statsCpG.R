@@ -6,6 +6,7 @@
 #' pattern of missing values, mean and standard deviation per each CpG.
 #'
 #' @import kableExtra
+#' @import stats
 #'
 #' @param cleaned.obj SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers).
 #' @param varselect Index of the dataset to be used (numeric value 1-5) to extract the information related to the CpGs' pattern. 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
@@ -52,30 +53,30 @@
 #'
 statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
-
-  X <- cleaned.obj[[varselect]]
-
   options(error = expression(NULL))
 
-  cpg <- rownames(X[[varselect]])
+  cpg <- rownames(cleaned.obj[[varselect]])
 
 
   # Transposing selected variable
 
-  X[[varselect]] <-t(X[[varselect]])
-  Y <- X[[varselect]]
+  X<-t(cleaned.obj[[varselect]])
+  Y <- X
+
+  # Transposing selected variable
+
 
   # Extraction of dimensions of selected variable matrix
-  rows <- nrow(X[[varselect]])  # individuals
-  cols <- ncol(X[[varselect]])  # CpG
+  rows <- nrow(X)  # individuals
+  cols <- ncol(X)  # CpG
 
 
-  colnames(X[[varselect]]) <- cpg
-  names <- rownames(X[[varselect]])
+  colnames(X) <- cpg
+  names <- rownames(X)
 
 
   # Applying as.numeric function to all X elements
-  vars_non_num <- (X[[varselect]])[!sapply(X[[varselect]], is.numeric)]
+  vars_non_num <- (X)[!sapply(X, is.numeric)]
   if (length(vars_non_num) != 0){
     stop(paste("Warning! CpG(s) ", (paste(vars_non_num, collapse = ", ")),
                " is/are not numeric. Convert this/these variables to numeric using clean_cpg() and repeat the get_data() function until no warnings are shown.",
@@ -88,7 +89,7 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
   # Extraction of statistics (complete observations and NAs)
 
   # Number and percentage of complete individuals
-  no.complete <- X[[varselect]] %>% as_tibble(X[[varselect]])%>%
+  no.complete <- X %>% as_tibble(X)%>%
     summarise_all(funs(sum(!is.na(.))))
 
   no.complete <- as.numeric(no.complete)
@@ -96,7 +97,7 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
   # Number and percentage of incomplete individuals
   cat("Calculating missing values per individual ...\n")
-  no.incomplete <- X[[varselect]] %>% as_tibble(X[[varselect]])%>%
+  no.incomplete <- X %>% as_tibble(X)%>%
     summarise_all(funs(sum(is.na(.))))
 
   no.incomplete <- as.numeric(no.incomplete)
@@ -122,14 +123,14 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
   # Missingness per variable
   cat("Calculating missing values per variable ...\n")
-  missfrac_per_X <- sum(is.na(X[[varselect]]))/(nrow(X[[varselect]]) * ncol(X[[varselect]]))
-  missfrac_per_var <- colMeans(is.na(X[[varselect]]))
-  na_per_X <- sum(is.na(X[[varselect]]))
-  na_per_var <- sapply(X[[varselect]], function(x) sum(length(which(is.na(x)))))
+  missfrac_per_X <- sum(is.na(X))/(nrow(X) * ncol(X))
+  missfrac_per_var <- colMeans(is.na(X))
+  na_per_X <- sum(is.na(X))
+  na_per_var <- sapply(X, function(x) sum(length(which(is.na(x)))))
 
   # Missing data pattern
   #cat("Computing missing data pattern per variable ...\n")
-  # mdpat <- mice::md.pattern(X[[varselect]], plot = FALSE)     # this funciton returns
+  # mdpat <- mice::md.pattern(X, plot = FALSE)     # this funciton returns
   # a matrix with \code{ncol(x)+1} columns, in which each row corresponds
   # to a missing data pattern (1=observed, 0=missing).
 
