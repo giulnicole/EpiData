@@ -6,7 +6,7 @@
 #'
 #' @import matrixcalc
 #'
-#' @param stats.obj list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)
+#' @param list.stats list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)
 #' @param correlation.type Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).
 #'
 #'
@@ -25,7 +25,7 @@
 #'  input.list <- assays(data)
 #'  clean.coverage <- cleanCovMat(input.obj = input.list,
 #'                               max_na_cpg = 0.5, max_na_ind = 0.2,
-#'                              cpg_removal_threshold = 10)
+#'                               cpg_removal_threshold = 10)
 #'
 #' # Cleaning outliers in methylated and unmethylated counts
 #'  clean.out <- cleanOutliers(filtered.obj=clean.coverage,

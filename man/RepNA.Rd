@@ -5,7 +5,7 @@
 \title{repNA}
 \usage{
 repNA(
-  list.cleaned,
+  cleaned.obj,
   varselect = 5,
   missing_prop = 0.3,
   n.iter = 2,
@@ -18,6 +18,8 @@ repNA(
 )
 }
 \arguments{
+\item{cleaned.obj}{cleaned dataset from cleaning part 1 (coverage cleaning) and cleaning part 2 (outliers).}
+
 \item{varselect}{Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.}
 
 \item{missing_prop}{missing proportion to be tested at each replication.}
@@ -35,8 +37,6 @@ repNA(
 \item{ncomp}{number of components for PCA methods.}
 
 \item{plots}{plots for KS test on CpGs.}
-
-\item{cleaned.obj}{cleaned dataset from cleaning part 1 (coverage cleaning) and cleaning part 2 (outliers).}
 }
 \value{
 list with datasets imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.

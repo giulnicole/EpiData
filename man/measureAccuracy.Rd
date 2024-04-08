@@ -7,7 +7,7 @@
 measureAccuracy(list.imputed)
 }
 \arguments{
-\item{output}{of imputed datasets performed by repNA.}
+\item{list.imputed}{output of imputed datasets performed by repNA.}
 }
 \value{
 List with

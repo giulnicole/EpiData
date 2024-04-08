@@ -8,7 +8,7 @@
 #' @import hrbrthemes
 #' @import viridis
 #'
-#' @param output of imputed datasets performed by repNA.
+#' @param list.imputed output of imputed datasets performed by repNA.
 #'
 #' @name measureAccuracy
 #'

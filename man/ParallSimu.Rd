@@ -7,9 +7,9 @@
 ParallSimu(list.stats, correlation.type = "meanCpG")
 }
 \arguments{
-\item{correlation.type}{Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).}
+\item{list.stats}{list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)}
 
-\item{stats.obj}{list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)}
+\item{correlation.type}{Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).}
 }
 \value{
 List with SummarizedExperiment objects and imputed datasets in metadata:
@@ -29,7 +29,7 @@ and simulate new values drawn from the same distribution to impute remaining mis
  input.list <- assays(data)
  clean.coverage <- cleanCovMat(input.obj = input.list,
                               max_na_cpg = 0.5, max_na_ind = 0.2,
-                             cpg_removal_threshold = 10)
+                              cpg_removal_threshold = 10)
 
 # Cleaning outliers in methylated and unmethylated counts
  clean.out <- cleanOutliers(filtered.obj=clean.coverage,

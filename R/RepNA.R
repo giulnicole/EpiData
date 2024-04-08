@@ -52,7 +52,7 @@
 #'
 #'
 #' @export
-repNA <- function(list.cleaned,varselect=5,
+repNA <- function(cleaned.obj, varselect=5,
                   missing_prop= 0.3,
                   n.iter= 2,
                   sel_method, matrix="M",
