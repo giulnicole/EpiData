@@ -39,7 +39,7 @@
 #'  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
 #'                              remove_outliers = TRUE)
 #'  stats <- lapply(clean.out, na.omit)
-#'  imp.M <- repNA(list.cleaned=stats,
+#'  imp.M <- repNA(cleaned.obj=stats,
 #'                 missing_prop= 0.2,
 #'                 varselect=5,
 #'                 n.iter= 10,
@@ -62,7 +62,7 @@ repNA <- function(cleaned.obj, varselect=5,
 
   # original cleaned data
 
-  mat1<- list.cleaned[[varselect]]
+  mat1<- cleaned.obj[[varselect]]
 
   # Define the proportion of missing values to introduce
   # missing_prop <- 0.2  # 20% missing values
@@ -684,9 +684,9 @@ repNA <- function(cleaned.obj, varselect=5,
       # Assign NA values to the mat1
       na_positions <- is.na(masked_data.mat1)
 
-      list.cleaned[[varselect]] <-  t(masked_data.mat1)
+      cleaned.obj[[varselect]] <-  t(masked_data.mat1)
 
-      stats.m <-statsCpG(cleaned.obj = list.cleaned, varselect)
+      stats.m <-statsCpG(cleaned.obj = cleaned.obj, varselect)
 
       simu3 <- imputeCorr(cleaned.obj=stats.m,
                              matrix="M",

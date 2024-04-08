@@ -53,7 +53,7 @@ A function for computing the comparisong between imputation methods, compute acc
  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
                              remove_outliers = TRUE)
  stats <- lapply(clean.out, na.omit)
- imp.M <- repNA(list.cleaned=stats,
+ imp.M <- repNA(cleaned.obj=stats,
                 missing_prop= 0.2,
                 varselect=5,
                 n.iter= 10,
