@@ -5,6 +5,10 @@
 #' \code{} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
 #' @import cola
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr group_split
+#' @importFrom dplyr arrange
+#'
 #'
 #' @name consensusPart
 #'
@@ -73,7 +77,6 @@ consensusPart <- function(data, dataset.simulated,
   stats <- as.data.frame(get_stats(sim.clust))
   membership <- as.data.frame(cbind(rownames(dataset.raw), get_membership(sim.clust, k=best.k)))
   classes <- get_classes(sim.clust)
-
 
 
   cat("Computing KNN per cluster to the missing values\n")

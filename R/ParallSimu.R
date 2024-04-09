@@ -5,6 +5,7 @@
 #' \code{} computes the imputation based on correlation pattern between CpGs
 #'
 #' @import matrixcalc
+#' @importFrom BiocParallel bplapply
 #'
 #' @param list.stats list of SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (ParallStats output)
 #' @param correlation.type Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).

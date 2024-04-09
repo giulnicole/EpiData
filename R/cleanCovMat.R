@@ -8,7 +8,7 @@
 #' @import GenomicRanges
 #' @import SummarizedExperiment
 #' @import ggplot2
-#'
+#' @importFrom dplyr mutate_all
 #'
 #'
 #' @param input.obj SummarizedExperiment assay object (list) as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).

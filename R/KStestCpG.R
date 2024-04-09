@@ -2,6 +2,8 @@
 #' @description
 #' \code{} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 #'
+#' @importFrom dplyr bind_rows
+#' @importFrom graphics legend
 #'
 #' @param origmat filtered matrix from the SummarizedExperiment object but without missing
 #' @param masked_data.mat1 matrix which has been imputed
