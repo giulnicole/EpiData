@@ -13,24 +13,15 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Imports:
-Suggests: 
-    knitr,
-    RefManageR,
-    rmarkdown,
-    psych,
-    radiant.data,
-    sessioninfo,
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-Depends: 
-    S4Vectors,
     magrittr,
+    tidyverse,
+    tibble, 
+    BiocParallel, 
+    IRanges, 
+    S4Vectors,
+    dplyr,
     GenomicRanges,
     GenomicFeatures,
-    tibble,
-    tidyverse,
-    IRanges,
-    BiocParallel,
     SummarizedExperiment,
     kableExtra,
     purrr,
@@ -39,8 +30,9 @@ Depends:
     ggplot2,
     matrixcalc,
     stats,
+    psych,
+    radiant.data,
     cola,
-    dplyr,
     latentcor,
     apcluster,
     propagate,
@@ -51,7 +43,15 @@ Depends:
     softImpute,
     impute,
     viridis,
-    hrbrthemes,
+    hrbrthemes
+Suggests: 
+    knitr,
+    RefManageR,
+    rmarkdown,
+    sessioninfo,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: 
     R (>= 2.10)
 LazyData: true
 VignetteBuilder: knitr

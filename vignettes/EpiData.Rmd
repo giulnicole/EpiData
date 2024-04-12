@@ -105,7 +105,7 @@ A comparison can be performed on an experimental dataset from a subset of CpGs w
 ```{r, message=FALSE, warning=FALSE}
 
 stats<- lapply(clean.out, na.omit)
-
+devtools::load_all()
 imp.M <- repNA(cleaned.obj=stats,
                        missing_prop= 0.2, varselect=5,
                        n.iter= 1, sel_method=c(1:10),

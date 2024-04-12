@@ -297,19 +297,19 @@ repNA <- function(cleaned.obj, varselect=5,
 
 
 # - - - - - - - - - - - - -  - - - - - - - - - - - - -
-  #  # Method 4 = SVD imputation
+  #  # Method 4 = NIPALS imputation
 
   if (4 %in% sel_method) {
 
     origmat1 <- as.data.frame(mat1)
 
-    cat("SVD imputation - in progress\n")
+    cat("NIPALS imputation - in progress\n")
 
-    svd.mat1 <- list()
-    rmse.svd.mat1 <- NULL
-    mae.svd.mat1 <- NULL
-    time.svd <- NULL
-    KStest.svd <- NULL
+    nipals.mat1 <- list()
+    rmse.nipals.mat1 <- NULL
+    mae.nipals.mat1 <- NULL
+    time.nipals <- NULL
+    KStest.nipals <- NULL
 
     # Repeat the process n_iterations times
     for (i in 1:n.iter) {
@@ -326,15 +326,15 @@ repNA <- function(cleaned.obj, varselect=5,
 
 
       # Impute the missing values
-      imputed_data.mat1<- pca(masked_data.mat1, nPcs=ncomp, method="svd", center = F)
+      imputed_data.mat1<- pca(masked_data.mat1, nPcs=ncomp, method="nipals", center = F)
       imputed_data.mat1 <- as.data.frame(imputed_data.mat1@completeObs)
       masked_data.mat1<- imputed_data.mat1
 
-      #time.svd[i] <-t[[3]]
+      #time.nipals[i] <-t[[3]]
 
       #imputed_data.mat1 <- round(masked_data.mat1)
       #imputed_data.mat1[imputed_data.mat1<0] <- 0
-      svd.mat1[[i]] <- masked_data.mat1
+      nipals.mat1[[i]] <- masked_data.mat1
 
       err <- Errors(origmat1, masked_data.mat1, na_positions)
 
@@ -342,33 +342,33 @@ repNA <- function(cleaned.obj, varselect=5,
       S3 <- err[1]
       M3 <- err[2]
 
-      rmse.svd.mat1[i]  <- S3
-      mae.svd.mat1[i]  <- M3
+      rmse.nipals.mat1[i]  <- S3
+      mae.nipals.mat1[i]  <- M3
 
       KS_test <- KStesCpG(origmat1, masked_data.mat1)
 
-      KStest.svd <- KS_test
+      KStest.nipals <- KS_test
 
       #cat("Time elapsed at iteration:\n")
       #print(t[[3]])
       #cat("\n")
 
 
-      results.svd <- list(imputed.svd.mat1 =  svd.mat1,
-                          RMSE.svd.mat1 = rmse.svd.mat1,
-                          MAE.svd.mat1 = mae.svd.mat1,
-                          #Comp_time = time.svd,
-                          KS_statsitics = KStest.svd
+      results.nipals <- list(imputed.nipals.mat1 =  nipals.mat1,
+                          RMSE.nipals.mat1 = rmse.nipals.mat1,
+                          MAE.nipals.mat1 = mae.nipals.mat1,
+                          #Comp_time = time.nipals,
+                          KS_statsitics = KStest.nipals
       )
 
 
 
-    }# svd
+    }# nipals
 
 
 
 
-  }  else results.svd <- NULL
+  }  else results.nipals <- NULL
 
 # - - - - - - - - - - - - -  - - - - - - - - - - - - -
   #  # Method 5 = MDA imputation
@@ -814,7 +814,7 @@ repNA <- function(cleaned.obj, varselect=5,
               PPCA_imputation = results.ppca,
               BPCA_imputation = results.bpca,
               MF_imputation = results.mf,
-              SVD_imputation = results.svd,
+              NIPALS_imputation = results.nipals,
               MDA_imputation = results.mda,
               EM_imputation = results.em,
               KNN_imputation = results.knn,
