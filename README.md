@@ -91,8 +91,6 @@ clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_i
 ```{r}
 clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
 ```
-After cleaning the data, the pipeline follows with studying each chromosome seprately.the following function helps in separating the information of BS experiment per each chromosome. 
-
 
 
 
