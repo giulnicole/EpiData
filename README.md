@@ -118,27 +118,6 @@ simu<- ParallSimu(stats)
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
 
-
-
 The default missing values' investigation is performed for M values. Note that percentage of missing values in M values are higher than counts' missing value percentages.
 
 
-# Comparison of imputation methods
-
-```{r}
-data.missing <- lapply(clean.out, na.omit)
-
-imp.M <- repNA(list.cleaned=data.missing ,
-                       missing_prop= 0.2, varselect=5,
-                       n.iter= 2, sel_method=c(1:10),
-                       trees= 50, nb= 10, ncomp= 2, matrix="M")
-
-```
-
-## Measuring and visualizing the accuracy of the imputation methods
-
-```{r}
-measure_imp_m <- measureAccuracy(imp.M)
-measure_imp_m$Boxplot.rmse
-measure_imp_m$Boxplot.mae
-```
