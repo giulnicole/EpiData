@@ -6,6 +6,7 @@
 #'
 #' @import cola
 #' @importFrom tibble as_tibble
+#' @importFrom tibble rownames_to_column
 #' @importFrom dplyr group_split
 #' @importFrom dplyr arrange
 #'

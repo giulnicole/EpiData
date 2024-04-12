@@ -81,7 +81,7 @@ Function `cleanCovMat` filters coverage matrix, consideriign the following assum
 
 3)	individuals (columns) with a missing percentage greater than 20% are removed.
 
-### Filtering 2
+### Filtering 2: beta and M values
 
 ```{r message=FALSE, warning = FALSE}
 clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
@@ -91,48 +91,11 @@ clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, rem
 
 The function returns filtered counts' matrices for excessive NAs in methylated and unmenhylated counts' matrices. 
 
-`cleanOutliers` filters per rows (CpGs) and columns (individuals). First the function removes entries which may still have undesirable high percentages of NAs in methylated or unmethylated matrices, not yet cleaned from cleaning step 1. Secondly, the function clean outliers, since they can significantly impact the results of statistical analyses. 
+- `cleanOutliers` filters per rows (CpGs) and columns (individuals). First the function removes entries which may still have undesirable high percentages of NAs in methylated or unmethylated matrices, not yet cleaned from cleaning step 1. Secondly, the function clean outliers, since they can significantly impact the results of statistical analyses. 
 
+- Moreover this function computes the matrices of beta values and M values. 
 
 However, issues may arise when converting outliers to NAs, especially in studies focusing on specific areas, patient categories, or low-quality sequencing results after quality control. On the other hand, coverage of sequencing should be considered when removing outliers from sequencing experiments to ensure the reliability of the analysis. Outliers, which are data points that appear not to belong among the other data present, can significantly impact statistical analyses. While it may seem simple to remove outliers, it is crucial to handle them appropriately due to their potential impact on results and assumptions. Coverage must be considered when approaching removing counts. 
-
-
-
-# Comparison of imputation methods
-
-**Comparison between the imputation algorithms**
-A comparison can be performed on an experimental dataset from a subset of CpGs which have much complete data.   
-```{r, message=FALSE, warning=FALSE}
-
-stats<- lapply(clean.out, na.omit)
-devtools::load_all()
-imp.M <- repNA(cleaned.obj=stats,
-                       missing_prop= 0.2, varselect=5,
-                       n.iter= 1, sel_method=c(1:10),
-                       trees= 50, nb= 10, ncomp= 2, matrix="M")
-
-```
-
-
-
-The default missing values' investigation is performed for M values. Note that percentage of missing values in M values are higher than counts' missing value percentages.
-
-**Measuring accuracy**
-```{r, warning=FALSE, message=FALSE}
-measure_imp_m <- measureAccuracy(imp.M)
-```
-
-**RMSE**
-```{r, warning=FALSE, message=FALSE}
-measure_imp_m$Boxplot.rmse
-```
-
-**MAE**
-```{r, warning=FALSE, message=FALSE}
-measure_imp_m$Boxplot.mae
-```
-
-
 
 
 After cleaning the data, the pipeline follows with studying each chromosome seprately. The following function helps in separating the information of BS experiment per each chromosome. 
@@ -144,7 +107,7 @@ The input should be the assay method of the SummarizedExperiment object, if pres
 The result is a list where we have the total coverage matrix, methylated maytrix and unmethylated matrix with all chromoeomse, but also a list called *final* which contains all these three matrices already divided per each chromosome. 
 
 
-## Seconda part: imputation
+## Second part: imputation
 After cleaning steps, CpGs' matrices are divided per each chromosome with the function
 
 ```{r warning=FALSE, message=FALSE}
@@ -171,4 +134,40 @@ Here is shown the example of `imputeCorr` function (used by ParallSimu) through 
 
 When computing correlation matrix in presence of missing data, the correlation pattern behind the data may result affected by NAs presence. Since out aim is to impute the M values matrix, the  of CpGs' correlation can be reconstructed via computing the correlation matrix once imputed the mean vM value per each CpG, not to change the similarity between CpGs or via pairwise correlation. 
 
+
+#à Comparison of imputation 
+```{r, echo=F}
+devtools::load_all()
+data.full <- lapply(clean.out, na.omit)
+imp.M <- repNA(cleaned.obj=data.full,
+                missing_prop= 0.2,
+                varselect=5,
+                n.iter= 5,
+                sel_method=c(1:10) ,
+                trees= 50, nb= 10, 
+                ncomp= 2,
+                matrix="M")
+
+
+```
+
+
+## Measuring accuracy
+```{r}
+measures<- measureAccuracy(imp.M)
+```
+
+
+**Measuring RMSE**
+```{r}
+measures$Boxplot.rmse
+
+```
+
+
+
+**Measuring MAE**
+```{r}
+measures$Boxplot.mae
+```
 
