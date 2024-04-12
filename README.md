@@ -60,11 +60,7 @@ library(radiant.data)
 
 **Loading data** 
 ```{r}
-<<<<<<< HEAD
-data("rangedObject")
-=======
 data("rabgedObject")
->>>>>>> 867aa43db0128c3a198ab4402cb0ab840d51b66e
 ```
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
 As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it s provided): 
