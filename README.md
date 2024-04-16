@@ -106,12 +106,12 @@ library(matrixcalc)
 
 ### Calculating statistics per CpG and imputing data
 ```{r}
-stats<- ParallStats(clean.out)
+stats<- missingStats(clean.out)
 ```
 
 
 ```{r}
-simu<- ParallSimu(stats)
+simu<- eigenImpute(stats)
 ```
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
