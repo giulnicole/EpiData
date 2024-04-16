@@ -120,14 +120,14 @@ library(matrixcalc)
 ```{r warning=FALSE}
 # Statistics
 clean.out2<- list(clean.out, clean.out)
-stats<- ParallStats(clean.out2)
+stats<- missingStats(clean.out2)
 ```
 
 
 
 ### Imputing data based on correlation
 ```{r  warning=FALSE}
-simu<- ParallSimu(stats)
+simu<- eigenImpute(stats)
 ```
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
@@ -135,9 +135,8 @@ Here is shown the example of `imputeCorr` function (used by ParallSimu) through 
 When computing correlation matrix in presence of missing data, the correlation pattern behind the data may result affected by NAs presence. Since out aim is to impute the M values matrix, the  of CpGs' correlation can be reconstructed via computing the correlation matrix once imputed the mean vM value per each CpG, not to change the similarity between CpGs or via pairwise correlation. 
 
 
-#à Comparison of imputation 
+# Comparison of imputation methods
 ```{r, echo=F}
-devtools::load_all()
 data.full <- lapply(clean.out, na.omit)
 imp.M <- repNA(cleaned.obj=data.full,
                 missing_prop= 0.2,

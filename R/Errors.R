@@ -1,4 +1,4 @@
-#' @title Errors
+#' @title errors
 #' @description
 #' \code{} internal function which perform the accuracy measure with RMSE, MAE
 #'
@@ -7,7 +7,7 @@
 #' @param masked_data.mat1 matrix which has been imputed
 #' @param na_positiond position in the matrix with replicate NAs
 #'
-#' @name Errors
+#' @name errors
 #'
 #' @return
 #' a vector with errors per each iteration:
@@ -18,7 +18,7 @@
 #' @examples
 #'
 #' \dontrun{
-#'  err <- Errors(origmat1, masked_data.mat1, na_positions)
+#'  err <- errors(origmat1, masked_data.mat1, na_positions)
 #'
 #' }
 #'
@@ -26,7 +26,7 @@
 #' @noRd
 #'
 #'
-Errors <- function(origmat1, masked_data.mat1, na_positions) {
+errors <- function(origmat1, masked_data.mat1, na_positions) {
 
 
   # Calculate RMSE, MAE, KL distance, KL divergence for mat1

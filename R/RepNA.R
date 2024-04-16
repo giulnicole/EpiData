@@ -111,7 +111,7 @@ repNA <- function(cleaned.obj, varselect=5,
       mean.mat1[[i]] <- masked_data.mat1
 
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
       S3 <- err[1]
       M3 <- err[2]
@@ -184,7 +184,7 @@ repNA <- function(cleaned.obj, varselect=5,
       #imputed_data.mat1[imputed_data.mat1<0] <- 0
       ppca.mat1[[i]] <- masked_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
       S3 <- err[1]
       M3 <- err[2]
@@ -259,7 +259,7 @@ repNA <- function(cleaned.obj, varselect=5,
       #imputed_data.mat1[imputed_data.mat1<0] <- 0
       bpca.mat1[[i]] <- masked_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
       S3 <- err[1]
       M3 <- err[2]
@@ -336,7 +336,7 @@ repNA <- function(cleaned.obj, varselect=5,
       #imputed_data.mat1[imputed_data.mat1<0] <- 0
       nipals.mat1[[i]] <- masked_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
 
       S3 <- err[1]
@@ -407,7 +407,7 @@ repNA <- function(cleaned.obj, varselect=5,
 
       mda.mat1[[i]] <- masked_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
       S3 <- err[1]
       M3 <- err[2]
@@ -479,7 +479,7 @@ repNA <- function(cleaned.obj, varselect=5,
 
       em.mat1[[i]] <- masked_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
 
       S3 <- err[1]
@@ -550,7 +550,7 @@ repNA <- function(cleaned.obj, varselect=5,
 
       mf.mat1[[i]] <- masked_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
 
       S3 <- err[1]
@@ -623,7 +623,7 @@ repNA <- function(cleaned.obj, varselect=5,
       knn.mat1[[i]] <- imputed_data.mat1
       masked_data.mat1 <- as.data.frame(t(imputed_data.mat1))
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
       S3 <- err[1]
       M3 <- err[2]
@@ -697,7 +697,7 @@ repNA <- function(cleaned.obj, varselect=5,
       corr.mat1[[i]] <- imputed_data.mat1
       masked_data.mat1 <- imputed_data.mat1
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
 
       S3 <- err[1]
@@ -772,7 +772,7 @@ repNA <- function(cleaned.obj, varselect=5,
       cpart.mat1[[i]] <- cpart_data.mat1
       masked_data.mat1[na_positions] <- cpart_data.mat1[na_positions]
 
-      err <- Errors(origmat1, masked_data.mat1, na_positions)
+      err <- errors(origmat1, masked_data.mat1, na_positions)
 
 
       S3 <- err[1]
