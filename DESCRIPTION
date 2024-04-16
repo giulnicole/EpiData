@@ -30,8 +30,6 @@ Imports:
     ggplot2,
     matrixcalc,
     stats,
-    psych,
-    radiant.data,
     cola,
     latentcor,
     apcluster,
