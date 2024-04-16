@@ -114,7 +114,11 @@ stats<- missingStats(clean.out)
 simu<- eigenImpute(stats)
 ```
 
+<<<<<<< HEAD
 Here is shown the example of `imputeCorr` function (used by eigenImpute) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
+=======
+Here is shown the example of `imputeCorr` function (used by `eigenImpute`) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
+>>>>>>> 0865078aae12c4885aa9422ffbc914ad0d9cc221
 
 The default missing values' investigation is performed for M values. Note that percentage of missing values in M values are higher than counts' missing value percentages.
 
