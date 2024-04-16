@@ -1,5 +1,5 @@
 Package: EpiData
-Title: Enhancing reliability in DNA methylation analysis with a novel approach for imputing missing data from bisulfite sequencing experiments.
+Title: RPackage
 Version: 4.3.0
 Authors@R: 
        c(person(given = "Giulia Nicole",
@@ -9,13 +9,11 @@ Authors@R:
        comment = c(ORCID = "0000-0001-8538-4768")))
 Description:  Exploration of missing data patterns in bisulfite sequencing experiments, with pipeline for cleaning and impute M value, by cleaning disstribution per CpG and preserving the original correlation structure between CpGs.
 License: use_mit_license()
+Standardizable: FALSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Imports:
-    magrittr,
-    tidyverse,
-    tibble, 
     BiocParallel, 
     IRanges, 
     S4Vectors,
@@ -29,7 +27,6 @@ Imports:
     stats,
     ggplot2,
     matrixcalc,
-    stats,
     cola,
     latentcor,
     apcluster,
@@ -50,6 +47,9 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
+    magrittr,
+    tidyverse,
+    tibble,
     R (>= 2.10)
 LazyData: true
 VignetteBuilder: knitr
