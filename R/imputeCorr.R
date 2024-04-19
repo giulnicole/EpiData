@@ -97,7 +97,7 @@ imputeCorr <- function(cleaned.obj,
 
   cat("Computing covariance matrix ...\n")
   covMat <- as.data.frame(as.vector(stddev) %*% t(as.vector(stddev))) * pd_corr_matrix
-  #covMat[is.na(covMat)] <- 0
+  covMat[is.na(covMat)] <- 0
   #epsilon <- 1e-6
   #covMat <- covMat + epsilon * diag(length(mu))
 

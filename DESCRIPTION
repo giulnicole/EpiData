@@ -1,14 +1,11 @@
 Package: EpiData
-Title: RPackage
+Type: Package
+Title: Missing data imputation pipeline for bisulfite sequencing
 Version: 4.3.0
-Authors@R: 
-       c(person(given = "Giulia Nicole",
-       family = "Baldrighi",
-       role = c("aut", "cre"),
-       email = "giulianicole.baldrighi01@universitadipavia.it",
-       comment = c(ORCID = "0000-0001-8538-4768")))
+Authors@R: c(person("Giulia Nicole", "Baldrighi", email = "giulianicole.baldrighi01@universitadipavia.it", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8538-4768")),
+            person("Ali", "Altintas", email = "altintas@sund.ku.dk", role= c("aut"), comment = c(ORCID = "0000-0002-8932-0160")))
 Description:  Exploration of missing data patterns in bisulfite sequencing experiments, with pipeline for cleaning and impute M value, by cleaning disstribution per CpG and preserving the original correlation structure between CpGs.
-License: use_mit_license()
+License: MIT 
 Standardizable: FALSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -17,16 +14,19 @@ Imports:
     BiocParallel, 
     IRanges, 
     S4Vectors,
-    dplyr,
     GenomicRanges,
     GenomicFeatures,
     SummarizedExperiment,
+    ggplot2,
+    matrixcalc,
+    magrittr,
+    tidyverse,
+    tibble,
+    dplyr,
     kableExtra,
     purrr,
     MASS,
     stats,
-    ggplot2,
-    matrixcalc,
     cola,
     latentcor,
     apcluster,
@@ -47,9 +47,6 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
-    magrittr,
-    tidyverse,
-    tibble,
     R (>= 2.10)
 LazyData: true
 VignetteBuilder: knitr

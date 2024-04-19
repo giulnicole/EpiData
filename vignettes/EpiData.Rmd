@@ -25,7 +25,6 @@ knitr::opts_chunk$set(
 library(EpiData)
 ```
 
-
 ```{r, warning=FALSE, message=FALSE}
 library(magrittr)
 library(tidyverse)
@@ -58,7 +57,6 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 Assume that from the experiment we endend up with a dataset not only contanining chromosome 22, the optimal situation would be split dataset per each chromosome and perform a parallelized analysis. 
 
 
-
 # Pipeline
 
 ## First part: filtering
@@ -84,7 +82,6 @@ Function `cleanCovMat` filters coverage matrix, consideriign the following assum
 
 ```{r message=FALSE, warning = FALSE}
 clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
-
 
 ```
 
@@ -117,11 +114,9 @@ library(matrixcalc)
 
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
-# Statistics
 clean.out2<- list(clean.out, clean.out)
 stats<- missingStats(clean.out2)
 ```
-
 
 
 ### Imputing data based on correlation
@@ -145,7 +140,6 @@ imp.M <- repNA(cleaned.obj=data.full,
                 trees= 50, nb= 10, 
                 ncomp= 2,
                 matrix="M")
-
 
 ```
 

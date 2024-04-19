@@ -21,7 +21,7 @@
 #'  imputed.mat <- extractFinalMat(list.imputed=simu3)
 #'  }
 #'
-#' @noRd
+#' @export
 extractFinalMat <- function(list.imputed) {
 
   # Extract the imputed dataset from each sublist
