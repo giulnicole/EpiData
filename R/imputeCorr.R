@@ -13,7 +13,6 @@
 #' @param cleaned.obj SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (statsCpG output).
 #' @param matrix Matrix on which computing the correlation matrix; "M" as default.
 #' @param varselect Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
-#' @param correlation.type Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).
 #'
 #' @return
 #' dataset imputed:
@@ -48,8 +47,7 @@
 #'
 imputeCorr <- function(cleaned.obj,
                        matrix="M",
-                       varselect=5,
-                       correlation.type="meanCpG") {
+                       varselect=5) {
 
 
   rownum <- cleaned.obj[["Individuals"]]
@@ -59,9 +57,6 @@ imputeCorr <- function(cleaned.obj,
 
 
   dataset <- as.data.frame(t(cleaned.obj[["Matrix"]]))  # add
-
-
-  if (correlation.type == "meanCpG"){
 
       Row.means <- rowMeans(dataset, na.rm = T)
 
@@ -75,19 +70,12 @@ imputeCorr <- function(cleaned.obj,
 
       cat("Computing correlation matrix based on imputed mean per CpG\n")
 
-
       pd_corr_matrix <- cor(dataset)
 
       # pd_corr_matrix <- pd_corr_matrix[1:nrow(pd_corr_matrix), 1:ncol(pd_corr_matrix)]
 
 
-  } else {
-
     cat("Computing correlation matrix with pairwise observations\n")
-
-    pd_corr_matrix <- cor(dataset, use = "pairwise")
-    pd_corr_matrix[is.na(pd_corr_matrix)] <- 0
-  }
 
 
 

@@ -4,12 +4,7 @@
 \alias{imputeCorr}
 \title{imputeCorr}
 \usage{
-imputeCorr(
-  cleaned.obj,
-  matrix = "M",
-  varselect = 5,
-  correlation.type = "meanCpG"
-)
+imputeCorr(cleaned.obj, matrix = "M", varselect = 5)
 }
 \arguments{
 \item{cleaned.obj}{SummarizedExperimet object cleaned and after statistics and NAs' pattern computation (statsCpG output).}
@@ -17,8 +12,6 @@ imputeCorr(
 \item{matrix}{Matrix on which computing the correlation matrix; "M" as default.}
 
 \item{varselect}{Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.}
-
-\item{correlation.type}{Type of correlation to be imputed (default is with meanCpG imputed per rows, otherwise pairwise correlation).}
 }
 \value{
 dataset imputed:
