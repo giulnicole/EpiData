@@ -22,7 +22,7 @@
 #'  res <- adjustCounts(coverage = C, methylated = M, unmethylated = U)
 #' }
 #'
-#' @export
+#' @noRd
 #'
 adjustCounts <- function(coverage, methylated, unmethylated){
 
