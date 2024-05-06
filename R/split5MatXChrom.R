@@ -21,7 +21,7 @@
 #'  splitted.list <- split5MatXChrom(clean.out)
 #'  }
 #'
-#' @export
+#' @noRd
 split5MatXChrom <- function(list.cleaned)   {
 
   # split the chromosome
