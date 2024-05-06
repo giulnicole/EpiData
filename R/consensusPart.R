@@ -53,7 +53,7 @@
 #'
 #'
 #'
-#' @export
+#' @noRd
 consensusPart <- function(data, dataset.simulated,
                           partition_method = "pam", top_rows = "ATC",
                           k_to_test = 2:8, top_n = 100){
