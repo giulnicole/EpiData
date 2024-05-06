@@ -2,18 +2,20 @@
 
 # Define a test case
 test_that("statsCpG calculates statistics and correlations", {
-  # Create a sample cleaned object
-  cleaned_obj <- list(
-      Coverage_matrix = data.frame(CpG1 = c(10, NA, 30), CpG2 = c(NA, 6, 40)),
-      Met_matrix = data.frame(CpG1 = c(8, 2, 10), CpG2 = c(NA, 4, 21)),
-      Unmet_matrix = data.frame(CpG1 = c(2, NA, 20), CpG2 = c(NA, 2, 19)),
-      Beta_matrix = data.frame(CpG1 = c(0.8, NA, 0.3), CpG2 = c(NA, 0.3, 0.48)),
-      M_matrix = data.frame(CpG1 = c(2, NA, 3), CpG2 = c(NA, 2, 8))
-    )
 
+ library(SummarizedExperiment)
+ data("rangedObject")
+ input.list<- assays(rangedObject)
+ clean.coverage <- cleanCovMat(input.obj = input.list,
+                          max_na_cpg = 0.5, max_na_ind = 0.2,
+                            cpg_removal_threshold = 10)
 
+# Cleaning outliers in methylated and unmethylated counts
+ clean.out <- cleanOutliers(filtered.obj=clean.coverage,
+                              outlier_threshold=5,
+                               remove_outliers = TRUE)
   # Test the function
-  result <- statsCpG(cleaned_obj, varselect = 5, plot = FALSE)
+  result <- statsCpG(clean.out, varselect = 5, plot = FALSE)
 
   # Perform assertions using expect_* functions
   expect_true(is.list(result))

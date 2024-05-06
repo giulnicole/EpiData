@@ -3,16 +3,22 @@
 # Define a test case
 test_that("imputeCorr imputes missing values based on correlation", {
   # Create a sample cleaned object
-  cleaned_obj <- list(
-    Matrix = matrix(c(1, NA, 3, 4, 5, NA), ncol = 2),
-    Individuals = 3,
-    CpGs = 2,
-    means = c(2, 4),
-    sds = c(1, 1)
-  )
+  library(SummarizedExperiment)
+  data("rangedObject")
+  input.list<- assays(rangedObject)
+  clean.coverage <- cleanCovMat(input.obj = input.list,
+                                max_na_cpg = 0.5, max_na_ind = 0.2,
+                                cpg_removal_threshold = 10)
+
+  # Cleaning outliers in methylated and unmethylated counts
+  clean.out <- cleanOutliers(filtered.obj=clean.coverage,
+                             outlier_threshold=5,
+                             remove_outliers = TRUE)
+  # Test the function
+  result0 <- statsCpG(clean.out, varselect = 5, plot = FALSE)
 
   # Test the function
-  result <- imputeCorr(cleaned_obj, matrix = "M", varselect = 5, correlation.type = "meanCpG")
+  result <- imputeCorr(result0, matrix = "M", varselect = 5)
 
   # Perform assertions using expect_* functions
   expect_true(is.list(result))

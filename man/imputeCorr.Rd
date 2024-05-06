@@ -24,10 +24,12 @@ and simulate new values drawn from the same distribution to impute remaining mis
 }
 \examples{
 \dontrun{
+# Data
  data("rangedObject")
+ input.list<- assays(rangedObject)
 
  # Cleaning low counts for coverage
- input.list <- assays(data)
+
  clean.coverage <- cleanCovMat(input.obj = input.list,
                               max_na_cpg = 0.5, max_na_ind = 0.2,
                              cpg_removal_threshold = 10)
