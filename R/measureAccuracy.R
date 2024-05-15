@@ -43,8 +43,8 @@ measureAccuracy <- function(list.imputed){
   name <- NULL
   Method <- NULL
   replication <- NULL
-  Rmse <- NULL
-  Mae <- NULL
+  RMSE <- NULL
+  MAE <- NULL
   Method <- NULL
   Replication <- NULL
 

@@ -3,7 +3,6 @@
 #' \code{}First part of CpGs' cleaning. `cleanCovMat` helps in the conversion of zeroes into missing values (0->NA) in the coverage matrix,
 #'  removing rows (CpGs) and columns (individuals) above pre-specified missingness threshold.
 #'
-#' @import magrittr
 #' @import tidyverse
 #' @import GenomicRanges
 #' @import SummarizedExperiment
@@ -48,7 +47,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
   sites <- rownames(X)
   stopifnot("Input must be numeric dataframe" =is.data.frame(X), all(sapply(X, is.numeric)))
   cat("Converting 0s in NAs for coverage counts ...", "\n")
-  X <- X %>% mutate_all(~na_if(., 0))
+  X <- X %>% dplyr::mutate_all(~na_if(., 0))
 
 
   # Convert the object to a matrix (if needed)

@@ -159,7 +159,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
       beta <- max(meth, 0)/(max(meth,0) + max(unmeth,0) + p)
       B[j,i] <- beta
 
-      m <- log2((max (meth,0) + p)/ (max(unmeth,0) +p))
+      m <- log2((max(meth,0) + p)/ (max(unmeth,0) +p))
       M[j,i] <- m
 
     } # for i

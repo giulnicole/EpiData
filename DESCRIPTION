@@ -4,9 +4,8 @@ Title: Missing data imputation pipeline for bisulfite sequencing
 Version: 4.3.0
 Authors@R: c(person("Giulia Nicole", "Baldrighi", email = "giulianicole.baldrighi01@universitadipavia.it", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8538-4768")),
             person("Ali", "Altintas", email = "altintas@sund.ku.dk", role= c("aut"), comment = c(ORCID = "0000-0002-8932-0160")))
-Description:  Exploration of missing data patterns in bisulfite sequencing experiments, with pipeline for cleaning and impute M value, by cleaning disstribution per CpG and preserving the original correlation structure between CpGs.
-License: use_mit_license()
-Standardizable: FALSE
+Description: Exploration of missing data patterns in bisulfite sequencing experiments, with pipeline for cleaning and impute M value, by cleaning disstribution per CpG and preserving the original correlation structure between CpGs.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
@@ -19,11 +18,9 @@ Imports:
     SummarizedExperiment,
     ggplot2,
     matrixcalc,
-    magrittr,
     tidyverse,
     tibble,
     dplyr,
-    kableExtra,
     purrr,
     MASS,
     stats,

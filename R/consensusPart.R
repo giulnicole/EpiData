@@ -63,6 +63,7 @@ consensusPart <- function(data, dataset.simulated,
   # dataset.simulated for calculating the consensus partitions
 
   dataset.raw <- data
+  ID <- NULL
 
   # computing similarity matrix (default is euclidean distance)
   sim.euc <- negDistMat(dataset.simulated)

@@ -26,14 +26,13 @@ library(EpiData)
 ```
 
 ```{r, warning=FALSE, message=FALSE}
-library(magrittr)
+library(dplyr)
 library(tidyverse)
 library(purrr)
 library(dplyr)
-library(kableExtra)
+library(SummarizedExperiment)
 library(GenomicRanges)
 library(GenomicFeatures)
-library(SummarizedExperiment)
 library(MASS)
 library(stats)
 ```

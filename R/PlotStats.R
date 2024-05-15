@@ -33,6 +33,9 @@
 #'
 plotStats <- function(list.cleaned) {
 
+  Dataset <- NULL
+  PercentageNA <- NULL
+
   mat1  <- list.cleaned[[1]]
   mat2 <- list.cleaned[[2]]
   mat3 <-  list.cleaned[[3]]

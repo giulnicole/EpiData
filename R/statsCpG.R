@@ -5,10 +5,8 @@
 #' \code{\link{statsCpG}} computes the statistics on missing values per dataset, highlighting the
 #' pattern of missing values, mean and standard deviation per each CpG.
 #'
-#' @import kableExtra
-#' @import stats
-#' @importFrom tibble as_tibble
 #' @importFrom dplyr summarise_all
+#' @importFrom tibble as_tibble
 #' @import tidyverse
 #'
 #' @param cleaned.obj SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers).
@@ -55,6 +53,8 @@
 #' @export
 #'
 #'
+#'
+#'
 statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
   options(error = expression(NULL))
@@ -93,18 +93,14 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
   # Extraction of statistics (complete observations and NAs)
 
   # Number and percentage of complete individuals
-  no.complete <- X %>% as_tibble(X)%>%
-    summarise_all(funs(sum(!is.na(.))))
+  no.complete <- data.frame(apply(X, 2, function(x) sum(!is.na(x))))
 
-  no.complete <- as.numeric(no.complete)
   perc.complete <- no.complete / rows * 100L
 
   # Number and percentage of incomplete individuals
   cat("Calculating missing values per individual ...\n")
-  no.incomplete <- X %>% as_tibble(X)%>%
-    summarise_all(funs(sum(is.na(.))))
+  no.incomplete <- data.frame(apply(X, 2, function(x) sum(!is.na(x))))
 
-  no.incomplete <- as.numeric(no.incomplete)
   perc.incomplete <- no.incomplete / rows * 100L
 
 
@@ -196,6 +192,7 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
 
 
      }
+
   #cleaned.obj@metadata$statistics <- res
 
 
