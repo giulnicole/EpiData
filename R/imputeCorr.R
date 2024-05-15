@@ -4,8 +4,6 @@
 #' and simulate new values drawn from the same distribution to impute remaining missing values in the original cleaned dataset.
 #' \code{} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
-#' @import latentcor
-#' @import propagate
 #' @importFrom matrixcalc is.positive.semi.definite
 #'
 #' @name imputeCorr

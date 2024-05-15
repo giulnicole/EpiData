@@ -3,8 +3,6 @@
 #' @description A function for computing the comparisong between imputation methods, compute accuracy measure with replications and Kolmogorov-Smirnov test on CpG
 #' \code{\link{repNA}} computes the imputation based on standard methods and correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
-#' @import latentcor
-#' @import propagate
 #' @import missForest
 #' @import cola
 #' @import FNN
