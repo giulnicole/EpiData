@@ -4,6 +4,8 @@
 #'
 #' @importFrom dplyr bind_rows
 #' @importFrom graphics legend
+#' @importFrom stats ks.test
+#' @importFrom stats ecdf
 #'
 #' @param origmat filtered matrix from the SummarizedExperiment object but without missing
 #' @param masked_data.mat1 matrix which has been imputed

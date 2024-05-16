@@ -15,6 +15,7 @@ Imports:
     S4Vectors,
     GenomicRanges,
     GenomicFeatures,
+    stats,
     SummarizedExperiment,
     ggplot2,
     matrixcalc,
@@ -23,14 +24,6 @@ Imports:
     dplyr,
     purrr,
     MASS,
-    cola,
-    apcluster,
-    missForest,
-    FNN,
-    pcaMethods,
-    missMDA,
-    softImpute,
-    impute,
     viridis,
     hrbrthemes
 Suggests: 
@@ -41,6 +34,14 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
+    cola,
+    apcluster,
+    missForest,
+    FNN,
+    pcaMethods,
+    missMDA,
+    softImpute,
+    impute,
     R (>= 2.10)
 LazyData: true
 VignetteBuilder: knitr
