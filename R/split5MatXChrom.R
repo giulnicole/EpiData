@@ -99,7 +99,6 @@ split5MatXChrom <- function(list.cleaned)   {
   rownames(split_cov)<- cpg
 
 
-
   # Beta
   split_beta <- beta.cleaned %>%
     group_split(chr)%>%
@@ -111,7 +110,6 @@ split5MatXChrom <- function(list.cleaned)   {
 
   split_beta<- as.data.frame(split_beta)
   rownames(split_beta)<- cpg
-
 
 
   # M

@@ -8,7 +8,7 @@
 #' @importFrom dplyr summarise_all
 #' @importFrom tibble as_tibble
 #' @import tidyverse
-#'
+#' @import stats
 #' @param cleaned.obj SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers).
 #' @param varselect Index of the dataset to be used (numeric value 1-5) to extract the information related to the CpGs' pattern. 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
 #' @param plot Barplot of missing values. Default = FALSE.

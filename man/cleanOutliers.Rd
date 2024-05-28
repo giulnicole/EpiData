@@ -23,17 +23,22 @@ coverage cleaning and outlier values in the conversion.
 }
 \examples{
 \dontrun{
- data("rangedObject")
+library(dplyr)
+library(tidyverse)
+library(SummarizedExperiment)
+library(purrr)
 
- # Cleaning low counts for coverage
- input.list<- assays(data)
-clean.coverage <- cleanCovMat(input.obj = input.list,
-                              max_na_cpg = 0.5, max_na_ind = 0.2,
-                             cpg_removal_threshold = 10)
+M <- as.data.frame(round(matrix(runif(200, min=0, max=100), nrow = 20, ncol = 10)))
+U <-  as.data.frame(round(matrix(runif(200, min=0, max=93), nrow = 20, ncol = 10)))
+rownames(M) <- paste0("cpg",seq(1:20))
+rownames(U) <- paste0("cpg",seq(1:20))
+C <- as.data.frame(M + U)
+input.list <- list(C = C, M = M, U = U)
+clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+max_na_ind = 0.2,  cpg_removal_threshold = 10)
 
-# Cleaning outliers in methylated and unmethylated counts
- clean.out <- cleanOutliers(filtered.obj=clean.coverage,
-                            outlier_threshold=5, remove_outliers = TRUE)
+clean.out <- cleanOutliers(filtered.obj=clean.coverage,
+outlier_threshold=0, remove_outliers = TRUE)
 }
 
 }
