@@ -5,6 +5,7 @@
 #' \code{} computes the imputation based on correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
 #' @importFrom matrixcalc is.positive.semi.definite
+#' @import stats
 #'
 #' @name imputeCorr
 #'

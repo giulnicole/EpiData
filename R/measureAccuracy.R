@@ -7,6 +7,7 @@
 #' @import tidyverse
 #' @import hrbrthemes
 #' @import viridis
+#' @import stats
 #'
 #' @param list.imputed output of imputed datasets performed by repNA.
 #'
