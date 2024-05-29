@@ -26,7 +26,6 @@ library(EpiData)
 ```
 
 ```{r, warning=FALSE, message=FALSE}
-library(xfun)
 library(dplyr)
 library(tidyverse)
 library(purrr)

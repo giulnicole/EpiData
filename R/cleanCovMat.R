@@ -27,17 +27,8 @@
 #' library(dplyr)
 #' library(tidyverse)
 #' library(SummarizedExperiment)
-#'
-#' M <- as.data.frame(round(matrix(runif(200, min=0, max=100), nrow = 20, ncol = 10)))
-#' U <-  as.data.frame(round(matrix(runif(200, min=0, max=93), nrow = 20, ncol = 10)))
-#' rownames(M) <- paste0("cpg",seq(1:20))
-#' rownames(U) <- paste0("cpg",seq(1:20))
-#' C <- as.data.frame(M + U)
-#' input.list <- list(C = C, M = M, U = U)
-#'
-#' names(input.list) <- c("Coverage_matrix", "Met_matrix", "Unmet_matrix")
-#' clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
-#' max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' input.list<- assays(rangedObject)
+#' clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'
 #'
 #' @export
