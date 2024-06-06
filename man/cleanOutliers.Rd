@@ -22,23 +22,18 @@ SummarizedExperiment object with 2 elements:
 coverage cleaning and outlier values in the conversion.
 }
 \examples{
+
 \dontrun{
 library(dplyr)
 library(tidyverse)
 library(SummarizedExperiment)
-library(purrr)
-
-M <- as.data.frame(round(matrix(runif(200, min=0, max=100), nrow = 20, ncol = 10)))
-U <-  as.data.frame(round(matrix(runif(200, min=0, max=93), nrow = 20, ncol = 10)))
-rownames(M) <- paste0("cpg",seq(1:20))
-rownames(U) <- paste0("cpg",seq(1:20))
-C <- as.data.frame(M + U)
-input.list <- list(C = C, M = M, U = U)
+input.list<- assays(rangedObject)
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
 max_na_ind = 0.2,  cpg_removal_threshold = 10)
-
 clean.out <- cleanOutliers(filtered.obj=clean.coverage,
-outlier_threshold=0, remove_outliers = TRUE)
+outlier_threshold=0, remove_outliers = T)
 }
+
+
 
 }

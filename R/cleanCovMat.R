@@ -28,7 +28,8 @@
 #' library(tidyverse)
 #' library(SummarizedExperiment)
 #' input.list<- assays(rangedObject)
-#' clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#' clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+#' max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'
 #'
 #' @export
@@ -44,7 +45,6 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_t
   stopifnot("Input must be numeric dataframe" =is.data.frame(X), all(sapply(X, is.numeric)))
   cat("Converting 0s in NAs for coverage counts ...", "\n")
   X <- X %>% dplyr::mutate_all(~na_if(., 0))
-
 
   # Convert the object to a matrix (if needed)
   is_matrix <- is.matrix(X)

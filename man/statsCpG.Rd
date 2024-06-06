@@ -52,4 +52,5 @@ pattern of missing values, mean and standard deviation per each CpG.
  stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
 }
 
+
 }
