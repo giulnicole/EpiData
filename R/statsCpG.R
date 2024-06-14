@@ -50,6 +50,7 @@
 #'  stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
 #' }
 #'
+#'
 #' @export
 #'
 #'
