@@ -114,7 +114,6 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
                                       dimnames = list(NULL, c("nObs", "percObs", "nNA", "percNA"))),
                                       stringsAsFactors = FALSE)
 
-
 # Kable extra object
 # table_k <- kable(table_missing, row.names = F)  %>%
 #   kable_styling(bootstrap_options = c("striped", "hover", "bordered"),
