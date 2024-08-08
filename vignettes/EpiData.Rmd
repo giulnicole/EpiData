@@ -15,7 +15,10 @@ knitr::opts_chunk$set(
   fig.width = 8,
   fig.asp = 0.8,
   out.width = "100%",
-  dpi = 300
+  dpi = 300,
+  warning = FALSE, 
+  message = FALSE, 
+  echo = TRUE) 
 )
 ```
 
@@ -37,6 +40,8 @@ library(MASS)
 library(stats)
 ```
 
+
+
 ## Loading data 
 ```{r}
 data("rangedObject")
@@ -56,6 +61,19 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 Assume that from the experiment we endend up with a dataset not only contanining chromosome 22, the optimal situation would be split dataset per each chromosome and perform a parallelized analysis. 
 
 
+Note that if data is not in this format and sequencing gave the three matrices, this operation can be done with: 
+```{r}
+assays<- assays(rangedObject)
+coverage<- assays@listData[["Coverage_matrix"]]
+met <-assays@listData[["Met_matrix"]]
+unmet <- assays@listData[["Unmet_matrix"]]
+
+input.list <-  list(Coverage_matrix=coverage, Met_matrix=met, Unmet_matrix=unmet)
+gr.object <- GRconversion(input.list)
+```
+
+
+
 # Pipeline
 
 ## First part: filtering
@@ -63,6 +81,10 @@ Assume that from the experiment we endend up with a dataset not only contanining
 ### Filtering 1
 ```{r message=FALSE, warning = FALSE}
 input.list<- assays(rangedObject)
+
+
+# alternatively
+input.list<-  assays(gr.object)
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
