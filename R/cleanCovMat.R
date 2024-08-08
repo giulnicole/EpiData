@@ -35,7 +35,8 @@
 #' @export
 #'
 #'
-cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2, cpg_removal_threshold=10) {
+cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
+                        cpg_removal_threshold=10, verbose=FALSE) {
 
   X<- input.obj$Coverage_matrix
   Y<- input.obj$Met_matrix
