@@ -13,7 +13,7 @@
 #'
 #' @return
 #' SummarizedExperiment object with 2 elements:
-#'  \item{List with 5 elements}{cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
+#'  \item{List with 3 elements}{cleaned matrices (coverage, methylated and unmethylated counts)}
 #'
 #'s
 #' @examples
