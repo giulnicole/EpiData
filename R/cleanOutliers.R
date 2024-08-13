@@ -146,7 +146,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
                         Unmet_matrix = as.data.frame(clean.unmet2) )
 
 
-  list.cleaned3 <- split5MatXChrom(list.cleaned2)
+  list.cleaned3 <- split3MatXChrom(list.cleaned2)
 
   #obj<- GRconversion2(list.cleaned2)
 

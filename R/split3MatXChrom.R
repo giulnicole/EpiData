@@ -29,7 +29,7 @@ split5MatXChrom <- function(list.cleaned)   {
   met.cleaned <- list.cleaned[[2]]
   unmet.cleaned <- list.cleaned[[3]]
  # beta.cleaned <- list.cleaned[[4]]
-  m.cleaned <- list.cleaned[[5]]
+ #  m.cleaned <- list.cleaned[[5]]
 
   cpg <- rownames(met.cleaned)
   chr <- gsub("-.*", "", cpg)
@@ -44,11 +44,11 @@ split5MatXChrom <- function(list.cleaned)   {
   cov.cleaned <- as.data.frame(cbind(cov.cleaned, chr))
   colnames(cov.cleaned)[n+1] <- "chr"
 
-  #beta.cleaned <- as.data.frame(cbind(beta.cleaned, chr))
-  #colnames(beta.cleaned)[n+1] <- "chr"
+  # beta.cleaned <- as.data.frame(cbind(beta.cleaned, chr))
+  # colnames(beta.cleaned)[n+1] <- "chr"
 
-  m.cleaned <- as.data.frame(cbind(m.cleaned, chr))
-  colnames(m.cleaned)[n+1] <- "chr"
+  # m.cleaned <- as.data.frame(cbind(m.cleaned, chr))
+  # colnames(m.cleaned)[n+1] <- "chr"
 
   label.chr <- unique(chr)
 

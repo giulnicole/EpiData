@@ -120,8 +120,10 @@ Function `cleanCovMat` filters coverage matrix, consideriign the following assum
 ### Filtering 2: beta and M values
 
 ```{r message=FALSE, warning = FALSE}
-clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
+clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = TRUE)
 ```
+
+
 
 The function returns filtered counts' matrices for excessive NAs in methylated and unmenhylated counts' matrices. 
 
