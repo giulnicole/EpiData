@@ -129,6 +129,12 @@ The function returns filtered counts' matrices for excessive NAs in methylated a
 
 - `cleanOutliers` filters per rows (CpGs) and columns (individuals). First the function removes entries which may still have undesirable high percentages of NAs in methylated or unmethylated matrices, not yet cleaned from cleaning step 1. Secondly, the function clean outliers, since they can significantly impact the results of statistical analyses. 
 
+
+
+```{r}
+values <- MethilationValues(clean.out)
+```
+
 - Moreover this function computes the matrices of beta values and M values. 
 
 However, issues may arise when converting outliers to NAs, especially in studies focusing on specific areas, patient categories, or low-quality sequencing results after quality control. On the other hand, coverage of sequencing should be considered when removing outliers from sequencing experiments to ensure the reliability of the analysis. Outliers, which are data points that appear not to belong among the other data present, can significantly impact statistical analyses. While it may seem simple to remove outliers, it is crucial to handle them appropriately due to their potential impact on results and assumptions. Coverage must be considered when approaching removing counts. 
@@ -154,14 +160,16 @@ library(matrixcalc)
 
 ### Calculating statistics per CpG 
 ```{r warning=FALSE}
-clean.out2<- list(clean.out, clean.out)
-stats<- missingStats(clean.out2)
+#clean.out2<- list(values, values)
+#stats<- missingStats(clean.out2)
+stats <- statsCpG(values)
 ```
 
 
 ### Imputing data based on correlation
 ```{r  warning=FALSE}
-simu<- eigenImpute(stats)
+#simu<- eigenImpute(stats)
+simu <- imputeCorr(stats)
 ```
 
 Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
@@ -171,7 +179,7 @@ When computing correlation matrix in presence of missing data, the correlation p
 
 # Comparison of imputation methods
 ```{r, echo=F}
-data.full <- lapply(clean.out, na.omit)
+data.full <- lapply(values, na.omit)
 imp.M <- repNA(cleaned.obj=data.full,
                 missing_prop= 0.2,
                 varselect=5,

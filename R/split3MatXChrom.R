@@ -1,9 +1,9 @@
-#' @title split5MatChrom
+#' @title split3MatChrom
 #'
 #' @description A function for splitting the 5 matrices per each chromosome.
 #'
 #' @import purrr
-#' @name split5MatChrom
+#' @name split3MatChrom
 #'
 #' @param list.cleaned List cleaned by filtering steps, with all the 3 matrices with counts (coverage, methylated, unmethylated counts) and matrices of beta and M values.
 #'
@@ -18,11 +18,11 @@
 #'                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'  clean.out <- cleanOutliers(filtered.obj=clean.coverage2, outlier_threshold=5,
 #'                              remove_outliers = TRUE)
-#'  splitted.list <- split5MatXChrom(clean.out)
+#'  splitted.list <- split3MatXChrom(clean.out)
 #'  }
 #'
-#' @noRd
-split5MatXChrom <- function(list.cleaned)   {
+#' @export
+split3MatXChrom <- function(list.cleaned)   {
 
   # split the chromosome
   cov.cleaned <- list.cleaned[[1]]
@@ -154,8 +154,8 @@ split5MatXChrom <- function(list.cleaned)   {
 
   } else {
 
-    res <- list(coverage = split_cov, methylated = split_met,
-                unmethylated = split_unmet)
+    res <- list(Coverage_matrix = split_cov, Met_matrix = split_met,
+                Unmet_matrix = split_unmet)
                 # beta = split_beta, m = split_m)
 
     }

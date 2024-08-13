@@ -150,6 +150,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
 
   #obj<- GRconversion2(list.cleaned2)
 
+ lapply(list.cleaned3, as.matrix)
 
   return(list.cleaned3)
 
