@@ -16,6 +16,7 @@
 #' @param max_na_cpg Threshold of missing values per each CpG in the coverage counts matrix.
 #' @param max_na_ind Threshold of missing values per each individual.
 #' @param cpg_removal_threshold Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.
+#' @param verbose suppress messages for progression, default is FALSE
 #'
 #' @name cleanCovMat
 #'
@@ -28,7 +29,8 @@
 #' library(tidyverse)
 #' library(SummarizedExperiment)
 #' input.list<- assays(rangedObject)
-#' clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+#' subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
+#' clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
 #' max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'
 #'
@@ -132,10 +134,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
   cat("Coverting results to matrices ...", "\n")
   res2<- lapply(res, as.data.frame)
 
-
   objGR<- res2
-
-  #objGR<- GRconversion2(cleaned.list = results$Cleaned1)
 
   return(objGR)
 

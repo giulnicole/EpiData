@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
   warning = FALSE, 
   message = FALSE, 
   echo = TRUE) 
-)
 ```
 
 
@@ -63,15 +62,40 @@ Assume that from the experiment we endend up with a dataset not only contanining
 
 Note that if data is not in this format and sequencing gave the three matrices, this operation can be done with: 
 ```{r}
-assays<- assays(rangedObject)
-coverage<- assays@listData[["Coverage_matrix"]]
-met <-assays@listData[["Met_matrix"]]
-unmet <- assays@listData[["Unmet_matrix"]]
+n_sites <- 10
+n_indiv <- 6
 
-input.list <-  list(Coverage_matrix=coverage, Met_matrix=met, Unmet_matrix=unmet)
-gr.object <- GRconversion(input.list)
+# Generate random data for methylated counts
+set.seed(123)  # For reproducibility
+methylated <- as.data.frame(matrix(sample(0:100, n_sites * n_indiv, replace = TRUE), nrow = n_sites, ncol = n_indiv))
+
+# Generate random data for unmethylated counts
+unmethylated <- as.data.frame(matrix(sample(0:100, n_sites * n_indiv, replace = TRUE), nrow = n_sites, ncol = n_indiv))
+
+# Total coverage is the sum of methylated and unmethylated counts
+coverage <- as.data.frame(methylated + unmethylated)
+
+input.list <- list(Coverage_matrix=coverage, Met_matrix=methylated, Unmet_matrix=unmethylated)
 ```
 
+
+Without the ranged object the final input list can be obtained with `GRconvresion` function
+
+```{r}
+gr.object <- GRconversion(input.list)
+
+input.list <-  assays(gr.object)
+```
+
+
+Otherwise the ranged object can be used:
+```{r message=FALSE, warning = FALSE}
+
+# with the ranged object
+input.list <- assays(rangedObject)
+
+subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
+```
 
 
 # Pipeline
@@ -80,13 +104,7 @@ gr.object <- GRconversion(input.list)
 
 ### Filtering 1
 ```{r message=FALSE, warning = FALSE}
-input.list<- assays(rangedObject)
-
-
-# alternatively
-input.list<-  assays(gr.object)
-
-clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
 

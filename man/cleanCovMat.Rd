@@ -8,7 +8,8 @@ cleanCovMat(
   input.obj,
   max_na_cpg = 0.5,
   max_na_ind = 0.2,
-  cpg_removal_threshold = 10
+  cpg_removal_threshold = 10,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ cleanCovMat(
 \item{max_na_ind}{Threshold of missing values per each individual.}
 
 \item{cpg_removal_threshold}{Minimum threshold of coverage counts (across all individuals) for a CpG to be kept.}
+
+\item{verbose}{suppress messages for progression, default is FALSE}
 }
 \value{
 \item{List with 3 elements}{coverage matrix, methylated counts matrix, unmethylated counts matrix, cleaned at the specified missingness thresholds removed.}
@@ -32,7 +35,8 @@ library(dplyr)
 library(tidyverse)
 library(SummarizedExperiment)
 input.list<- assays(rangedObject)
-clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
+clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
 max_na_ind = 0.2,  cpg_removal_threshold = 10)
 
 

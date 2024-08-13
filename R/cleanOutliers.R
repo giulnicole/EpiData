@@ -15,20 +15,18 @@
 #' SummarizedExperiment object with 2 elements:
 #'  \item{List with 5 elements}{cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
 #'
-#'
-#'
+#'s
 #' @examples
 #'
-#' \dontrun{
 #' library(dplyr)
 #' library(tidyverse)
 #' library(SummarizedExperiment)
 #' input.list<- assays(rangedObject)
-#' clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+#' subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
+#' clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
 #' max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #' clean.out <- cleanOutliers(filtered.obj=clean.coverage,
-#' outlier_threshold=0, remove_outliers = T)
-#' }
+#' outlier_threshold=0, remove_outliers = TRUE)
 #'
 #'
 #'
@@ -137,52 +135,6 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
 
   }
 
-  # THIRD PART: calculating ratios
-
-  # Calculating beta values matrix and M values on cleaned data
-  cat("Calculating beta values and M values ...", "\n")
-  p <- 1  # offset parameter
-
-
-  # B values' matrix
-  B <- matrix(0, nrow(clean.met2), ncol(clean.met2))
-
-  # M values' matrix
-  M <- matrix(0, nrow(clean.met2), ncol(clean.met2))
-
-  for (j in 1:nrow(clean.met2)){
-
-    for (i in 1:ncol(clean.met2)) {
-
-      meth <- as.numeric(clean.met2[[j,i]])
-      unmeth <- as.numeric(clean.unmet2[[j,i]])
-
-      beta <- max(meth, 0)/(max(meth,0) + max(unmeth,0) + p)
-      B[j,i] <- beta
-
-      m <- log2((max(meth,0) + p)/ (max(unmeth,0) +p))
-      M[j,i] <- m
-
-    } # for i
-
-  } # for j
-
-
-
-
-  colnames(B)<- colnames(clean.met2)
-  rownames(B)<- rownames(clean.met2)
-  cat("Beta matrix computed ...", "\n")
-
-  colnames(M)<- colnames(clean.met2)
-  rownames(M)<- rownames(clean.met2)
-  cat("M matrix computed ...", "\n")
-
-
-
-  #list.cleaned[[4]] <- B
-  #list.cleaned[[5]] <- M
-
 
 
   clean.cov <- filtered.obj$Coverage_matrix
@@ -191,9 +143,7 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
 
   list.cleaned2 <- list(Coverage_matrix = as.data.frame(clean.cov),
                         Met_matrix = as.data.frame(clean.met2),
-                        Unmet_matrix = as.data.frame(clean.unmet2),
-                        Beta_matrix = as.data.frame(B),
-                        M_matrix = as.data.frame(M))
+                        Unmet_matrix = as.data.frame(clean.unmet2) )
 
 
   list.cleaned3 <- split5MatXChrom(list.cleaned2)

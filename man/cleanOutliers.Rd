@@ -16,6 +16,8 @@ cleanOutliers(filtered.obj, outlier_threshold = 5, remove_outliers = F)
 \value{
 SummarizedExperiment object with 2 elements:
 \item{List with 5 elements}{cleaned matrices (coverage, methylated and unmethylated counts) after filtering for outliers and Beta and M values matrices}
+
+s
 }
 \description{
 \code{} Second part of CpGs' cleaning. \code{cleanOutliers} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
@@ -23,16 +25,15 @@ coverage cleaning and outlier values in the conversion.
 }
 \examples{
 
-\dontrun{
 library(dplyr)
 library(tidyverse)
 library(SummarizedExperiment)
 input.list<- assays(rangedObject)
-clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
+clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
 max_na_ind = 0.2,  cpg_removal_threshold = 10)
 clean.out <- cleanOutliers(filtered.obj=clean.coverage,
-outlier_threshold=0, remove_outliers = T)
-}
+outlier_threshold=0, remove_outliers = TRUE)
 
 
 
