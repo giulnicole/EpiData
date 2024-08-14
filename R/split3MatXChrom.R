@@ -5,7 +5,7 @@
 #' @import purrr
 #' @name split3MatChrom
 #'
-#' @param list.cleaned List cleaned by filtering steps, with all the 3 matrices with counts (coverage, methylated, unmethylated counts) and matrices of beta and M values.
+#' @param list.cleaned List cleaned by filtering steps, with all the 3 matrices with counts (coverage, methylated, unmethylated counts).
 #'
 #' @return
 #' List with all the matrices divided per each chromosome.
