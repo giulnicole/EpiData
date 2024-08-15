@@ -4,11 +4,9 @@
 #'  removing rows (CpGs) and columns (individuals) above pre-specified missingness threshold.
 #'
 #' @import tidyverse
-#' @import GenomicRanges
 #' @import SummarizedExperiment
 #' @import stats
 #' @import htmltools
-#' @import ggplot2
 #' @importFrom dplyr mutate_all
 #'
 #'
