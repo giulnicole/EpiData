@@ -40,7 +40,6 @@ library(stats)
 ```
 
 
-
 ## Loading data 
 ```{r}
 data("rangedObject")
@@ -75,20 +74,20 @@ unmethylated <- as.data.frame(matrix(sample(0:100, n_sites * n_indiv, replace = 
 # Total coverage is the sum of methylated and unmethylated counts
 coverage <- as.data.frame(methylated + unmethylated)
 
-input.list <- list(Coverage_matrix=coverage, Met_matrix=methylated, Unmet_matrix=unmethylated)
+counts.list <- list(Coverage_matrix=coverage, Met_matrix=methylated, Unmet_matrix=unmethylated)
 ```
 
 
 Without the ranged object the final input list can be obtained with `GRconvresion` function
 
 ```{r}
-gr.object <- GRconversion(input.list)
+gr.object <- GRconversion(counts.list)
 
 input.list <-  assays(gr.object)
 ```
 
 
-Otherwise the ranged object can be used:
+Otherwise the ranged object can be used and the subset of 100 sites and 10 individuals can be performed:
 ```{r message=FALSE, warning = FALSE}
 
 # with the ranged object
@@ -132,10 +131,9 @@ The function returns filtered counts' matrices for excessive NAs in methylated a
 
 ```{r}
 values <- MethilationValues(clean.coverage)
-
 ```
 
-- Moreover this function computes the matrices of beta values and M values. 
+`MethilationValues`  function computes the matrices of beta values and M values. 
 
 However, issues may arise when converting outliers to NAs, especially in studies focusing on specific areas, patient categories, or low-quality sequencing results after quality control. On the other hand, coverage of sequencing should be considered when removing outliers from sequencing experiments to ensure the reliability of the analysis. Outliers, which are data points that appear not to belong among the other data present, can significantly impact statistical analyses. While it may seem simple to remove outliers, it is crucial to handle them appropriately due to their potential impact on results and assumptions. Coverage must be considered when approaching removing counts. 
 

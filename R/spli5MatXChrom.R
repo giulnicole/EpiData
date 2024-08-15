@@ -12,12 +12,6 @@
 #' List with all the matrices divided per each chromosome.
 #'
 #'
-#' @examples
-#' \dontrun{
-#'
-#'
-#'  }
-#'
 #' @export
 split5MatXChrom <- function(list.cleaned)   {
 

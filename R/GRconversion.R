@@ -3,7 +3,7 @@
 #' \code{\link{GRconversion}} internal function which helps in adjusting methylated matrix and unmethylated matrix when filtering the CpGs according to the already filtered coverage
 #'
 #'
-#' @import GenomicFeatures
+#' @importFrom GenomicRanges GRanges
 #' @importClassesFrom S4Vectors DataFrame
 #' @importFrom IRanges IRanges
 #'
