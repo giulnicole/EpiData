@@ -28,8 +28,6 @@ split3MatXChrom <- function(list.cleaned)   {
   cov.cleaned <- list.cleaned[[1]]
   met.cleaned <- list.cleaned[[2]]
   unmet.cleaned <- list.cleaned[[3]]
- # beta.cleaned <- list.cleaned[[4]]
- #  m.cleaned <- list.cleaned[[5]]
 
   cpg <- rownames(met.cleaned)
   chr <- gsub("-.*", "", cpg)
@@ -43,22 +41,12 @@ split3MatXChrom <- function(list.cleaned)   {
 
   cov.cleaned <- as.data.frame(cbind(cov.cleaned, chr))
   colnames(cov.cleaned)[n+1] <- "chr"
-
-  # beta.cleaned <- as.data.frame(cbind(beta.cleaned, chr))
-  # colnames(beta.cleaned)[n+1] <- "chr"
-
-  # m.cleaned <- as.data.frame(cbind(m.cleaned, chr))
-  # colnames(m.cleaned)[n+1] <- "chr"
-
   label.chr <- unique(chr)
 
 
   split_met <- list()
   split_unmet <- list()
   split_cov <- list()
-  #split_beta <- list()
-  #split_m <- list()
-
 
 
   # Met
@@ -97,38 +85,9 @@ split3MatXChrom <- function(list.cleaned)   {
   split_cov<- as.data.frame(split_cov)
   rownames(split_cov)<- cpg
 
-
-  # Beta
- # split_beta <- beta.cleaned %>%
- #   group_split(chr)%>%
- #   purrr::map(~ as.data.frame(.))
-
- #
- # split_beta <- split_beta %>%
- #  map(~ .[,-(n+1)])
-
- # split_beta<- as.data.frame(split_beta)
- #  rownames(split_beta)<- cpg
-
-
-  # M
- # split_m <- m.cleaned %>%
- #  group_split(chr)%>%
- #  purrr::map(~ as.data.frame(.))
-
- #
- # split_m <- split_m %>%
- #   map(~ .[,-(n+1)])
-
- # split_m<- as.data.frame(split_m)
- # rownames(split_m)<- cpg
-
- # unifying the 5 lists per each chromosome
-
   final <- list()
 
   matrices <- list(Coverage = split_cov, Methylated = split_met, Unmethylated = split_unmet)
-                 #  Beta = split_beta, M = split_m)
 
 
   if (length(label.chr)>1){
@@ -139,8 +98,7 @@ split3MatXChrom <- function(list.cleaned)   {
     aa <- list(Coverage_matrix = as.data.frame(matrices[[a]][["Coverage"]]),
                Met_matrix =  as.data.frame(matrices[[a]][["Methylated"]]),
                Unmet_matrix =  as.data.frame(matrices[[a]][["Unmethylated"]]) )
-               #Beta_matrix = as.data.frame(matrices[[a]][["Beta"]]),
-               #M_matrix = as.data.frame(matrices[[a]][["M"]]))
+
 
     final[[a]]<- aa
 
@@ -150,13 +108,13 @@ split3MatXChrom <- function(list.cleaned)   {
                 coverage = split_cov,
                 methylated = split_met,
                 unmethylated = split_unmet)
-                #beta = split_beta, m = split_m)
+
 
   } else {
 
     res <- list(Coverage_matrix = split_cov, Met_matrix = split_met,
                 Unmet_matrix = split_unmet)
-                # beta = split_beta, m = split_m)
+
 
     }
 
