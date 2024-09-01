@@ -15,10 +15,9 @@ test_that("cleanCovMat removes CpGs with high missing values", {
   result <- cleanOutliers(result0, remove_outliers = FALSE)
 
   # Perform assertions using expect_* functions
-  expect_true("coverage" %in% names(result))
-  expect_true("methylated" %in% names(result))
-  expect_true("unmethylated" %in% names(result))
-  expect_true("beta" %in% names(result))
-  expect_true("m" %in% names(result))
+  expect_true("Coverage_matrix" %in% names(result))
+  expect_true("Met_matrix" %in% names(result))
+  expect_true("Unmet_matrix" %in% names(result))
+
 
 })

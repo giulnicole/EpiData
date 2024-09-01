@@ -15,9 +15,8 @@
 #' SummarizedExperiment object with 2 elements:
 #'  \item{List with 3 elements}{cleaned matrices (coverage, methylated and unmethylated counts)}
 #'
-#'s
-#' @examples
 #'
+#' @examples
 #' library(dplyr)
 #' library(tidyverse)
 #' library(SummarizedExperiment)

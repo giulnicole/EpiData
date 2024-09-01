@@ -16,15 +16,12 @@ cleanOutliers(filtered.obj, outlier_threshold = 5, remove_outliers = F)
 \value{
 SummarizedExperiment object with 2 elements:
 \item{List with 3 elements}{cleaned matrices (coverage, methylated and unmethylated counts)}
-
-s
 }
 \description{
 \code{} Second part of CpGs' cleaning. \code{cleanOutliers} helps in discarding those CpGs with high rate of missing values of methylated and unmethylated counts after
 coverage cleaning and outlier values in the conversion.
 }
 \examples{
-
 library(dplyr)
 library(tidyverse)
 library(SummarizedExperiment)

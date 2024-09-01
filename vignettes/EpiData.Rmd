@@ -130,7 +130,7 @@ The function returns filtered counts' matrices for excessive NAs in methylated a
 
 
 ```{r}
-values <- MethilationValues(clean.coverage)
+values <- MethilationValues(clean.out)
 ```
 
 `MethilationValues`  function computes the matrices of beta values and M values. 
@@ -150,33 +150,28 @@ The result is a list where we have the total coverage matrix, methylated maytrix
 ## Second part: imputation
 After cleaning steps, CpGs' matrices are divided per each chromosome with the function
 
-```{r warning=FALSE, message=FALSE}
-library(BiocParallel)
-library(matrixcalc)
-```
-
 
 ### Calculating statistics per CpG 
-```{r warning=FALSE}
-#clean.out2<- list(values, values)
-#stats<- missingStats(clean.out2)
-stats <- statsCpG(values)
-```
+
 
 ```{r}
-values2 <- list(values, values)
-meta.stat <- lapply(values2, statsCpG)
+stats <- statsCpG(values)
 ```
 
 
 
 ### Imputing data based on correlation
 ```{r  warning=FALSE}
-#simu<- eigenImpute(stats)
 simu <- imputeCorr(stats)
 ```
 
-Here is shown the example of `imputeCorr` function (used by ParallSimu) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
+
+```{r}
+values2 <- list(values, values)
+meta.stat <- lapply(values2, statsCpG)
+meta.simu <- lapply(meta.stat, imputeCorr)
+```
+
 
 When computing correlation matrix in presence of missing data, the correlation pattern behind the data may result affected by NAs presence. Since out aim is to impute the M values matrix, the  of CpGs' correlation can be reconstructed via computing the correlation matrix once imputed the mean vM value per each CpG, not to change the similarity between CpGs or via pairwise correlation. 
 
