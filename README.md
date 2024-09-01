@@ -10,9 +10,9 @@ We welcome any and all contributions. Here are some ways you can get started:
 
 **Contribute code**: if you are a developer and want to contribute, follow the instructions below to get started!
 
-**Suggestions**: if you don't want to code but have some awesome ideas, open up an issue explaining some updates or imporvements you would like to see!
+**Suggestions**: if you don't want to code but have some awesome ideas, open up an issue explaining some updates or improvements you would like to see!
 
-**Documentation**: If you see the need for some additional documentation, feel free to add some!
+**Documentation**: if you see the need for some additional documentation, feel free to add some!
 
 
 ## Installing the package
@@ -63,13 +63,14 @@ library(radiant.data)
 data("rabgedObject")
 ```
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
+
 As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it s provided): 
 
-- coverage counts' matrix (Coverage_matrix)
+- coverage counts matrix (Coverage_matrix)
 
-- methylated counts' matrix (Met_matrix)
+- methylated counts matrix (Met_matrix)
 
-- unmenthylated counts' matrix (Unmet_matrix)
+- unmenthylated counts matrix (Unmet_matrix)
 
 In this objects exact locations and CpGs' names are present (labeled as chr:bp). 
 
@@ -77,7 +78,7 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 ## Pipeline
 
 ### Part 1: cleaning the whole matrix of the CpGs
-**Cleaning step 1**
+**Cleaning step 1: coverage**
 
 ```{r}
 
@@ -86,36 +87,31 @@ input.list<- assays(rabgedObject)
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
-**Cleaning step 2**
+**Cleaning step 2: outliers**
 
 ```{r}
 clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
 ```
 
-
-
-## Part2: parallelization per chromosome for imputation
-
-Here is shown the example pipeline through each one of the chromosomes. 
-
+## Part 2: methylation values
 
 ```{r}
-library(BiocParallel)
-library(matrixcalc)
+values <- MethilationValues(clean.coverage)
 ```
+
+
+## Part 3: imputation
+
 
 ### Calculating statistics per CpG and imputing data
-```{r}
-stats<- missingStats(clean.out)
-```
-
 
 ```{r}
-simu<- eigenImpute(stats)
+stats<- missingStats(values)
 ```
 
-Here is shown the example of `imputeCorr` function (used by `eigenImpute`) through each one of the chromosomes. Note that the input could be *pairwise* as well as *meanCpG*.
-
-The default missing values' investigation is performed for M values. Note that percentage of missing values in M values are higher than counts' missing value percentages.
+### Imputing data
+```{r}
+simu <- imputeCorr(stats)
+```
 
 
