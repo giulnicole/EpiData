@@ -1,6 +1,6 @@
-#' @title Split3MatXChrom
+#' @title MethilationValues
 #' @description
-#' \code{\link{Split3MatXChrom}} is a function which computes the Beta and M matrices from the filtered filtered coverage, methylated and unmethylated counts.
+#' \code{\link{MethilationValues}} is a function which computes the Beta and M matrices from the filtered filtered coverage, methylated and unmethylated counts.
 #'
 #'
 #' @import GenomicFeatures
@@ -9,7 +9,7 @@
 #'
 #' @param filtered.obj with the three experimental matrices from the SummarizedExperiment object: coverage counts filtered matrix, methylated counts matrix, unmethylated counts matrices.
 #'
-#' @name Split3MatXChrom
+#' @name MethilationValues
 #'
 #' @return
 #' a list of 5 matrices:
@@ -30,7 +30,7 @@ MethilationValues <- function(filtered.obj){
 
   # Calculating beta values matrix and M values on cleaned data
   cat("Calculating beta values and M values ...", "\n")
-  p <- 1  # offset parameter
+  p <- 100  # offset parameter
 
 
   # B values' matrix
