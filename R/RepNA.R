@@ -117,7 +117,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.mean.mat1[i]  <- S3
       mae.mean.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.mean <- KS_test
 
@@ -190,7 +190,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.ppca.mat1[i]  <- S3
       mae.ppca.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.ppca <- KS_test
 
@@ -265,7 +265,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.bpca.mat1[i]  <- S3
       mae.bpca.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.bpca <- KS_test
 
@@ -343,7 +343,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.nipals.mat1[i]  <- S3
       mae.nipals.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.nipals <- KS_test
 
@@ -413,7 +413,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.mda.mat1[i]  <- S3
       mae.mda.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.mda <- KS_test
 
@@ -486,7 +486,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.em.mat1[i]  <- S3
       mae.em.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.em <- KS_test
 
@@ -557,7 +557,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.mf.mat1[i]  <- S3
       mae.mf.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1)
 
       KStest.mf <- KS_test
 
@@ -629,7 +629,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.knn.mat1[i]  <- S3
       mae.knn.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1, plots = F)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1, plots = F)
 
       KStest.knn <- KS_test
 
@@ -704,7 +704,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.corr.mat1[i]  <- S3
       mae.corr.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1, plots = F)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1, plots = F)
 
       KStest.corr <- KS_test
 
@@ -779,7 +779,7 @@ repNA <- function(cleaned.obj, varselect=5,
       rmse.cpart.mat1[i]  <- S3
       mae.cpart.mat1[i]  <- M3
 
-      KS_test <- KStesCpG(origmat1, masked_data.mat1, plots = F)
+      KS_test <- KStestCpG(origmat1, masked_data.mat1, plots = F)
 
       KStest.cpart <- KS_test
 
