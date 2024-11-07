@@ -23,13 +23,13 @@
 #'
 #'  \dontrun{
 #'
-#'  KS_test <- KStesCpG(origmat1, masked_data.mat1)
+#'  KS_test <- KStestCpG(origmat1, masked_data.mat1)
 #'
 #'  }
 #'
 #'
 #' @noRd
-KStesCpG <- function(origmat1, masked_data.mat1, plots=FALSE){
+KStestCpG <- function(origmat1, masked_data.mat1, plots=FALSE){
 
 
   KStest.results <- list()

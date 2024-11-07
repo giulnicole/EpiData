@@ -185,7 +185,7 @@ imp.M <- repNA(cleaned.obj=data.full,
                 missing_prop= 0.2,
                 varselect=5,
                 n.iter= 5,
-                sel_method=c(1:10) ,
+                sel_method=c(1:9) ,
                 trees= 50, nb= 10, 
                 ncomp= 2,
                 matrix="M")
