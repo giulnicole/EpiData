@@ -28,7 +28,7 @@ install.packages("devtools")
 
 Installing EpiData package:
 ```{r}
-BiocManager::install(c("Epidata"))
+BiocManager::install("Epidata")
 ```
 
 
@@ -43,6 +43,7 @@ Wait for pull request to be merged
 ```{r, warning=FALSE}
 library(EpiData)
 ```
+
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(tidyverse)
@@ -59,6 +60,7 @@ library(stats)
 ## Loading data 
 ```{r}
 data("rangedObject")
+print(rangedObject)
 ```
 
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
@@ -89,7 +91,7 @@ Assume that from the experiment we endend up with a dataset not only contanining
 
 ```{r}
 
-input.list<- assays(rabgedObject)
+input.list<- assays(rangedObject)
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
