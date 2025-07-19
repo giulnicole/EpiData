@@ -91,7 +91,7 @@ Assume that from the experiment we endend up with a dataset not only contanining
 
 ```{r}
 
-input.list<- assays(rangedObject)
+input.list<- assays(meth_data)
 
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
@@ -105,7 +105,7 @@ clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remo
 ## Part 2: methylation values
 
 ```{r}
-values <- MethilationValues(clean.coverage)
+values <- methilationValues(clean.coverage)
 ```
 
 
