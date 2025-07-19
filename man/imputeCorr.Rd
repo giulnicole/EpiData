@@ -25,8 +25,10 @@ and simulate new values drawn from the same distribution to impute remaining mis
 \examples{
 \dontrun{
 # Data
- data("rangedObject")
- input.list<- assays(rangedObject)
+ data("meth_data")
+ print(meth_data)
+
+ input.list<- assays(meth_data)
 
  # Cleaning low counts for coverage
 

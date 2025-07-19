@@ -29,10 +29,11 @@ A function for calculating statistics and missing values patterns
 \examples{
 \dontrun{
 
- data("rangedObject")
+ data("meth_data")
+ print(meth_data)
 
  # Cleaning low counts for coverage
- input.list <- assays(rangedObject)
+ input.list <- assays(meth_data)
 
  clean.coverage <- cleanCovMat(input.obj = input.list,
                               max_na_cpg = 0.5, max_na_ind = 0.2,
