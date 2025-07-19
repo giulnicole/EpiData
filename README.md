@@ -65,8 +65,8 @@ print(meth_data)
 
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
 
-As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it s provided): 
-=======
+As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it is provided): 
+
 
 
 The dataset contains the LargeSummarizedExperiment object with the following list of assays from experiment obtained by bisulfite sequencing 43 individuals. As an example data derives from chromosome 22: 
