@@ -15,7 +15,8 @@
 #'
 #' @examples
 #' \dontrun{
-#'  data("rangedObject")
+#'  data("meth_data")
+#'  print(meth_data)
 #'  C<- assay(data, 1)
 #'  M<- assay(data, 2)
 #'  U<- assay(data, 3)

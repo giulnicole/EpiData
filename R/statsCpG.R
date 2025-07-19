@@ -34,8 +34,10 @@
 #' @examples
 #' \dontrun{
 #' # Data
-#'  data("rangedObject")
-#'  input.list<- assays(rangedObject)
+#'  data("meth_data")
+#'  print(meth_data)
+#'
+#'  input.list<- assays(meth_data)
 #'
 #'  # Cleaning low counts for coverage
 #'  clean.coverage <- cleanCovMat(input.obj = input.list,

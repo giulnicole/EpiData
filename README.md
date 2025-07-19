@@ -104,7 +104,7 @@ clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remo
 ## Part 2: methylation values
 
 ```{r}
-values <- methilationValues(clean.coverage)
+values <- methValues(clean.coverage)
 ```
 
 
