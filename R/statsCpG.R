@@ -35,7 +35,6 @@
 #' \dontrun{
 #' # Data
 #'  data("meth_data")
-#'  print(meth_data)
 #'
 #'  input.list<- assays(meth_data)
 #'
@@ -49,7 +48,9 @@
 #'                             outlier_threshold=5,
 #'                             remove_outliers = TRUE)
 #'
-#'  stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
+#'  clean.values <- methValues(clean.out)
+#'
+#'  stats <- statsCpG(cleaned.obj=clean.values, varselect = 5)
 #' }
 #'
 #'
@@ -196,8 +197,6 @@ statsCpG <- function(cleaned.obj, varselect = 5, plot=FALSE) {
      }
 
   #cleaned.obj@metadata$statistics <- res
-
-
 
   return(res)
 

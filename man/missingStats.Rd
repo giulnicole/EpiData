@@ -4,7 +4,7 @@
 \alias{missingStats}
 \title{missingStats}
 \usage{
-missingStats(list.cleaned)
+missingStats(input.list)
 }
 \arguments{
 \item{list.cleaned}{SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)}
@@ -30,7 +30,6 @@ A function for calculating statistics and missing values patterns
 \dontrun{
 
  data("meth_data")
- print(meth_data)
 
  # Cleaning low counts for coverage
  input.list <- assays(meth_data)
@@ -41,11 +40,13 @@ A function for calculating statistics and missing values patterns
 
 # Cleaning outliers in methylated and unmethylated counts
   clean.out <- cleanOutliers(filtered.obj=clean.coverage,
-                            outlier_threshold=5, remove_outliers = TRUE)ù
+                            outlier_threshold=5, remove_outliers = TRUE)
 
- list.cleaned <- list(clean.out, clean.out)
+  mat.values <- methValues(clean.coverage)
+  stat.result <- missingStats(list(mat.values))
 
- stats <- missingStats(list.cleaned)
+
+
 }
 
 

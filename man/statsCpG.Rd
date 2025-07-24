@@ -36,8 +36,9 @@ pattern of missing values, mean and standard deviation per each CpG.
 \examples{
 \dontrun{
 # Data
- data("rangedObject")
- input.list<- assays(rangedObject)
+ data("meth_data")
+
+ input.list<- assays(meth_data)
 
  # Cleaning low counts for coverage
  clean.coverage <- cleanCovMat(input.obj = input.list,
@@ -49,7 +50,9 @@ pattern of missing values, mean and standard deviation per each CpG.
                             outlier_threshold=5,
                             remove_outliers = TRUE)
 
- stats<- statsCpG(cleaned.obj=clean.out, varselect = 5)
+ clean.values <- methValues(clean.out)
+
+ stats <- statsCpG(cleaned.obj=clean.values, varselect = 5)
 }
 
 

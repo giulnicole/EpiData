@@ -104,7 +104,7 @@ clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remo
 ## Part 2: methylation values
 
 ```{r}
-values <- methValues(clean.coverage)
+mat.values <- methValues(clean.coverage)
 ```
 
 
@@ -114,12 +114,12 @@ values <- methValues(clean.coverage)
 ### Calculating statistics per CpG and imputing data
 
 ```{r}
-stats<- missingStats(values)
+stat.result <- missingStats(list(mat.values))
 ```
 
 ### Imputing data
 ```{r}
-simu <- imputeCorr(stats)
+imputed <- batchImputeCorr(stat.result)
 ```
 
 

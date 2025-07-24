@@ -26,7 +26,6 @@
 #' \dontrun{
 #'
 #'  data("meth_data")
-#'  print(meth_data)
 #'
 #'  # Cleaning low counts for coverage
 #'  input.list <- assays(meth_data)
@@ -37,24 +36,45 @@
 #'
 #' # Cleaning outliers in methylated and unmethylated counts
 #'   clean.out <- cleanOutliers(filtered.obj=clean.coverage,
-#'                             outlier_threshold=5, remove_outliers = TRUE)ù
+#'                             outlier_threshold=5, remove_outliers = TRUE)
 #'
-#'  list.cleaned <- list(clean.out, clean.out)
+#'   mat.values <- methValues(clean.coverage)
+#'   stat.result <- missingStats(list(mat.values))
 #'
-#'  stats <- missingStats(list.cleaned)
+#'
+#'
 #' }
 #'
 #'
 #'
 #'
 #' @export
-missingStats <- function(list.cleaned){
+missingStats <- function(input.list) {
+  if (!is.list(input.list)) {
+    stop("Input must be a list of cleaned objects.")
+  }
 
-  meta.stat <- bplapply(list.cleaned, statsCpG)
+  results <- lapply(seq_along(input.list), function(i) {
+    message("Processing element ", i, "...")
+    obj <- input.list[[i]]
 
-  return(meta.stat)
+    if (!is.list(obj) || length(obj) < 5) {
+      warning(sprintf("Element %d skipped: expected a list of 5 elements.", i))
+      return(NULL)
+    }
 
-}# missingStats
+    tryCatch({
+      statsCpG(obj, varselect = 5, plot = FALSE)
+    }, error = function(e) {
+      warning(sprintf("Element %d failed: %s", i, e$message))
+      NULL
+    })
+  })
 
+  # Preserve names if present
+  if (!is.null(names(input.list))) {
+    names(results) <- names(input.list)
+  }
 
-
+  return(results)
+}
