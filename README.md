@@ -59,7 +59,6 @@ library(stats)
 ## Loading data 
 ```{r}
 data("meth_data")
-print(meth_data)
 ```
 
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 

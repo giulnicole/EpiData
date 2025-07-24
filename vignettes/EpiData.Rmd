@@ -153,9 +153,8 @@ After cleaning steps, CpGs' matrices are divided per each chromosome with the fu
 
 ### Calculating statistics per CpG 
 
-
 ```{r}
-mat.values <- methValues(clean.coverage)
+stat.result <- missingStats(list(mat.values))
 ```
 
 
@@ -184,8 +183,8 @@ data.full <- lapply(values, na.omit)
 imp.M <- repNA(cleaned.obj=data.full,
                 missing_prop= 0.2,
                 varselect=5,
-                n.iter= 5,
-                sel_method=c(1:9) ,
+                n.iter= 1,
+                sel_method=c(1:2) ,
                 trees= 50, nb= 10, 
                 ncomp= 2,
                 matrix="M")
