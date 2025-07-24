@@ -42,7 +42,7 @@ library(stats)
 
 ## Loading data 
 ```{r}
-data("rangedObject")
+data("meth_data")
 ```
 
 
@@ -91,7 +91,7 @@ Otherwise the ranged object can be used and the subset of 100 sites and 10 indiv
 ```{r message=FALSE, warning = FALSE}
 
 # with the ranged object
-input.list <- assays(rangedObject)
+input.list <- assays(meth_data)
 
 subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
 ```
@@ -130,7 +130,7 @@ The function returns filtered counts' matrices for excessive NAs in methylated a
 
 
 ```{r}
-values <- MethilationValues(clean.out)
+mat.values <- methValues(clean.coverage)
 ```
 
 `MethilationValues`  function computes the matrices of beta values and M values. 
@@ -155,14 +155,14 @@ After cleaning steps, CpGs' matrices are divided per each chromosome with the fu
 
 
 ```{r}
-stats <- statsCpG(values)
+mat.values <- methValues(clean.coverage)
 ```
 
 
 
 ### Imputing data based on correlation
 ```{r  warning=FALSE}
-simu <- imputeCorr(stats)
+imputed <- batchImputeCorr(stat.result)
 ```
 
 
