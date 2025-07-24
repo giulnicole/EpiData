@@ -4,8 +4,8 @@
 test_that("cleanCovMat removes CpGs with high missing values", {
   # Create a sample input object
   # Creating the matrix with chosen values
-  data("rangedObject")
-  input.list<- assays(rangedObject)
+  data("meth_data")
+  input.list<- assays(meth_data)
 
 
   # Test the function

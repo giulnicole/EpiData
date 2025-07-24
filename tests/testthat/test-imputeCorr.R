@@ -2,10 +2,10 @@
 
 # Define a test case
 test_that("imputeCorr imputes missing values based on correlation", {
-  # Create a sample cleaned object
+
   library(SummarizedExperiment)
-  data("rangedObject")
-  input.list<- assays(rangedObject)
+  data("meth_data")
+  input.list<- assays(meth_data)
   clean.coverage <- cleanCovMat(input.obj = input.list,
                                 max_na_cpg = 0.5, max_na_ind = 0.2,
                                 cpg_removal_threshold = 10)
@@ -14,15 +14,19 @@ test_that("imputeCorr imputes missing values based on correlation", {
   clean.out <- cleanOutliers(filtered.obj=clean.coverage,
                              outlier_threshold=5,
                              remove_outliers = TRUE)
-  # Test the function
-  result0 <- statsCpG(clean.out, varselect = 5, plot = FALSE)
+
+  # Calculating beta and M values
+  mat.values <- methValues(clean.coverage)
 
   # Test the function
-  result <- imputeCorr(result0, matrix = "M", varselect = 5)
+  stat.result <- missingStats(list(mat.values))
+
+  # Test the function
+  imputed <- batchImputeCorr(stat.result)
 
   # Perform assertions using expect_* functions
-  expect_true(is.list(result))
-  expect_true("Imputed" %in% names(result))
-  expect_true("Simulated" %in% names(result))
+  expect_true(is.list(imputed))
+  expect_true("Imputed" %in% names(imputed[[1]]))
+  expect_true("Simulated" %in% names(imputed[[1]]))
 
 })
