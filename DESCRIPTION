@@ -24,6 +24,15 @@ Imports:
     dplyr,
     purrr,
     MASS,
+    tmltools,
+    cola,
+    apcluster,
+    missForest,
+    FNN,
+    pcaMethods,
+    missMDA,
+    softImpute,
+    impute,
     viridis,
     hrbrthemes
 Suggests: 
@@ -34,15 +43,6 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
-    htmltools,
-    cola,
-    apcluster,
-    missForest,
-    FNN,
-    pcaMethods,
-    missMDA,
-    softImpute,
-    impute,
     R (>= 2.10)
 LazyData: true
 VignetteBuilder: knitr

@@ -2,11 +2,13 @@
 
 export(GRconversion)
 export(MethilationValues)
+export(batchImputeCorr)
 export(cleanCovMat)
 export(cleanOutliers)
 export(eigenImpute)
 export(imputeCorr)
 export(measureAccuracy)
+export(methValues)
 export(missingStats)
 export(repNA)
 export(split3MatXChrom)
