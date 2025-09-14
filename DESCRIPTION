@@ -12,6 +12,7 @@ RoxygenNote: 7.3.2
 Imports:
     BiocParallel, 
     IRanges, 
+    htmltools,
     S4Vectors,
     GenomicRanges,
     GenomicFeatures,
@@ -24,7 +25,6 @@ Imports:
     dplyr,
     purrr,
     MASS,
-    tmltools,
     cola,
     apcluster,
     missForest,
