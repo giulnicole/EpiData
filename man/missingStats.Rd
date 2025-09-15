@@ -7,7 +7,7 @@
 missingStats(input.obj)
 }
 \arguments{
-\item{list.cleaned}{SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)}
+\item{input.obj}{SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)}
 }
 \value{
 List with SummarizedExperiment objects and metadata statistics:
