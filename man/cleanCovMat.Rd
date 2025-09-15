@@ -33,6 +33,7 @@ removing rows (CpGs) and columns (individuals) above pre-specified missingness t
 \examples{
 library(dplyr)
 library(tidyverse)
+library(SummarizedExperiment)
 data("meth_data")
 print(meth_data)
 input.list<- assays(meth_data)

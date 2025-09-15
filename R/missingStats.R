@@ -49,14 +49,14 @@
 #'
 #'
 #' @export
-missingStats <- function(input.list) {
-  if (!is.list(input.list)) {
+missingStats <- function(input.obj) {
+  if (!is.list(input.obj)) {
     stop("Input must be a list of cleaned objects.")
   }
 
-  results <- lapply(seq_along(input.list), function(i) {
+  results <- lapply(seq_along(input.obj), function(i) {
     message("Processing element ", i, "...")
-    obj <- input.list[[i]]
+    obj <- input.obj[[i]]
 
     if (!is.list(obj) || length(obj) < 5) {
       warning(sprintf("Element %d skipped: expected a list of 5 elements.", i))
@@ -72,8 +72,8 @@ missingStats <- function(input.list) {
   })
 
   # Preserve names if present
-  if (!is.null(names(input.list))) {
-    names(results) <- names(input.list)
+  if (!is.null(names(input.obj))) {
+    names(results) <- names(input.obj)
   }
 
   return(results)

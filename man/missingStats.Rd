@@ -4,7 +4,7 @@
 \alias{missingStats}
 \title{missingStats}
 \usage{
-missingStats(input.list)
+missingStats(input.obj)
 }
 \arguments{
 \item{list.cleaned}{SummarizedExperiment list object from filtering coverage (cleanCovMat) + cleaning outliers (cleanOutliers)}
