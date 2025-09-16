@@ -26,23 +26,13 @@ Commit and push
 Wait for pull request to be merged
 
 
-## Loading the package and useful libraries
+## Loading the package 
 ```{r, warning=FALSE}
 library(EpiData)
 ```
 
-```{r, warning=FALSE, message=FALSE}
-library(dplyr)
-library(tidyverse)
-library(purrr)
-library(SummarizedExperiment)
-library(GenomicRanges)
-library(GenomicFeatures)
-library(MASS)
-library(stats)
-```
-
 # Get started with the analysis
+
 ## Loading data 
 ```{r}
 data("meth_data")
