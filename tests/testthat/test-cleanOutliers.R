@@ -10,7 +10,8 @@ test_that("cleanCovMat removes CpGs with high missing values", {
   input.list<- assays(meth_data)
 
   # Test the function
-  library(tidyverse)
+  library(dplyr)
+  library(SummarizedExperiment)
   result0 <- cleanCovMat(input.list)
   result <- cleanOutliers(result0, remove_outliers = FALSE)
 

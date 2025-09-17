@@ -9,7 +9,8 @@ test_that("cleanCovMat removes CpGs with high missing values", {
 
 
   # Test the function
-  library(tidyverse)
+  library(dplyr)
+  library(SummarizedExperiment)
   result <- cleanCovMat(input.list)
 
   # Perform assertions using expect_* functions
