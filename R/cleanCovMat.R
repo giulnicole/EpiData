@@ -21,11 +21,10 @@
 #'
 #' @examples
 #' library(dplyr)
-#' library(tidyverse)
 #' library(SummarizedExperiment)
 #' data("meth_data")
 #' print(meth_data)
-#' input.list<- assays(meth_data)
+#' input.list<- SummarizedExperiment::assays(meth_data)
 #' subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
 #' clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
 #' max_na_ind = 0.2,  cpg_removal_threshold = 10)
