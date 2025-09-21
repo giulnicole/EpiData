@@ -5,7 +5,7 @@
 #'
 #' @importFrom dplyr na_if
 #' @importFrom dplyr mutate_all
-#'
+#' @importFrom SummarizedExperiment assays
 #'
 #' @param input.obj SummarizedExperiment assay object (list) as input with list with coverage, methylated counts and unmethylated counts in assays/data/listData (rows are CpGs and individuals are columns).
 #' @param max_na_cpg Threshold of missing values per each CpG in the coverage counts matrix.

@@ -4,6 +4,7 @@
 #' coverage cleaning and outlier values in the conversion.
 #'
 #' @import stats
+#' @importFrom SummarizedExperiment assays
 #'
 #' @param filtered.obj List object deriving from cleanMatCov.
 #' @param outlier_threshold Threshold for considering a value of the counts' matrices as an outlier.
