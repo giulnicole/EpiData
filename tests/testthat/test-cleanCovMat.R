@@ -4,13 +4,12 @@
 test_that("cleanCovMat removes CpGs with high missing values", {
   # Create a sample input object
   # Creating the matrix with chosen values
-  data("meth_data")
-  input.list<- assays(meth_data)
-
-
-  # Test the function
   library(dplyr)
   library(SummarizedExperiment)
+
+  data("meth_data")
+  input.list<- SummarizedExperiment::assays(meth_data)
+
   result <- cleanCovMat(input.list)
 
   # Perform assertions using expect_* functions
