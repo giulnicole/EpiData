@@ -72,7 +72,7 @@ input.list<- assays(meth_data)
 input.list<- SummarizedExperiment::assays(meth_data)
 head(input.list[[1]]) # coverage matrix
 head(input.list[[2]]) # methylated counts matrix
-
+head(input.list[[3]]) # unmethylated counts matrix
 ```
 And then run directly the passage of the cleaning step 1 (Pipeline Part 1).
 
@@ -118,8 +118,6 @@ imputed_data <- (imputed[[1]][[1]])
 imputed_data[1:4, 1:10]
 
 ```
-
-
 
 ### Imputation comparison pipeline  
 
