@@ -59,7 +59,24 @@ Assume that from the experiment we endend up with a dataset not only contanining
 
 ## Pipeline
 
-### Part 1: cleaning the whole matrix of the CpGs
+### Part 1: data set and cleaning the whole matrix of the CpGs
+
+```{r}
+
+input.list<- assays(meth_data)
+```
+
+**NOTE** that if you start from three raw matrices (coverage matrix, methylated and unmethylated counts matrices) -not arranged as GRanged object- you can put them in a list of three dataframe as shown: 
+
+```{r, warning=FALSE}
+input.list<- SummarizedExperiment::assays(meth_data)
+head(input.list[[1]]) # coverage matrix
+head(input.list[[2]]) # methylated counts matrix
+
+```
+And then run directly the passage of the cleaning step 1 (Pipeline Part 1).
+
+
 **Cleaning step 1: coverage**
 
 In this step, we clean the input data by applying coverage filters. Specifically, we remove CpGs and individuals with excessive missing values and exclude CpGs with very low coverage (fewer than 10 reads by default).
@@ -67,9 +84,6 @@ In this step, we clean the input data by applying coverage filters. Specifically
 Coverage filtering ensures that downstream analyses are based on reliable and comparable data. CpGs with low coverage or individuals with too many missing values can introduce noise and bias, potentially leading to spurious results. By applying these thresholds, we retain high-quality CpG sites and individuals, improving the robustness of subsequent statistical analyses.
 
 ```{r}
-
-input.list<- assays(meth_data)
-
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
