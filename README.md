@@ -115,6 +115,9 @@ stat.result <- missingStats(list(mat.values))
 
 Our method imputes missing values in methylation datasets by computing the correlation structure between CpG sites. It first computes a non-negative definite covariance matrix via eigen-decomposition, then simulates new values from the same distribution to fill in missing entries. The approach is parallelized for efficiency and preserves the natural correlation patterns in the data, improving accuracy over standard imputation methods.
 
+
+The method that we introduce, firstly fills missing values with row means. Secondly, it calculates a correlation matrix, it constructs a covariance matrix, ensuring it is positive semi-definite via eigen decomposition and finally simulates new values from a multivariate normal distribution to impute missing entries.
+
 ```{r}
 imputed <- batchImputeCorr(stat.result)
 imputed_data <- (imputed[[1]][[1]])

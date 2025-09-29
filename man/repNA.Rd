@@ -55,7 +55,7 @@ A list of length 10 (one per method), where each element is itself a list contai
 \item \code{Comp_time} – computation time (if recorded).
 }
 \description{
-A function for comparing different imputation methods for CpG methylation data.
+\code{}A function for comparing different imputation methods for CpG methylation data.
 It introduces missing values at a specified proportion, applies selected imputation
 algorithms, and evaluates accuracy through replication (RMSE, MAE) and
 Kolmogorov-Smirnov (KS) tests.

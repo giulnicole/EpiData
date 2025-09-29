@@ -8,7 +8,12 @@
 #'
 #' @name plotStats
 #'
-#' @importFrom ggplot2 ggplot geom_boxplot aes theme element_text ggtitle xlab
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_boxplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 ggtitle xlab
 #'
 #' @return
 #' a list with 2 elements:
