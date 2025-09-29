@@ -23,7 +23,7 @@
 #' @importFrom impute impute.knn
 #' @importFrom apcluster apcluster
 #' @importFrom missMDA imputePCA
-#'
+#' @importFrom missForest prodNA
 #'
 #' @param cleaned.obj A cleaned dataset (list of matrices) from coverage and outlier cleaning steps.
 #' @param varselect Integer index (1–5) selecting which data representation to use:
@@ -702,7 +702,7 @@ repNA <- function(cleaned.obj, varselect=5,
 
       # Mask the missing values
       masked_data.mat1 <- origmat1
-      masked_data.mat1<- prodNA(masked_data.mat1, missing_prop) # Mask some values
+      masked_data.mat1<- missForest::prodNA(masked_data.mat1, missing_prop) # Mask some values
 
       # Assign NA values to the mat1
       na_positions <- is.na(masked_data.mat1)

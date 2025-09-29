@@ -9,7 +9,7 @@
 #' @importFrom tibble rownames_to_column
 #' @importFrom dplyr group_split
 #' @importFrom dplyr arrange
-#'
+#' @importFrom apcluster negDistMat
 #'
 #' @name consensusPart
 #'
