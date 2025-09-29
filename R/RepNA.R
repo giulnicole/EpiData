@@ -1,38 +1,63 @@
 #' @title repNA
+#' @description
+#' A function for comparing different imputation methods for CpG methylation data.
+#' It introduces missing values at a specified proportion, applies selected imputation
+#' algorithms, and evaluates accuracy through replication (RMSE, MAE) and
+#' Kolmogorov-Smirnov (KS) tests.
+#' The implemented methods include mean substitution, PCA-based (PPCA, BPCA, NIPALS),
+#' missMDA-based, EM, MissForest, kNN, correlation-based, and consensus partitioning.
 #'
-#' @description A function for computing the comparisong between imputation methods, compute accuracy measure with replications and Kolmogorov-Smirnov test on CpG
-#' \code{\link{repNA}} computes the imputation based on standard methods and correlation pattern between CpGs derived from eigen decomposition of the covariance matrix.
 #'
-#' @import missForest
-#' @import cola
-#' @import FNN
-#' @import pcaMethods
-#' @import softImpute
-#' @import impute
-#' @import apcluster
-#' @import missMDA
+#' @details
+#' The function \code{repNA} masks CpG data according to a user-defined missing rate
+#' and applies one or more imputation strategies. Each method is evaluated
+#' across multiple replications, and the imputed datasets are returned along with
+#' performance measures (RMSE, MAE, KS test). This is useful for benchmarking
+#' imputation approaches in DNA methylation or similar high-dimensional omics data.
 #'
-#' @name repNA
+#' @importFrom missForest missForest
+#' @importFrom cola consensus_partition
+#' @importFrom FNN knn
+#' @importFrom pcaMethods pca
+#' @importFrom softImpute softImpute
+#' @importFrom impute impute.knn
+#' @importFrom apcluster apcluster
+#' @importFrom missMDA imputePCA
 #'
-#' @param cleaned.obj cleaned dataset from cleaning part 1 (coverage cleaning) and cleaning part 2 (outliers).
-#' @param missing_prop missing proportion to be tested at each replication.
-#' @param sel_method method for imputation to be selected.
-#' @param matrix Matrix on which computing the correlation matrix; "M" as default.
-#' @param varselect Index of the dataset to be used (numeric value 1-5). 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values.
-#' @param n.iter number of replication.
-#' @param nb number of nearest neighbors for KNN method.
-#' @param ncomp number of components for PCA methods.
-#' @param trees number of tree for miss forest regression method.
-#' @param plots plots for KS test on CpGs.
+#'
+#' @param cleaned.obj A cleaned dataset (list of matrices) from coverage and outlier cleaning steps.
+#' @param varselect Integer index (1–5) selecting which data representation to use:
+#'   1 = coverage counts,
+#'   2 = methylated counts,
+#'   3 = unmethylated counts,
+#'   4 = beta values,
+#'   5 = M values (default).
+#' @param missing_prop Numeric; proportion of missing values to introduce (default = 0.3).
+#' @param n.iter Integer; number of replications for imputation evaluation (default = 2).
+#' @param sel_method Integer vector; methods to apply (1–10).
+#'   1 = Mean, 2 = PPCA, 3 = BPCA, 4 = NIPALS, 5 = MDA,
+#'   6 = EM, 7 = MissForest, 8 = kNN, 9 = Correlation-based, 10 = Consensus Partition.
+#' @param matrix Character; matrix on which to compute correlation ("M" as default).
+#' @param trees Integer; number of trees for MissForest (default = 50).
+#' @param nb Integer; number of nearest neighbors for kNN (default = 10).
+#' @param ncomp Integer; number of components for PCA-based methods (default = 2).
+#' @param plots Logical; whether to produce KS test plots (default = FALSE).
 #'
 #'
 #' @return
-#' list with datasets imputed from selected method and relative accuracy measures (root mean squared error - RMSE- and mean absolute error -MAE) and KS test results.
+#' A list of length 10 (one per method), where each element is itself a list containing:
+#' \itemize{
+#'   \item \code{imputed.*} – list of imputed datasets across replications,
+#'   \item \code{RMSE.*} – numeric vector of RMSE values,
+#'   \item \code{MAE.*} – numeric vector of MAE values,
+#'   \item \code{KS_statistics} – KS test results,
+#'   \item \code{Comp_time} – computation time (if recorded).
 #'
 #' @examples
 #'  \dontrun{
-#'  data("rangedObject")
-#'  clean.coverage <- cleanCovMat(input.obj=data, max_na_cpg = 0.5,
+#'  data("meth_data")
+#'  input.list<- assays(meth_data)
+#'  clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,
 #'                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
 #'                              remove_outliers = TRUE)
