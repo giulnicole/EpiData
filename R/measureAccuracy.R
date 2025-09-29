@@ -3,10 +3,10 @@
 #' @description A function for computing accuracy measure (RMSE and MAE computation) and perform the Kolmogorov-Smirnov test per each CpG and produce boxplots for comaprison.
 #' \code{} computes the accuracy measure of imputation methods.
 #'
-#' @import ggplot2
-#' @import tidyverse
-#' @import hrbrthemes
-#' @import viridis
+#' @importFrom ggplot2 ggplot aes geom_boxplot theme element_text ggtitle xlab
+#' @importFrom dplyr bind_rows
+#' @importFrom hrbrthemes theme_ipsum
+#' @importFrom viridis scale_fill_viridis
 #' @import stats
 #'
 #' @param list.imputed output of imputed datasets performed by repNA.
@@ -22,8 +22,9 @@
 #'
 #' @examples
 #' \dontrun{
-#'  data("rangedObject")
-#'  clean.coverage <- cleanCovMat(input.obj=data, max_na_cpg = 0.5,
+#' data("meth_data")
+#' input.list<- assays(meth_data)
+#' clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,
 #'                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
 #'  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
 #'                              remove_outliers = TRUE)

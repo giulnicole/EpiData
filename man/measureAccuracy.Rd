@@ -22,8 +22,9 @@ A function for computing accuracy measure (RMSE and MAE computation) and perform
 }
 \examples{
 \dontrun{
- data("rangedObject")
- clean.coverage <- cleanCovMat(input.obj=data, max_na_cpg = 0.5,
+data("meth_data")
+input.list<- assays(meth_data)
+clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,
                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=5,
                              remove_outliers = TRUE)

@@ -8,6 +8,8 @@
 #'
 #' @name plotStats
 #'
+#' @importFrom ggplot2 ggplot geom_boxplot aes theme element_text ggtitle xlab
+#'
 #' @return
 #' a list with 2 elements:
 #'  \item{NA_summary}{summary statistics of missing data}
