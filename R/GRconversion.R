@@ -6,6 +6,7 @@
 #' @importFrom GenomicRanges GRanges
 #' @importClassesFrom S4Vectors DataFrame
 #' @importFrom IRanges IRanges
+#' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @param input.list with the three experimental matrices from the SummarizedExperiment object: coverage filtered matrix, methylated counts' matrix, unmethylated counts'matrix.
 #'
@@ -65,7 +66,7 @@ GRconversion<- function(input.list){
 
 
   names(list.new)<- names(input.list)
-  object <- SummarizedExperiment(assays=list.new,
+  object <- SummarizedExperiment::SummarizedExperiment(assays=list.new,
                                  rowRanges=rowRanges, colData=colData)
 
 
