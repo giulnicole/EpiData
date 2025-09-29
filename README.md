@@ -97,6 +97,8 @@ clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remo
 
 ## Analysis part 2: methylation values
 
+Here are calculated the values that are used for testing methylation data, i.e., the beta values and the M values from the matrices of counts data.
+
 ```{r}
 mat.values <- methValues(clean.coverage)
 ```
