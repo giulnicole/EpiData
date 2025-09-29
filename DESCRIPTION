@@ -10,11 +10,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
-    BiocParallel, 
-    IRanges, 
-    S4Vectors,
-    GenomicRanges,
-    GenomicFeatures,
     stats,
     SummarizedExperiment,
     ggplot2,
@@ -34,6 +29,11 @@ Imports:
     viridis,
     hrbrthemes
 Suggests: 
+    BiocParallel, 
+    IRanges, 
+    S4Vectors,
+    GenomicRanges,
+    GenomicFeatures,
     knitr,
     RefManageR,
     rmarkdown,

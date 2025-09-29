@@ -3,7 +3,7 @@
 #' @description A function for computing accuracy measure (RMSE and MAE computation) and perform the Kolmogorov-Smirnov test per each CpG and produce boxplots for comaprison.
 #' \code{} computes the accuracy measure of imputation methods.
 #'
-#' @importFrom ggplot2 ggplot aes geom_boxplot theme element_text ggtitle xlab
+#' @import ggplot2
 #' @importFrom dplyr bind_rows
 #' @importFrom hrbrthemes theme_ipsum
 #' @importFrom viridis scale_fill_viridis
