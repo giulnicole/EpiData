@@ -121,7 +121,7 @@ imputed_data[1:4, 1:10]
 
 ```
 
-### Imputation comparison pipeline  
+## Imputation comparison pipeline  
 
 Comparison of this proposed method to other existing methods
 
