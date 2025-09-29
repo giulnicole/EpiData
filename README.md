@@ -1,9 +1,10 @@
 
-## Description of the package
+# Description of the package
 
 Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. We hope you enjoy and we look forward to your contributions!
 
 ## Installing the package
+
 Please install devtools and Bioconductor if you haven't them yet.
 
 Required Bioconductor/devtools packages:
@@ -21,6 +22,7 @@ BiocManager::install("Epidata")
 
 
 ## Fork this repository
+
 Clone the forked repository
 Add your contributions (code or documentation)
 Commit and push
@@ -28,6 +30,7 @@ Wait for pull request to be merged
 
 
 ## Loading the package 
+
 ```{r, warning=FALSE}
 library(EpiData)
 ```
@@ -57,9 +60,8 @@ In this objects exact locations and CpGs' names are present (labeled as chr:bp).
 Assume that from the experiment we endend up with a dataset not only contanining chromosome 22, the optimal situation would be split dataset per each chromosome and perform a parallelized analysis. 
 
 
-## Pipeline
 
-### Part 1: data set and cleaning the whole matrix of the CpGs
+## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
 ```{r}
 
@@ -93,13 +95,15 @@ clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_i
 clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
 ```
 
-## Part 2: methylation values
+## Analysis part 2: methylation values
+
+Here are calculated the values that are used for testing methylation data, i.e., the beta values and the M values from the matrices of counts data.
 
 ```{r}
 mat.values <- methValues(clean.coverage)
 ```
 
-## Part 3: imputation
+## Analysis part 3: imputation
 
 ### Calculating statistics per CpG and imputing data
 
@@ -119,7 +123,7 @@ imputed_data[1:4, 1:10]
 
 ```
 
-### Imputation comparison pipeline  
+## Imputation comparison pipeline  
 
 Comparison of this proposed method to other existing methods
 
