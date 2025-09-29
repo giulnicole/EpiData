@@ -6,9 +6,6 @@
 #' Kolmogorov-Smirnov (KS) tests.
 #' The implemented methods include mean substitution, PCA-based (PPCA, BPCA, NIPALS),
 #' missMDA-based, EM, MissForest, kNN, correlation-based, and consensus partitioning.
-#'
-#'
-#' @details
 #' The function \code{repNA} masks CpG data according to a user-defined missing rate
 #' and applies one or more imputation strategies. Each method is evaluated
 #' across multiple replications, and the imputed datasets are returned along with
@@ -54,6 +51,7 @@
 #'   \item \code{Comp_time} – computation time (if recorded).
 #'
 #' @examples
+#'
 #'  \dontrun{
 #'  data("meth_data")
 #'  input.list<- assays(meth_data)
