@@ -40,15 +40,14 @@ repNA(
 }
 \value{
 List of length 10 (one per method), where each element is itself a list containing:
-\itemize{
-\item \code{imputed.*} – list of imputed datasets across replications,
-\item \code{RMSE.*} – numeric vector of RMSE values,
-\item \code{MAE.*} – numeric vector of MAE values,
-\item \code{KS_statistics} – KS test results,
-\item \code{Comp_time} – computation time (if recorded).
+\item{imputed}{list of imputed datasets across replications}
+\item{RMSE}{numeric vector of RMSE values}
+\item{MAE}{numeric vector of MAE values}
+\item{KS_statistics}{KS test results}
+\item{Comp_time}{computation time (if recorded)}
 }
 \description{
-A function for comparing different imputation methods for CpG methylation data. It introduces missing values at a specified proportion, applies selected imputation algorithms, and evaluates accuracy through replication (RMSE, MAE) and Kolmogorov-Smirnov (KS) tests. The implemented methods include mean substitution, PCA-based (PPCA, BPCA, NIPALS), missMDA-based, EM, MissForest, kNN, correlation-based, and consensus partitioning. The function \code{repNA} masks CpG data according to a user-defined missing rate and applies one or more imputation strategies. Each method is evaluated across multiple replications, and the imputed datasets are returned along with performance measures (RMSE, MAE, KS test). This is useful for benchmarking imputation approaches in DNA methylation or similar high-dimensional omics data.
+\code{}A function for comparing different imputation methods for CpG methylation data. It introduces missing values at a specified proportion, applies selected imputation algorithms, and evaluates accuracy through replication (RMSE, MAE) and Kolmogorov-Smirnov (KS) tests. The implemented methods include mean substitution, PCA-based (PPCA, BPCA, NIPALS), missMDA-based, EM, MissForest, kNN, correlation-based, and consensus partitioning. The function \code{repNA} masks CpG data according to a user-defined missing rate and applies one or more imputation strategies. Each method is evaluated across multiple replications, and the imputed datasets are returned along with performance measures (RMSE, MAE, KS test). This is useful for benchmarking imputation approaches in DNA methylation or similar high-dimensional omics data.
 }
 \examples{
  \dontrun{

@@ -38,8 +38,9 @@ Wait for pull request to be merged
 
 ## Loading the package 
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=F}
 library(EpiData)
+library(SummarizedExperiment)
 ```
 
 # Get started with the analysis
