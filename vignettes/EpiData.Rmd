@@ -79,8 +79,7 @@ Assume that from the experiment we endend up with a dataset not only contanining
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
 ```{r}
-
-input.list<- assays(meth_data)
+input.list<- SummarizedExperiment::assays(meth_data)
 ```
 
 **NOTE** that if you start from three raw matrices (coverage matrix, methylated and unmethylated counts matrices) -not arranged as GRanged object- you can put them in a list of three dataframe as shown: 
