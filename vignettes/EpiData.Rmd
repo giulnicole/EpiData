@@ -71,7 +71,6 @@ Assume that from the experiment we endend up with a dataset not only contanining
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
 ```{r}
-
 input.list<- SummarizedExperiment::assays(meth_data)
 ```
 
