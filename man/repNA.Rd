@@ -20,20 +20,13 @@ repNA(
 \arguments{
 \item{cleaned.obj}{A cleaned dataset (list of matrices) from coverage and outlier cleaning steps.}
 
-\item{varselect}{Integer index (1–5) selecting which data representation to use:
-1 = coverage counts,
-2 = methylated counts,
-3 = unmethylated counts,
-4 = beta values,
-5 = M values (default).}
+\item{varselect}{Integer index (1–5) selecting which data representation to use: 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values (default).}
 
 \item{missing_prop}{Numeric; proportion of missing values to introduce (default = 0.3).}
 
 \item{n.iter}{Integer; number of replications for imputation evaluation (default = 2).}
 
-\item{sel_method}{Integer vector; methods to apply (1–10).
-1 = Mean, 2 = PPCA, 3 = BPCA, 4 = NIPALS, 5 = MDA,
-6 = EM, 7 = MissForest, 8 = kNN, 9 = Correlation-based, 10 = Consensus Partition.}
+\item{sel_method}{Integer vector; methods to apply (1–10); 1 = Mean, 2 = PPCA, 3 = BPCA, 4 = NIPALS, 5 = MDA, 6 = EM, 7 = MissForest, 8 = kNN, 9 = Correlation-based, 10 = Consensus Partition.}
 
 \item{matrix}{Character; matrix on which to compute correlation ("M" as default).}
 
@@ -55,7 +48,7 @@ A list of length 10 (one per method), where each element is itself a list contai
 \item \code{Comp_time} – computation time (if recorded).
 }
 \description{
-\code{}A function for comparing different imputation methods for CpG methylation data.
+A function for comparing different imputation methods for CpG methylation data.
 It introduces missing values at a specified proportion, applies selected imputation
 algorithms, and evaluates accuracy through replication (RMSE, MAE) and
 Kolmogorov-Smirnov (KS) tests.
@@ -68,8 +61,8 @@ performance measures (RMSE, MAE, KS test). This is useful for benchmarking
 imputation approaches in DNA methylation or similar high-dimensional omics data.
 }
 \examples{
-
  \dontrun{
+
  data("meth_data")
  input.list<- assays(meth_data)
  clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,

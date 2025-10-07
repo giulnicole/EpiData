@@ -1,6 +1,5 @@
 #' @title repNA
-#' @description
-#' \code{}A function for comparing different imputation methods for CpG methylation data.
+#' @description A function for comparing different imputation methods for CpG methylation data.
 #' It introduces missing values at a specified proportion, applies selected imputation
 #' algorithms, and evaluates accuracy through replication (RMSE, MAE) and
 #' Kolmogorov-Smirnov (KS) tests.
@@ -23,17 +22,10 @@
 #' @importFrom missForest prodNA
 #'
 #' @param cleaned.obj A cleaned dataset (list of matrices) from coverage and outlier cleaning steps.
-#' @param varselect Integer index (1–5) selecting which data representation to use:
-#'   1 = coverage counts,
-#'   2 = methylated counts,
-#'   3 = unmethylated counts,
-#'   4 = beta values,
-#'   5 = M values (default).
+#' @param varselect Integer index (1–5) selecting which data representation to use: 1 = coverage counts, 2 = methylated counts, 3 = unmethylated counts, 4 = beta values, 5 = M values (default).
 #' @param missing_prop Numeric; proportion of missing values to introduce (default = 0.3).
 #' @param n.iter Integer; number of replications for imputation evaluation (default = 2).
-#' @param sel_method Integer vector; methods to apply (1–10).
-#'   1 = Mean, 2 = PPCA, 3 = BPCA, 4 = NIPALS, 5 = MDA,
-#'   6 = EM, 7 = MissForest, 8 = kNN, 9 = Correlation-based, 10 = Consensus Partition.
+#' @param sel_method Integer vector; methods to apply (1–10); 1 = Mean, 2 = PPCA, 3 = BPCA, 4 = NIPALS, 5 = MDA, 6 = EM, 7 = MissForest, 8 = kNN, 9 = Correlation-based, 10 = Consensus Partition.
 #' @param matrix Character; matrix on which to compute correlation ("M" as default).
 #' @param trees Integer; number of trees for MissForest (default = 50).
 #' @param nb Integer; number of nearest neighbors for kNN (default = 10).
@@ -52,8 +44,8 @@
 #'   \item \code{Comp_time} – computation time (if recorded).
 #'
 #' @examples
-#'
 #'  \dontrun{
+#'
 #'  data("meth_data")
 #'  input.list<- assays(meth_data)
 #'  clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,
