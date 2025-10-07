@@ -159,11 +159,6 @@ imp.M <- repNA(cleaned.obj=mat.values,
                  trees= 50, nb= 10, ncomp= 2,
                  matrix="M")
 
-imp.M <- repNA(cleaned.obj=stat.result,
-               missing_prop= 0.2, varselect=5,
-               n.iter= 2, sel_method=c(1:3, 9,10),
-               trees= 50, nb= 10, ncomp= 2, matrix="M")
-
 measure_imp_m <- measureAccuracy(imp.M)
 measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
