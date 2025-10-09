@@ -23,20 +23,6 @@ Welcome to the `EpiData` project, which is a package for enhancing reliability i
 
 Please install devtools and Bioconductor if you haven't them yet.
 
-Required Bioconductor/devtools packages:
-```{r}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-install.packages("devtools")
-```
-
-
-Installing EpiData and  loading the package:
-```{r}
-BiocManager::install("Epidata")
-```
-
 ```{r, warning=FALSE}
 library(EpiData)
 library(SummarizedExperiment)
