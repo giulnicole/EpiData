@@ -39,6 +39,7 @@ BiocManager::install("Epidata")
 
 ```{r, warning=FALSE}
 library(EpiData)
+library(SummarizedExperiment)
 ```
 
 # Get started with the analysis
@@ -70,7 +71,6 @@ Assume that from the experiment we endend up with a dataset not only contanining
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
 ```{r}
-
 input.list<- assays(meth_data)
 ```
 
