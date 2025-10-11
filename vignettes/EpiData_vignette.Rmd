@@ -159,19 +159,18 @@ measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
 ```
 
-### Rationale fot the proposed method: 
-
-Why using correlation-based imputation for DNA methylation data.
+### Rationale fot the proposed method
 
 - DNA methylation patterns are highly correlated within genomic regions, such as CpG islands, shores, enhancers, and gene bodies.
 Neighboring CpG sites often share similar methylation dynamics because they are regulated by the same chromatin context, DNA-binding proteins, or local transcriptional activity.
 
 - When missing values occur—due to sequencing depth variability, bisulfite conversion inefficiency, or array detection limits—naively replacing them with row means or most frequent values can distort this local structure.
+
 Such substitutions:
 
 - Ignore spatial and regulatory dependencies among CpGs.
 
-Reduce biological variance and weaken downstream analyses (e.g., PCA, differential methylation testing).
+- Reduce biological variance and weaken downstream analyses (e.g., PCA, differential methylation testing).
 
 - Introduce artificial clusters that do not reflect true methylation variability.
 
