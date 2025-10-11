@@ -16,12 +16,10 @@ knitr::opts_chunk$set(
 
 # Introduction 
 
-Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. We hope you enjoy and we look forward to your contributions!
+`EpiData`  is an R package designed to enhance the reliability and reproducibility of DNA methylation analysis. It provides tools to normalize M-value distributions per CpG site, improving data comparability across samples, and introduces a novel approach for imputing missing values in bisulfite sequencing experiments.
 
 
-## Installation
-
-Please install devtools and Bioconductor if you haven't them yet.
+## Installation and required packages
 
 ```{r, warning=FALSE}
 library(EpiData)
@@ -68,6 +66,7 @@ head(input.list[[1]]) # coverage matrix
 head(input.list[[2]]) # methylated counts matrix
 head(input.list[[3]]) # unmethylated counts matrix
 ```
+
 And then run directly the passage of the cleaning step 1 (Pipeline Part 1).
 
 
@@ -126,13 +125,17 @@ This pipeline compares our new imputation method to existing approaches.
 
 Steps: 
 
-Here are comapred our new imputation method to existing approaches.  
+Here are compared our new imputation method to existing approaches.  
 
 - **Our method**: computes a non-negative definite covariance matrix via eigen-decomposition and simulates new values from the same distribution, preserving CpG correlation patterns (parallelized).  
 
 - **Existing methods**: alternative imputation strategies included for benchmarking.  
 
 - **Evaluation**: performance is assessed with RMSE and MAE after introducing artificial missingness.  
+
+
+The function imputeCorr() implements a correlation-based imputation method for DNA methylation matrices, designed to recover missing CpG-level values from bisulfite sequencing or array-based data.
+It extract the correlation structure between CpG sites to generate realistic imputed values consistent with the underlying methylation patterns.
 
 ```{r}
 data("meth_data")
@@ -156,11 +159,28 @@ measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
 ```
 
+### Rationale fot the proposed method: 
 
+Why using correlation-based imputation for DNA methylation data.
 
-## Contributing  
+- DNA methylation patterns are highly correlated within genomic regions, such as CpG islands, shores, enhancers, and gene bodies.
+Neighboring CpG sites often share similar methylation dynamics because they are regulated by the same chromatin context, DNA-binding proteins, or local transcriptional activity.
 
-Contributions are welcome!  
-You can help by reporting bugs, suggesting improvements, or contributing code/documentation through pull requests.  
+- When missing values occur—due to sequencing depth variability, bisulfite conversion inefficiency, or array detection limits—naively replacing them with row means or most frequent values can distort this local structure.
+Such substitutions:
 
+- Ignore spatial and regulatory dependencies among CpGs.
 
+Reduce biological variance and weaken downstream analyses (e.g., PCA, differential methylation testing).
+
+- Introduce artificial clusters that do not reflect true methylation variability.
+
+- In contrast, correlation-based imputation uses the empirical co-methylation structure across CpGs to estimate missing entries in a biologically informed way.
+
+- By simulating values from a multivariate normal model constrained by the observed covariance, imputeCorr() preserves both:
+
+- Global methylation trends across individuals, and
+
+- Local co-regulation between CpGs within regions.
+
+- This results in more realistic methylation matrices for downstream modeling, differential testing, and network inference.
