@@ -26,9 +26,9 @@ library(EpiData)
 library(SummarizedExperiment)
 ```
 
-# Get started with the analysis
+## Get started with the analysis
 
-## Loading data 
+**Loading data**
 ```{r}
 data("meth_data")
 ```
