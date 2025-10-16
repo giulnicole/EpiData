@@ -24,7 +24,7 @@
 #' library(SummarizedExperiment)
 #' data("meth_data")
 #' print(meth_data)
-#' input.list<- SummarizedExperiment::assays(meth_data)
+#' input.list <- SummarizedExperiment::assays(meth_data)
 #' subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
 #' clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
 #' max_na_ind = 0.2,  cpg_removal_threshold = 10)
@@ -70,7 +70,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
   rownames(X2) <- sites_filtered1
 
   if (eliminated != 0) {
-    message(paste(eliminated, " CpG(s) removed due to exceeding the pre-defined removal threshold (>",
+    message(paste(eliminated, " CpG(s) removed due to exceeding the pre-defined threshold (>",
                   max_na_cpg * 100, "%) for missingness.", sep = "")) }
 
 
@@ -84,7 +84,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
 
 
   if (eliminated2 != 0) {
-    message(paste(eliminated2, " individual(s) removed due to exceeding the pre-defined removal threshold (>",
+    message(paste(eliminated2, " individual(s) removed due to exceeding the pre-defined threshold (>",
                   max_na_ind * 100, "%) for missingness.", sep = "")) }
 
   # THIRD PART: discard CpGs with less than 10 counts per individuals
@@ -98,7 +98,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
 
 
   if (eliminated3 != 0) {
-    message(paste(eliminated3, " Cpg(s) removed due to not exceeding the pre-defined removal threshold (<",
+    message(paste(eliminated3, " Cpg(s) removed due to not exceeding the pre-defined threshold (<",
                   cpg_removal_threshold, ") for counts.", sep = "")) }
 
 
@@ -127,7 +127,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
   # Results
   res<- list(Coverage_matrix = X4, Met_matrix = Y, Unmet_matrix = Z)
 
-  cat("Coverting results to matrices ...", "\n")
+  cat("Converting results to matrices ...", "\n")
   res2<- lapply(res, as.data.frame)
 
   objGR<- res2
