@@ -55,13 +55,13 @@ Assume that from the experiment we endend up with a dataset not only contanining
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
 ```{r}
-input.list<- assays(meth_data)
+input.list <- assays(meth_data)
 ```
 
 **NOTE** that if you start from three raw matrices (coverage matrix, methylated and unmethylated counts matrices) -not arranged as GRanged object- you can put them in a list of three dataframe as shown: 
 
 ```{r, warning=FALSE}
-input.list<- SummarizedExperiment::assays(meth_data)
+input.list <- SummarizedExperiment::assays(meth_data)
 head(input.list[[1]]) # coverage matrix
 head(input.list[[2]]) # methylated counts matrix
 head(input.list[[3]]) # unmethylated counts matrix
@@ -77,13 +77,15 @@ In this step, we clean the input data by applying coverage filters. Specifically
 Coverage filtering ensures that downstream analyses are based on reliable and comparable data. CpGs with low coverage or individuals with too many missing values can introduce noise and bias, potentially leading to spurious results. By applying these thresholds, we retain high-quality CpG sites and individuals, improving the robustness of subsequent statistical analyses.
 
 ```{r}
+#TODO: In your messages, please mention how many CpGs and individual(s) exist
 clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
 **Cleaning step 2: outliers**
+TODO: How do we define outliers here? Please provide a small description as you did in "Cleaning step 1"
 
 ```{r}
-clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = T)
+clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = TRUE)
 ```
 
 ## Analysis part 2: methylation values
@@ -110,6 +112,8 @@ Our method imputes missing values in methylation datasets by computing the corre
 The method that we introduce, firstly fills missing values with row means. Secondly, it calculates a correlation matrix, it constructs a covariance matrix, ensuring it is positive semi-definite via eigen decomposition and finally simulates new values from a multivariate normal distribution to impute missing entries.
 
 ```{r}
+#TODO: 'imputed_data' seems to be transposed. The user might get confused. Please back-transpose it in the backend using `t()`
+#TODO: What are we looking at here as "imputed"? I guess it is M-values, right? Please mention it. 
 imputed <- batchImputeCorr(stat.result)
 imputed_data <- (imputed[[1]][[1]])
 
@@ -140,26 +144,29 @@ It extract the correlation structure between CpG sites to generate realistic imp
 ```{r}
 data("meth_data")
 input.list <- assays(meth_data)
-clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,
-                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
+clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5,
+                              max_na_ind = 0.2, cpg_removal_threshold = 10)
 
 mat.values <- methValues(clean.coverage)
 mat.values <- lapply(mat.values, na.omit)
 
-imp.M <- repNA(cleaned.obj=mat.values,
-                 missing_prop= 0.2,
-                 varselect=5,
-                 n.iter=4,
-                 sel_method=c(1:3, 9:10),
-                 trees= 50, nb= 10, ncomp= 2,
-                 matrix="M")
+#TODO: the output of this function is too verbose. The user should be able to hide all the messages.
+#TODO: We can implement something like this: `verbose` is logical
+#TODO: `if(verbose == TRUE){message(...)}`
+imp.M <- repNA(cleaned.obj = mat.values,
+               missing_prop = 0.2,
+               varselect = 5,
+               n.iter = 4,
+               sel_method = c(1:3, 9:10), #TODO: What's this parameter for? 
+               trees = 50, nb = 10, ncomp= 2, #TODO: These parameters are also confusing. Any easy way to mention them? 
+               matrix = "M")
 
 measure_imp_m <- measureAccuracy(imp.M)
 measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
 ```
 
-### Rationale fot the proposed method
+### Rationale for the proposed method
 
 - DNA methylation patterns are highly correlated within genomic regions, such as CpG islands, shores, enhancers, and gene bodies.
 Neighboring CpG sites often share similar methylation dynamics because they are regulated by the same chromatin context, DNA-binding proteins, or local transcriptional activity.
