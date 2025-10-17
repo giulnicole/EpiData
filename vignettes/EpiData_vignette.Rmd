@@ -23,7 +23,10 @@ knitr::opts_chunk$set(
 
 ```{r, warning=FALSE}
 library(EpiData)
-library(SummarizedExperiment)
+
+#TODO: I know that need this library for "assays()" below, but then why isn't it imported with the package?
+library(SummarizedExperiment) 
+#TODO: I might have a better suggestion below where you used "assays()"
 ```
 
 ## Get started with the analysis
@@ -44,7 +47,7 @@ The dataset contains the LargeSummarizedExperiment object with the following lis
 
 - methylated counts matrix (Met_matrix)
 
-- unmenthylated counts matrix (Unmet_matrix)
+- unmethylated counts matrix (Unmet_matrix)
 
 In this objects exact locations and CpGs' names are present (labeled as chr:bp). 
 
@@ -55,13 +58,17 @@ Assume that from the experiment we endend up with a dataset not only contanining
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
 ```{r}
-input.list <- assays(meth_data)
+#TODO: We need a better way to import the data. At this stage, it is really harder for the user to create data by themselves. 
+#TODO: I suggest that we use the 'BSseq' object from "bsseq" package. One can easily create that object either from .cov files or manually. 
+#TODO: Here is a link for you and let's discuss this together:
+#TODO: https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#2_Overview
+input.list <- SummarizedExperiment::assays(meth_data)
 ```
 
 **NOTE** that if you start from three raw matrices (coverage matrix, methylated and unmethylated counts matrices) -not arranged as GRanged object- you can put them in a list of three dataframe as shown: 
 
 ```{r, warning=FALSE}
-input.list <- SummarizedExperiment::assays(meth_data)
+input.list <- SummarizedExperiment::assays(meth_data) #TODO: You have just ran this line of code above. Avoid redundancy!
 head(input.list[[1]]) # coverage matrix
 head(input.list[[2]]) # methylated counts matrix
 head(input.list[[3]]) # unmethylated counts matrix
@@ -78,14 +85,14 @@ Coverage filtering ensures that downstream analyses are based on reliable and co
 
 ```{r}
 #TODO: In your messages, please mention how many CpGs and individual(s) exist
-clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2, cpg_removal_threshold = 10)
 ```
 
 **Cleaning step 2: outliers**
-TODO: How do we define outliers here? Please provide a small description as you did in "Cleaning step 1"
+`#TODO:` How do we define outliers here? Please provide a small description as you did in "Cleaning step 1"
 
 ```{r}
-clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = TRUE)
+clean.out <- cleanOutliers(filtered.obj = clean.coverage, outlier_threshold = 0, remove_outliers = TRUE)
 ```
 
 ## Analysis part 2: methylation values
@@ -137,8 +144,9 @@ Here are compared our new imputation method to existing approaches.
 
 - **Evaluation**: performance is assessed with RMSE and MAE after introducing artificial missingness.  
 
+`#TODO:` You mention about the `imputeCorr` below, but we haven't used that function. Users will get confused. 
 
-The function imputeCorr() implements a correlation-based imputation method for DNA methylation matrices, designed to recover missing CpG-level values from bisulfite sequencing or array-based data.
+The function `imputeCorr()` implements a correlation-based imputation method for DNA methylation matrices, designed to recover missing CpG-level values from bisulfite sequencing or array-based data.
 It extract the correlation structure between CpG sites to generate realistic imputed values consistent with the underlying methylation patterns.
 
 ```{r}
@@ -162,8 +170,17 @@ imp.M <- repNA(cleaned.obj = mat.values,
                matrix = "M")
 
 measure_imp_m <- measureAccuracy(imp.M)
+#TODO: measureAccuracy() does not need to make plots. 
+#TODO: Let's have a separate function for plotting, instead of letting measureAccuracy() to do that
 measure_imp_m$Boxplot.rmse
 measure_imp_m$Boxplot.mae
+
+
+#TODO: FURTHER IMPORTANT POINTS:
+#TODO: 1) PARALLELIZATION: Do we have a strategy for parallel processing? We will need parallelization for big datasets. 
+#TODO: 2) END RESULTS    : The user approched until here and we still do not have final "imputed" methylated/unmethylated/coverage matrices. 
+#TODO:                   : We need to make it more convenient for the user.
+
 ```
 
 ### Rationale for the proposed method
