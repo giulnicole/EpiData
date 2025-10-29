@@ -57,7 +57,6 @@ The data contains a list of assays from experiment obtained by bisulfite sequenc
 
 As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it is provided): 
 
-
 The dataset contains the LargeSummarizedExperiment object with the following list of assays from experiment obtained by bisulfite sequencing 43 individuals. As an example data derives from chromosome 22: 
 
 - coverage counts matrix (Coverage_matrix)
@@ -69,8 +68,7 @@ The dataset contains the LargeSummarizedExperiment object with the following lis
 In this objects exact locations and CpGs' names are present (labeled as chr:bp). 
 
 Assume that from the experiment we endend up with a dataset not only contanining chromosome 22, the optimal situation would be split dataset per each chromosome and perform a parallelized analysis. 
-
-
+Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object.
 
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
@@ -78,9 +76,9 @@ Assume that from the experiment we endend up with a dataset not only contanining
 **NOTE** that if you start from three raw matrices (coverage matrix, methylated and unmethylated counts matrices) -not arranged as GRanged object- you can put them in a list of three dataframe as shown: 
 
 ```{r, warning=FALSE}
-head(input.list[[1]]) # coverage matrix
-head(input.list[[2]]) # methylated counts matrix
-head(input.list[[3]]) # unmethylated counts matrix
+head(bs_list[[1]]) # coverage matrix
+head(bs_list[[2]]) # methylated counts matrix
+head(bs_list[[3]]) # unmethylated counts matrix
 ```
 And then run directly the passage of the cleaning step 1 (Pipeline Part 1).
 
