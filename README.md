@@ -1,7 +1,18 @@
 
 # Description of the package
 
-Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. We hope you enjoy and we look forward to your contributions!
+Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. 
+Accurate imputation of missing methylation values is a crucial step in bisulfite sequencing (BS-seq) analysis, as incomplete data can bias downstream association or differential methylation studies.
+EpiData provides a modular and reproducible framework for preprocessing and imputation of BS-seq data.
+
+The main objectives of EpiData are:
+
+- to ensure data integrity and quality before statistical modeling
+
+- to provide parallelized and scalable computation for large methylome datasets
+
+- to allow flexible integration with downstream pipelines (e.g., differential methylation, EWAS, or multi-omics integration)
+
 
 ## Installing the package
 
@@ -39,7 +50,7 @@ library(EpiData)
 
 ## Loading data 
 ```{r}
-data("meth_data")
+data("bs_list")
 ```
 
 The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
@@ -63,15 +74,10 @@ Assume that from the experiment we endend up with a dataset not only contanining
 
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
-```{r}
-
-input.list<- assays(meth_data)
-```
 
 **NOTE** that if you start from three raw matrices (coverage matrix, methylated and unmethylated counts matrices) -not arranged as GRanged object- you can put them in a list of three dataframe as shown: 
 
 ```{r, warning=FALSE}
-input.list<- SummarizedExperiment::assays(meth_data)
 head(input.list[[1]]) # coverage matrix
 head(input.list[[2]]) # methylated counts matrix
 head(input.list[[3]]) # unmethylated counts matrix
@@ -86,7 +92,7 @@ In this step, we clean the input data by applying coverage filters. Specifically
 Coverage filtering ensures that downstream analyses are based on reliable and comparable data. CpGs with low coverage or individuals with too many missing values can introduce noise and bias, potentially leading to spurious results. By applying these thresholds, we retain high-quality CpG sites and individuals, improving the robustness of subsequent statistical analyses.
 
 ```{r}
-clean.coverage <- cleanCovMat(input.obj = input.list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
+clean.coverage <- cleanCovMat(input.obj = bs_list, max_na_cpg = 0.5, max_na_ind = 0.2,  cpg_removal_threshold = 10)
 ```
 
 **Cleaning step 2: outliers**
@@ -100,7 +106,7 @@ clean.out<- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remo
 Here are calculated the values that are used for testing methylation data, i.e., the beta values and the M values from the matrices of counts data.
 
 ```{r}
-mat.values <- methValues(clean.coverage)
+meth <- methValues(clean.out)
 ```
 
 ## Analysis part 3: imputation
@@ -108,60 +114,25 @@ mat.values <- methValues(clean.coverage)
 ### Calculating statistics per CpG and imputing data
 
 ```{r}
-stat.result <- missingStats(list(mat.values))
+stats <- statsCpG_parallel(meth)
 ```
 
 ### Imputing data
 
 Our method imputes missing values in methylation datasets by computing the correlation structure between CpG sites. It first computes a non-negative definite covariance matrix via eigen-decomposition, then simulates new values from the same distribution to fill in missing entries. The approach is parallelized for efficiency and preserves the natural correlation patterns in the data, improving accuracy over standard imputation methods.
 
-
 The method that we introduce, firstly fills missing values with row means. Secondly, it calculates a correlation matrix, it constructs a covariance matrix, ensuring it is positive semi-definite via eigen decomposition and finally simulates new values from a multivariate normal distribution to impute missing entries.
 
 ```{r}
-imputed <- batchImputeCorr(stat.result)
-imputed_data <- (imputed[[1]][[1]])
+imputed <- imputeCorr_parallel(stats)
 
-imputed_data[1:4, 1:10]
+combine_imputed <- function(chr_list) {
+  imputed_list <- lapply(chr_list, function(x) x[["imputed"]]) 
+  do.call(rbind, imputed_list)                                  
+}
 
-```
-
-## Imputation comparison pipeline  
-
-Comparison of this proposed method to other existing methods
-
-This pipeline compares our new imputation method to existing approaches. 
-
-Steps: 
-
-Here are comapred our new imputation method to existing approaches.  
-
-- **Our method**: computes a non-negative definite covariance matrix via eigen-decomposition and simulates new values from the same distribution, preserving CpG correlation patterns (parallelized).  
-
-- **Existing methods**: alternative imputation strategies included for benchmarking.  
-
-- **Evaluation**: performance is assessed with RMSE and MAE after introducing artificial missingness.  
-
-```{r}
-data("meth_data")
-input.list <- assays(meth_data)
-clean.coverage <- cleanCovMat(input.obj=input.list, max_na_cpg = 0.5,
-                                  max_na_ind = 0.2,  cpg_removal_threshold = 10)
-
-mat.values <- methValues(clean.coverage)
-mat.values <- lapply(mat.values, na.omit)
-
-imp.M <- repNA(cleaned.obj=mat.values,
-                 missing_prop= 0.2,
-                 varselect=5,
-                 n.iter=4,
-                 sel_method=c(1:3, 9:10),
-                 trees= 50, nb= 10, ncomp= 2,
-                 matrix="M")
-
-measure_imp_m <- measureAccuracy(imp.M)
-measure_imp_m$Boxplot.rmse
-measure_imp_m$Boxplot.mae
+# Example use:
+combined_imputed_df <- combine_imputed(imputed)
 ```
 
 
