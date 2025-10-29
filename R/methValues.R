@@ -19,6 +19,14 @@
 #'  \item{Beta values}{Beta values counts matrix}
 #'  \item{M values}{M values counts matrix}
 #'
+#'  @examples
+#'  data("bs_list")
+#'  clean.coverage <- cleanCovMat(input.obj = bs_list, max_na_cpg = 0.5, max_na_ind = 0.2, cpg_removal_threshold = 10)
+#'  clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = TRUE)
+#'  mat.values <- methValues(clean.coverage)
+#'
+#'
+#'
 #' @export
 #'
 #'
@@ -79,7 +87,7 @@ methValues <- function(filtered.obj){
                         Beta_matrix = as.data.frame(B),
                         M_matrix = as.data.frame(M))
 
-  list.cleaned3 <- split5MatXChrom(list.cleaned2)
+  list.cleaned3 <- split5MatXChrom_compact(list.cleaned2)
 
   # obj<- GRconversion(list.cleaned2)
 

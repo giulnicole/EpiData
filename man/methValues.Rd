@@ -16,6 +16,12 @@ a list of 5 matrices:
 \item{unmethylated counts}{unmethylated counts matrix}
 \item{Beta values}{Beta values counts matrix}
 \item{M values}{M values counts matrix}
+
+@examples
+data("bs_list")
+clean.coverage <- cleanCovMat(input.obj = bs_list, max_na_cpg = 0.5, max_na_ind = 0.2, cpg_removal_threshold = 10)
+clean.out <- cleanOutliers(filtered.obj=clean.coverage, outlier_threshold=0, remove_outliers = TRUE)
+mat.values <- methValues(clean.coverage)
 }
 \description{
 \code{\link{methValues}} is a function which computes the Beta and M matrices from the filtered filtered coverage, methylated and unmethylated counts.

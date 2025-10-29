@@ -18,17 +18,12 @@
 #'
 #'
 #' @examples
-#' library(dplyr)
-#' library(SummarizedExperiment)
-#' data("meth_data")
-#' print(meth_data)
-#' input.list<- SummarizedExperiment::assays(meth_data)
-#' subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
-#' clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
-#' max_na_ind = 0.2,  cpg_removal_threshold = 10)
+#'
+#' data("bs_list")
+#' clean.coverage <- cleanCovMat(input.obj = bs_list, max_na_cpg = 0.5,
+#' max_na_ind = 0.2, cpg_removal_threshold = 10)
 #' clean.out <- cleanOutliers(filtered.obj=clean.coverage,
 #' outlier_threshold=0, remove_outliers = TRUE)
-#'
 #'
 #'
 #' @export
@@ -147,9 +142,9 @@ cleanOutliers<- function(filtered.obj, outlier_threshold=5,  remove_outliers=F){
                         Unmet_matrix = as.data.frame(clean.unmet2) )
 
 
-  list.cleaned3 <- split3MatXChrom(list.cleaned2)
+  list.cleaned3 <- split3MatXChrom_compact(list.cleaned2)
 
-  lapply(list.cleaned3, as.matrix)
+  #lapply(list.cleaned3, as.matrix)
 
   return(list.cleaned3)
 

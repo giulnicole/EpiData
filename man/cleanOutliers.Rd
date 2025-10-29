@@ -22,17 +22,12 @@ SummarizedExperiment object with 2 elements:
 coverage cleaning and outlier values in the conversion.
 }
 \examples{
-library(dplyr)
-library(SummarizedExperiment)
-data("meth_data")
-print(meth_data)
-input.list<- SummarizedExperiment::assays(meth_data)
-subset_list <- lapply(input.list, function(df) df[1:100, 1:10])
-clean.coverage <- cleanCovMat(input.obj = subset_list, max_na_cpg = 0.5,
-max_na_ind = 0.2,  cpg_removal_threshold = 10)
+
+data("bs_list")
+clean.coverage <- cleanCovMat(input.obj = bs_list, max_na_cpg = 0.5,
+max_na_ind = 0.2, cpg_removal_threshold = 10)
 clean.out <- cleanOutliers(filtered.obj=clean.coverage,
 outlier_threshold=0, remove_outliers = TRUE)
-
 
 
 }

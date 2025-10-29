@@ -1,0 +1,171 @@
+---
+title: "EpiData-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{EpiData-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This package is an alternative missing data imputation pipeline for bisulfite sequencing. 
+
+Accurate imputation of missing methylation values is a crucial step in bisulfite sequencing (BS-seq) analysis, as incomplete data can bias downstream association or differential methylation studies.
+EpiData provides a modular and reproducible framework for preprocessing and imputation of BS-seq data.
+
+
+The main objectives of EpiData are:
+
+- to ensure data integrity and quality before statistical modeling
+
+- to provide parallelized and scalable computation for large methylome datasets
+
+- to allow flexible integration with downstream pipelines (e.g., differential methylation, EWAS, or multi-omics integration)
+
+### Loading the package:
+
+```{r setup}
+library(EpiData)
+```
+
+
+
+This vignette demonstrated a complete pipeline for:
+
+- Cleaning coverage and removing outliers
+
+- Computing methylation values
+
+- Calculating CpG-level statistics
+
+- Imputing missing values and combining results
+
+
+We will go through each function step-by-step, from filtering and outlier removal to computing CpG statistics and imputing missing data. The workflow ensures high-quality methylation matrices ready for downstream analysis such as differential methylation or association studies.
+
+### Data import and description
+
+```{r}
+data("bs_list")
+```
+
+
+The object bs_list contains example methylation data. It includes three assays: the total coverage count matrix, the methylated counts matrix, the unmethylated counts matrix for 150 CpG (150 rows) and 10 individuals. 
+
+
+Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object.
+
+## Workflow
+
+This vignette guides you through the complete imputation workflow, demonstrating how to:
+
+- Clean coverage and remove outliers
+
+- Compute methylation proportions
+
+- Summarize CpG-level statistics
+
+- Impute missing values using correlation-based methods
+
+- Combine results into ready-to-analyze methylation matrices
+
+The resulting datasets are high-quality, imputed methylation matrices suitable for downstream analyses such as differential methylation testing, clustering, or predictive modeling.
+
+### Step 1: Cleaning the coverage matrix
+
+We start by removing CpGs or individuals with too many missing values using **cleanCovMat()**.
+Missing or low-coverage CpGs can distort methylation estimates.
+
+
+```{r}
+clean.coverage <- cleanCovMat(
+input.obj = bs_list,
+max_na_cpg = 0.5, # max 50% missing per CpG
+max_na_ind = 0.2, # max 20% missing per individual
+cpg_removal_threshold = 10 # minimum number of valid CpGs required
+)
+```
+
+This step returns a cleaned coverage object where low-quality CpGs or samples are excluded.
+The function automatically retains metadata compatibility with subsequent steps.
+
+
+### Step 2: Outlier detection and removal
+
+Extreme methylation or coverage values may arise from technical noise or sequencing artifacts.
+**cleanOutliers()** detects and optionally removes these points based on customizable thresholds.
+
+```{r}
+clean.out <- cleanOutliers(
+filtered.obj = clean.coverage,
+outlier_threshold = 0,
+remove_outliers = TRUE
+)
+```
+
+This step ensures that methylation values reflect biological rather than technical variation.
+
+### Step 3: Compute methylation values
+
+Methylation proportions are calculated as the ratio of methylated counts to total coverage.
+Convert the cleaned object into methylation proportion matrices with **methValues()**.
+
+```{r}
+mat.values <- methValues(clean.coverage)
+```
+
+### Step 4: Compute CpG-level statistics
+
+CpG-wise summary statistics (mean, variance, missingness) are computed in parallel using **statsCpG_parallel()**.
+This step provides an overview of methylation distribution and reliability across the dataset.
+
+
+```{r}
+stat.result <- statsCpG_parallel(mat.values)
+```
+
+The output is a list of chromosome-specific results, allowing scalable analysis of genome-wide data.
+
+
+### Step 5: Impute missing data
+
+Missing methylation values are imputed using correlation-based imputation via **imputeCorr_parallel()**.
+This approach uses CpG-level correlations and local methylation patterns to predict missing entries, preserving biological structure.
+
+```{r}
+imputed <- imputeCorr_parallel(stat.result)
+```
+
+Each chromosome’s imputed object retains both raw and imputed methylation matrices, enabling traceability.
+
+
+### Step 6: Combine imputed data frames
+
+Each chromosome result includes an imputed data frame.
+We combine all imputed data frames into a single object using the custom helper function below.
+
+```{r}
+combine_imputed <- function(chr_list) {
+  imputed_list <- lapply(chr_list, function(x) x[["imputed"]]) 
+  do.call(rbind, imputed_list)                                  
+}
+
+# Example use:
+combined_imputed_df <- combine_imputed(imputed)
+```
+
+This unified imputed dataset is now ready for downstream statistical analysis and visualization.
+
+
+
+
+
+

@@ -56,6 +56,7 @@ imputeCorr <- function(cleaned.obj,
   meanval <- cleaned.obj[["means"]]
   sdval <- cleaned.obj[["sds"]]
 
+  #cleaned.obj<- cleaned.obj[[1]]
 
   dataset <- as.data.frame(t(cleaned.obj[["Matrix"]]))  # add
 

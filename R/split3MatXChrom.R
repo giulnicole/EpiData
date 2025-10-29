@@ -56,9 +56,9 @@ split3MatXChrom <- function(list.cleaned)   {
 
   #
   split_met <- split_met %>%
-    map(~ .[,-(n+1)])
+    purrr::map(~ .[,-(n+1)])
 
-  split_met<- as.data.frame(split_met)
+ split_met<- as.data.frame(split_met)
   rownames(split_met)<- cpg
 
   # Unmet
@@ -68,7 +68,7 @@ split3MatXChrom <- function(list.cleaned)   {
 
   #
   split_unmet <- split_unmet %>%
-    map(~ .[,-(n+1)])
+    purrr::map(~ .[,-(n+1)])
 
   split_unmet<- as.data.frame(split_unmet)
   rownames(split_unmet)<- cpg
