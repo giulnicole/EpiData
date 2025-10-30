@@ -61,6 +61,8 @@ data("bs_list")
 The object bs_list contains example methylation data. It includes three assays: the total coverage count matrix, the methylated counts matrix, the unmethylated counts matrix for 150 CpG (150 rows) and 10 individuals. 
 
 
+`#TODO`: Of course `SummarizedExperiment` might be one of the ways, I don't object it.  However, remember that the regular user will have this type of data in a TXT, Excel or COV (if they are professional) file and we need to provide a way to read that data into R environment. That's why I suggested `bsseq` object. I can work on that part, but let's discuss this on our next meeting.
+
 Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object.
 
 ## Workflow
@@ -92,6 +94,13 @@ max_na_cpg = 0.5, # max 50% missing per CpG
 max_na_ind = 0.2, # max 20% missing per individual
 cpg_removal_threshold = 10 # minimum number of valid CpGs required
 )
+
+#TODO: The clean.coverage still has 0s and they are not converted into NAs
+lapply(clean.coverage, function(x){sum(is.na(x))})
+lapply(clean.coverage, function(x){sum(x == 0)})
+
+#TODO: I am sorry that I cannot proceed with any further revisions efficiently as the sample dataset is not being imputed due to lack of NAs.
+#TODO: Let's meet together and come up with a concrete plan.
 ```
 
 This step returns a cleaned coverage object where low-quality CpGs or samples are excluded.
