@@ -55,7 +55,7 @@ data("bs_list")
 
 The object bs_list contains example methylation data. It includes three assays: the total coverage count matrix, the methylated counts matrix, the unmethylated counts matrix for 150 CpG (150 rows) and 10 individuals. 
 
-Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object or from .txt files of raw matrices (coverage, methylated counts matrix and unmethylated counts matrix) with the function **readBS()**.
+Otherwise own data can be use, derived from object class such as `SummarizedExperiment` object or from .txt files of raw matrices (coverage, methylated counts matrix and unmethylated counts matrix) with the function `readBS()`.
 
 ```{r}
 coverage_file <- system.file("extdata/coverage.txt", package = "EpiData")
