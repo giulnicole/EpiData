@@ -60,8 +60,17 @@ data("bs_list")
 
 The object bs_list contains example methylation data. It includes three assays: the total coverage count matrix, the methylated counts matrix, the unmethylated counts matrix for 150 CpG (150 rows) and 10 individuals. 
 
+Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object or from .txt files of raw matrices (coverage, methylated counts matrix and unmethylated counts matrix) with the function **readBS()**.
 
-Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object.
+```{r}
+coverage_file <- system.file("extdata/coverage.txt", package = "EpiData")
+met_file      <- system.file("extdata/methylated_counts.txt", package = "EpiData")
+unmet_file    <- system.file("extdata/unmethylated_counts.txt", package = "EpiData")
+file_paths <- c(coverage_file, met_file, unmet_file)
+
+bs_list2<- readBS(file_paths)
+```
+
 
 ## Workflow
 
@@ -96,6 +105,8 @@ cpg_removal_threshold = 10 # minimum number of valid CpGs required
 
 This step returns a cleaned coverage object where low-quality CpGs or samples are excluded.
 The function automatically retains metadata compatibility with subsequent steps.
+
+
 
 
 ### Step 2: Outlier detection and removal
