@@ -48,27 +48,24 @@ library(EpiData)
 
 # Get started with the analysis
 
-## Loading data 
+### Data import and description
 ```{r}
 data("bs_list")
 ```
 
-The data contains a list of assays from experiment obtained by bisulfite sequencing 43 individuals. 
+The object bs_list contains example methylation data. It includes three assays: the total coverage count matrix, the methylated counts matrix, the unmethylated counts matrix for 150 CpG (150 rows) and 10 individuals. 
 
-As an example data derives from chromosome 22 (the same pipeline is applied to the whole chromosome matrix if it is provided): 
+Otherwise own data can be use, derived from object class such as `SummarizedExperiment` object or from .txt files of raw matrices (coverage, methylated counts matrix and unmethylated counts matrix) with the function `readBS()`.
 
-The dataset contains the LargeSummarizedExperiment object with the following list of assays from experiment obtained by bisulfite sequencing 43 individuals. As an example data derives from chromosome 22: 
+```{r}
+coverage_file <- system.file("extdata/coverage.txt", package = "EpiData")
+met_file      <- system.file("extdata/methylated_counts.txt", package = "EpiData")
+unmet_file    <- system.file("extdata/unmethylated_counts.txt", package = "EpiData")
+file_paths <- c(coverage_file, met_file, unmet_file)
 
-- coverage counts matrix (Coverage_matrix)
+bs_list2<- readBS(file_paths)
+```
 
-- methylated counts matrix (Met_matrix)
-
-- unmenthylated counts matrix (Unmet_matrix)
-
-In this objects exact locations and CpGs' names are present (labeled as chr:bp). 
-
-Assume that from the experiment we endend up with a dataset not only contanining chromosome 22, the optimal situation would be split dataset per each chromosome and perform a parallelized analysis. 
-Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object.
 
 ## Analysis part 1: data set and cleaning the whole matrix of the CpGs
 
