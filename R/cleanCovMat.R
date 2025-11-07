@@ -122,7 +122,7 @@ cleanCovMat <- function(input.obj, max_na_cpg=0.5, max_na_ind=0.2,
   # Results
   res<- list(Coverage_matrix = X4, Met_matrix = Y, Unmet_matrix = Z)
 
-  cat("Coverting results to matrices ...", "\n")
+  cat("Converting results to matrices ...", "\n")
   cat("Final cleaning results:",dim(X4)[1], "CpGs left and", dim(X4)[2], "individuals left")
   res2<- lapply(res, as.data.frame)
 
