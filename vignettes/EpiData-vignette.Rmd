@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+# Introduction
 
 This package is an alternative missing data imputation pipeline for bisulfite sequencing. 
 
@@ -30,11 +30,58 @@ The main objectives of EpiData are:
 
 - to allow flexible integration with downstream pipelines (e.g., differential methylation, EWAS, or multi-omics integration)
 
-### Loading the package:
+# Getting ready
+
+## Install package
+
+`#TODO:` Update here!
 
 ```{r setup}
 library(EpiData)
 ```
+
+## Reading data
+
+The `EpiData` package works with [`BSseq`](https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#3_Using_objects_of_class_BSseq) objects. 
+
+```{r read_data}
+# Data
+data_dir <- system.file("extdata", package = "EpiData")
+cov_files <- list.files(data_dir, pattern = "\\.cov\\.gz$", full.names = TRUE)
+
+# Metadata (not necessary, but good to have)
+data_dir <- system.file("extdata", package = "EpiData")
+metadata_file <- list.files(data_dir, pattern = "\\.tsv\\.gz$", full.names = TRUE)
+metadata <- read.table(metadata_file, header = TRUE)
+rownames(metadata) <- metadata[, 2]
+metadata <- metadata
+metadata <- DataFrame(metadata)
+
+# BSseq object
+bs <- bsseq::read.bismark(files = files, 
+                          colData = metadata, 
+                          strandCollapse = TRUE,
+                          rmZeroCov = TRUE)
+bs
+```
+`#TODO:` This section below is for Giulia
+
+```{r important_matrices}
+# Coverage
+bs_coverage <- bsseq::getCoverage(bs, type = "Cov")
+
+
+bs_count_meth <- bsseq::getCoverage(bs, type = "M")
+bs_count_unmeth <- bsseq::getCoverage(bs, type = "Cov") - bsseq::getCoverage(bs, type = "M")
+
+bs_beta <- bsseq::getMeth(bs, type = "raw")
+bs_m <- bsseq::getMeth(bs, type = "raw")
+
+```
+
+
+
+
 
 
 
