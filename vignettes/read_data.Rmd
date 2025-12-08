@@ -1,0 +1,56 @@
+---
+title: "Reading data"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This is a short vignette to give an example about how to read bisulfite sequencing data into `EpiData` package. 
+
+Let's load the package first. 
+```{r setup}
+library(EpiData)
+```
+
+# Reading data
+
+The `EpiData` uses [`BSseq`](https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#3_Using_objects_of_class_BSseq) object as the primary data input. Please refer to [this guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/bsseq/inst/doc/bsseq.html) for details about how to create and manipulate `BSseq` objects. Below is an example from our package:
+
+```{r read_data}
+# Data
+data_dir <- system.file("extdata", package = "EpiData")
+cov_files <- list.files(data_dir, pattern = "\\.cov\\.gz$", full.names = TRUE)
+
+# Metadata (not necessary, but good to have)
+data_dir <- system.file("extdata", package = "EpiData")
+metadata_file <- list.files(data_dir, pattern = "\\.tsv\\.gz$", full.names = TRUE)
+metadata <- read.table(metadata_file, header = TRUE)
+rownames(metadata) <- metadata[, 2]
+metadata <- metadata
+metadata <- SummarizedExperiment::DataFrame(metadata)
+
+# BSseq object
+bs <- bsseq::read.bismark(files = files, 
+                          colData = metadata, 
+                          strandCollapse = TRUE,
+                          rmZeroCov = TRUE)
+bs
+```
+
+# Filtering missing data
+
+A high-quality set of CpG sites is essential before carrying out downstream imputation or modeling. To achieve this, we first retain CpGs that meet a minimum coverage threshold (`min_cov`) in at least a specified proportion of samples (`row_min`). After filtering the CpGs, we then retain only those samples that satisfy the same coverage requirement in at least a specified proportion of the remaining CpGs (`col_min`). This two-step filtering strategy ensures that both rows (CpGs) and columns (samples) contain sufficient, high-confidence coverage information, providing a robust foundation for subsequent imputation and analysis.
+
+```{r filter_data}
+# Filter low-coverage CpGs and samples
+bs_filt <- filterCov(bs = bs,
+                     min_cov = 10,
+                     row_min = 0.5, 
+                     col_min = 0.5)
+```
+
