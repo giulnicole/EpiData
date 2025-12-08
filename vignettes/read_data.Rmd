@@ -1,7 +1,14 @@
 ---
-title: "Reading data"
+title: "Reading data into EpiData"
+author: "Your Name"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Read Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +20,8 @@ knitr::opts_chunk$set(echo = TRUE)
 This is a short vignette to give an example about how to read bisulfite sequencing data into `EpiData` package. 
 
 Let's load the package first. 
-```{r setup}
+
+```{r library}
 library(EpiData)
 ```
 
@@ -31,11 +39,9 @@ data_dir <- system.file("extdata", package = "EpiData")
 metadata_file <- list.files(data_dir, pattern = "\\.tsv\\.gz$", full.names = TRUE)
 metadata <- read.table(metadata_file, header = TRUE)
 rownames(metadata) <- metadata[, 2]
-metadata <- metadata
-metadata <- SummarizedExperiment::DataFrame(metadata)
 
 # BSseq object
-bs <- bsseq::read.bismark(files = files, 
+bs <- bsseq::read.bismark(files = cov_files, 
                           colData = metadata, 
                           strandCollapse = TRUE,
                           rmZeroCov = TRUE)
