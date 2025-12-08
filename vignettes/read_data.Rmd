@@ -25,7 +25,9 @@ Let's load the package first.
 library(EpiData)
 ```
 
-# Reading data
+# Preparing data 
+
+## Reading data
 
 The `EpiData` uses [`BSseq`](https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#3_Using_objects_of_class_BSseq) object as the primary data input. Please refer to [this guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/bsseq/inst/doc/bsseq.html) for details about how to create and manipulate `BSseq` objects. Below is an example from our package:
 
@@ -48,7 +50,7 @@ bs <- bsseq::read.bismark(files = cov_files,
 bs
 ```
 
-# Filtering missing data
+## Filtering missing data
 
 A high-quality set of CpG sites is essential before carrying out downstream imputation or modeling. To achieve this, we first retain CpGs that meet a minimum coverage threshold (`min_cov`) in at least a specified proportion of samples (`row_min`). After filtering the CpGs, we then retain only those samples that satisfy the same coverage requirement in at least a specified proportion of the remaining CpGs (`col_min`). This two-step filtering strategy ensures that both rows (CpGs) and columns (samples) contain sufficient, high-confidence coverage information, providing a robust foundation for subsequent imputation and analysis.
 
@@ -58,5 +60,34 @@ bs_filt <- filterCov(bs = bs,
                      min_cov = 10,
                      row_min = 0.5, 
                      col_min = 0.5)
+bs_filt
 ```
 
+`#TODO:` I didn't implement your variance filtering (`cleanOutliers`) at this stage. If truly needed, I can make it a part of the function above.
+
+## Preparing the required matrices
+
+Various matrices are required for downstream imputation process. It includes:
+
+| Matrix / Object | Description                                                                       |
+|:----------------|:----------------------------------------------------------------------------------|
+| `coverage`      | Total CpG coverage                                                                |
+| `meth`          | Number of methylated reads                                                        |
+| `unmeth`        | Number of unmethylated reads                                                      |
+| `beta`          | Methylation percentages                                                           |
+| `m`             | M-values per CpG per sample, calculated as `log2(meth/unmeth)`                    |
+| `gr`            | `GRanges` object containing genomic coordinates (chromosome, start, end, strand)  |
+
+```{r calc_matrices}
+bs_mat <- extractMethData(bs_filt)
+lapply(bs_mat, head, 3)
+```
+
+
+# TODOs
+
+## After alpha version
+
+`#TODO:` At this stage, `extractMethData` return a list object with all the matrices. It is probably not optimal for big datasets, therefore, we may want to make it more modular to calculate the matrices required one at a time. We should decide on this after the package is functional again.
+
+`#TODO:` We need to cleanup the package dependencies once the alpha-version of the package is ready. 

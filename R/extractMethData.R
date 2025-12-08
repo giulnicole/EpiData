@@ -30,7 +30,8 @@
 #' @return A named list containing matrices (coverage, meth, unmeth, beta, m)
 #'   and a \code{GRanges} object with CpG coordinates.
 #'
-#' @import bsseq
+#' @importFrom bsseq getCoverage
+#' @importFrom SummarizedExperiment rowRanges
 #' @examples
 #'
 #' library(bsseq)
