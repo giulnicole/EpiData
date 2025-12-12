@@ -7,10 +7,12 @@
 #' }
 #'
 #' @param bs A \code{BSseq} object.
-#' @return Returns the same \code{BSseq} object with rownames
+#' @param verbose Print detailed output message (default = TRUE)
+#'
+#' @return Returns the same \code{BSseq} object with zero-coverages assigned to NA and rownames with the genomic positions.
 #'
 #' @importFrom bsseq granges getCoverage
-#' @importFrom GenomicRange seqnames ranges
+#' @importFrom GenomicRanges seqnames ranges
 #'
 #' @examples
 #'
