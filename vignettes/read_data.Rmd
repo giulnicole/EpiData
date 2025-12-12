@@ -62,8 +62,17 @@ bs_filt <- filterCov(bs = bs,
                      col_min = 0.5)
 bs_filt
 ```
-
 `#TODO:` I didn't implement your variance filtering (`cleanOutliers`) at this stage. If truly needed, I can make it a part of the function above.
+
+## Preparing `BSseq` object
+
+Before we proceed with the imputation step, we need to make sure that the CpG sites that has zero coverage is actually a missing value and therefore treated as `NA`.
+
+```{r process_data}
+bs_filt <- processBSseq(bs_filt)
+```
+
+
 
 ## Preparing the required matrices
 
@@ -80,8 +89,23 @@ Various matrices are required for downstream imputation process. It includes:
 
 ```{r calc_matrices}
 bs_mat <- extractMethData(bs_filt)
-lapply(bs_mat, head, 3)
+lapply(bs_mat, head, 5)
 ```
+
+# Notes
+
+## `BSseq` data: ratSpermBSseqData
+
+I have built a new R data package with using the entire dataset from [GSE173898](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE173898). Please see the instructions below: 
+
+```{r data_ratSpermBSseqData}
+if (!require("remotes")) install.packages("remotes")
+if (!require("ratSpermBSseqData")) remotes::install_github("altintasali/ratSpermBSseqData", dependencies = TRUE)
+library(ratSpermBSseqData)
+data("ratSpermBSseqData")
+```
+
+Once you load the data, you can prosses it `BSseq` object as mentioned at \@ref{Preparing-BSseq-object} and proceed with the downstream analysis.
 
 
 # TODOs
