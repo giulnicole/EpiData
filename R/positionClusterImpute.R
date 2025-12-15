@@ -5,7 +5,7 @@
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
 #' @param impute_method "mean" or "knn" (requires `impute` package).
 #' @return Imputed M-value matrix (rows = CpGs, columns = samples).
-#' @noRd
+#' @export
 positionClusterImpute <- function(m_values, positions,
                                   dist_threshold = 1000,
                                   impute_method = "mean") {
