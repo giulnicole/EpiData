@@ -52,6 +52,7 @@ extractMethData <- function(bs, log2_offset = 2) {
   meth <- bsseq::getCoverage(bs, type = "M")
   unmeth <- cov - meth
 
+
   # Beta values
   beta <- meth / cov
   beta[cov == 0] <- NA
@@ -59,12 +60,21 @@ extractMethData <- function(bs, log2_offset = 2) {
   # M-values
   m <- log2((meth + log2_offset) / (unmeth + log2_offset))
 
-  list(
-    coverage = cov,
-    meth = meth,
-    unmeth = unmeth,
-    beta = beta,
+  cpg_ids <- paste0(GenomicRanges::seqnames(gr), "-", GenomicRanges::start(gr))
+
+  rownames(m) <- cpg_ids
+  rownames(beta) <- cpg_ids
+
+  list(beta = beta,
     m = m,
     gr = gr
   )
+
+
+
 }
+
+
+
+
+
