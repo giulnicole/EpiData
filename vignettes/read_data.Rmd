@@ -49,6 +49,7 @@ bs <- bsseq::read.bismark(files = cov_files,
                           strandCollapse = TRUE,
                           rmZeroCov = TRUE)
 bs
+
 ```
 
 ## Filtering missing data
@@ -93,18 +94,38 @@ bs_mat <- extractMethData(bs_filt)
 lapply(bs_mat, head, 5)
 ```
 
+
+
+```{r}
+
+m_mat <- bs_mat$m
+gr<- bs_mat$gr
+
+positions <- data.frame(
+  CpG = rownames(m_mat),      
+  chr = GenomicRanges::seqnames(gr),
+  pos = GenomicRanges::start(gr),
+  stringsAsFactors = FALSE)
+
+
+res <- positionClusterImpute(
+  m_values = m_mat,
+  positions = positions,
+  dist_threshold = 1000,
+  impute_method = "mean"   # or "knn"
+)
+
+
+```
+
+
+
 # Notes
 
 ## `BSseq` data: ratSpermBSseqData
 
 I have built a new R data package with using the entire dataset from [GSE173898](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE173898). Please see the instructions below: 
 
-```{r data_ratSpermBSseqData}
-if (!require("remotes")) install.packages("remotes")
-if (!require("ratSpermBSseqData")) remotes::install_github("altintasali/ratSpermBSseqData", dependencies = TRUE)
-library(ratSpermBSseqData)
-data("ratSpermBSseqData")
-```
 
 Once you load the data, you can prosses it `BSseq` object as mentioned at \@ref{Preparing-BSseq-object} and proceed with the downstream analysis.
 
@@ -116,3 +137,7 @@ Once you load the data, you can prosses it `BSseq` object as mentioned at \@ref{
 `#TODO:` At this stage, `extractMethData` return a list object with all the matrices. It is probably not optimal for big datasets, therefore, we may want to make it more modular to calculate the matrices required one at a time. We should decide on this after the package is functional again.
 
 `#TODO:` We need to cleanup the package dependencies once the alpha-version of the package is ready. 
+
+
+
+
