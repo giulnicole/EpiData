@@ -31,7 +31,7 @@ library(EpiData)
 
 The `EpiData` uses [`BSseq`](https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#3_Using_objects_of_class_BSseq) object as the primary data input. Please refer to [this guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/bsseq/inst/doc/bsseq.html) for details about how to create and manipulate `BSseq` objects. Below is an example from our package:
 
-```{r read_data}
+```{r read_data, warning=F}
 # Data
 
 data_dir <- system.file("extdata", package = "EpiData")
@@ -121,20 +121,6 @@ res <- positionClusterImpute(
 
 
 # Notes
-
-## `BSseq` data: ratSpermBSseqData
-
-I have built a new R data package with using the entire dataset from [GSE173898](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE173898). Please see the instructions below: 
-
-
-Once you load the data, you can prosses it `BSseq` object as mentioned at \@ref{Preparing-BSseq-object} and proceed with the downstream analysis.
-
-
-# TODOs
-
-## After alpha version
-
-`#TODO:` At this stage, `extractMethData` return a list object with all the matrices. It is probably not optimal for big datasets, therefore, we may want to make it more modular to calculate the matrices required one at a time. We should decide on this after the package is functional again.
 
 `#TODO:` We need to cleanup the package dependencies once the alpha-version of the package is ready. 
 
