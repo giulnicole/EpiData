@@ -32,6 +32,7 @@ library(EpiData)
 The `EpiData` uses [`BSseq`](https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#3_Using_objects_of_class_BSseq) object as the primary data input. Please refer to [this guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/bsseq/inst/doc/bsseq.html) for details about how to create and manipulate `BSseq` objects. Below is an example from our package:
 
 ```{r read_data, warning=F}
+
 # Data
 data_dir <- system.file("extdata", package = "EpiData")
 cov_files <- list.files(data_dir, pattern = "\\.cov\\.gz$", full.names = TRUE)
