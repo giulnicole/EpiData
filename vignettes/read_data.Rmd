@@ -33,6 +33,7 @@ The `EpiData` uses [`BSseq`](https://www.bioconductor.org/packages/release/bioc/
 
 ```{r read_data}
 # Data
+
 data_dir <- system.file("extdata", package = "EpiData")
 cov_files <- list.files(data_dir, pattern = "\\.cov\\.gz$", full.names = TRUE)
 
