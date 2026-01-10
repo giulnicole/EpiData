@@ -74,6 +74,7 @@ cov_files <- list.files(data_dir, pattern = "\\.cov\\.gz$", full.names = TRUE)
 # Metadata (not necessary, but good to have)
 data_dir <- system.file("extdata", package = "EpiData")
 metadata_file <- list.files(data_dir, pattern = "\\.tsv\\.gz$", full.names = TRUE)
+
 metadata <- read.table(metadata_file, header = TRUE)
 rownames(metadata) <- metadata[, 2]
 
