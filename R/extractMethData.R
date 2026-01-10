@@ -1,0 +1,79 @@
+#' Extract methylation counts, values, and genomic coordinates from a BSseq object
+#'
+#' This function extracts commonly used DNA methylation matrices from a
+#' \code{BSseq} object, including total coverage, methylated counts,
+#' unmethylated counts, beta values, M-values, and genomic coordinates
+#' (\code{GRanges}). It wraps \code{\link[bsseq]{getCoverage}} and
+#' \code{rowRanges}.
+#'
+#' @param bs A \code{BSseq} object.
+#' @param log2_offset A numeric offset added to methylated and unmethylated
+#'   counts before computing M-values. Defaults to \code{2}, the standard offset
+#'   used in many methylation workflows to stabilize log ratios.
+#'
+#' @details
+#' The returned list includes:
+#' \itemize{
+#'   \item \strong{coverage}: total coverage matrix (Cov)
+#'   \item \strong{meth}: methylated counts (M)
+#'   \item \strong{unmeth}: unmethylated counts (Cov - M)
+#'   \item \strong{beta}: methylation proportion (M / Cov), with \code{NA} when
+#'         coverage is zero
+#'   \item \strong{m}: M-values computed as
+#'         \code{log2((M + offset) / (U + offset))}
+#'   \item \strong{gr}: genomic coordinates (\code{GRanges}) for each CpG site
+#' }
+#'
+#' Beta values reflect methylation proportion, while M-values provide more
+#' stable variance properties for differential methylation modeling.
+#'
+#' @return A named list containing matrices (coverage, meth, unmeth, beta, m)
+#'   and a \code{GRanges} object with CpG coordinates.
+#'
+#' @importFrom bsseq getCoverage
+#' @importFrom SummarizedExperiment rowRanges
+#' @examples
+#'
+#' library(bsseq)
+#' data(BS.chr22)
+#' res <- extractMethData(BS.chr22)
+#' head(res$m)
+#'
+#' @export
+extractMethData <- function(bs, log2_offset = 2) {
+  if (!inherits(bs, "BSseq"))
+    stop("Input must be a BSseq object")
+
+  # Genomic coordinates
+  gr <- SummarizedExperiment::rowRanges(bs)
+
+  # Raw counts
+  cov <- bsseq::getCoverage(bs, type = "Cov")
+  meth <- bsseq::getCoverage(bs, type = "M")
+  unmeth <- cov - meth
+
+
+  # Beta values
+  beta <- meth / cov
+  beta[cov == 0] <- NA
+
+  # M-values
+  m <- log2((meth + log2_offset) / (unmeth + log2_offset))
+
+  cpg_ids <- paste0(GenomicRanges::seqnames(gr), "-", GenomicRanges::start(gr))
+
+  rownames(m) <- cpg_ids
+  rownames(beta) <- cpg_ids
+
+  list(beta = beta,
+       m = m,
+       gr = gr
+  )
+
+
+
+}
+
+
+
+
