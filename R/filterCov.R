@@ -1,5 +1,6 @@
 #' Filter a BSseq object based on minimum coverage across CpGs and samples
 #'
+#' @importFrom bsseq getCoverage
 #' @param bs A BSseq object.
 #' @param min_cov Minimum coverage required for a CpG in a sample.
 #' @param row_min The minimum percent missing data allowed in any row (CpG)
@@ -18,7 +19,7 @@
 #'                      col_min = 0.5)
 #' bs
 #' bs_filt
-
+#' @export
 filterCov <- function(bs,
                       min_cov = 10,
                       row_min = 0.5,
