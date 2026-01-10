@@ -31,23 +31,6 @@ Installing EpiData package:
 BiocManager::install("Epidata")
 ```
 
----
-title: "Reading data into EpiData"
-author: "Your Name"
-date: "`r Sys.Date()`"
-output:
-  rmarkdown::html_vignette:
-    toc: true
-vignette: >
-  %\VignetteIndexEntry{Read Data}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 # Introduction
 
 This is a short vignette to give an example about how to read bisulfite sequencing data into `EpiData` package. 
@@ -97,7 +80,6 @@ bs_filt <- filterCov(bs = bs,
                      col_min = 0.5)
 bs_filt
 ```
-`#TODO:` I didn't implement your variance filtering (`cleanOutliers`) at this stage. If truly needed, I can make it a part of the function above.
 
 ## Preparing `BSseq` object
 
