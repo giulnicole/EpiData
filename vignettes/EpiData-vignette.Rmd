@@ -49,19 +49,6 @@ The main objectives of EpiData are:
 
 Please install devtools and Bioconductor if you haven't them yet.
 
-Required Bioconductor/devtools packages:
-```{r}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-install.packages("devtools")
-```
-
-Installing EpiData package:
-```{r}
-BiocManager::install("Epidata")
-```
-
 # Introduction
 
 This is a short vignette to give an example about how to read bisulfite sequencing data into `EpiData` package. 
