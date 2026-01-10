@@ -14,7 +14,7 @@ Imports:
     IRanges, 
     S4Vectors,
     GenomicRanges,
-    SummarizedExperiment,
+    SummarizedExperiment
 Suggests: 
     knitr,
     RefManageR,

@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 ## Introduction
 
 This package is an alternative missing data imputation pipeline for bisulfite sequencing. 
@@ -86,7 +87,6 @@ bs <- bsseq::read.bismark(files = cov_files,
 bs
 ```
 
-
 ## Filtering missing data
 
 A high-quality set of CpG sites is essential before carrying out downstream imputation or modeling. To achieve this, we first retain CpGs that meet a minimum coverage threshold (`min_cov`) in at least a specified proportion of samples (`row_min`). After filtering the CpGs, we then retain only those samples that satisfy the same coverage requirement in at least a specified proportion of the remaining CpGs (`col_min`). This two-step filtering strategy ensures that both rows (CpGs) and columns (samples) contain sufficient, high-confidence coverage information, providing a robust foundation for subsequent imputation and analysis.
@@ -129,7 +129,6 @@ lapply(bs_mat, head, 5)
 ```
 
 
-
 ```{r}
 
 m_mat <- bs_mat$m
@@ -148,6 +147,5 @@ res <- positionClusterImpute(
   dist_threshold = 1000,
   impute_method = "mean"   # or "knn"
 )
-
 
 ```
