@@ -30,153 +30,136 @@ The main objectives of EpiData are:
 
 - to allow flexible integration with downstream pipelines (e.g., differential methylation, EWAS, or multi-omics integration)
 
-### Loading the package:
+# Description of the package
 
-```{r setup}
+Welcome to the `EpiData` project, which is a package for enhancing reliability in DNA methylation analysis (contributing to normalize M value disstribution per CpG) and propose a novel approach for imputing missing data from bisulfite sequencing experiments. 
+Accurate imputation of missing methylation values is a crucial step in bisulfite sequencing (BS-seq) analysis, as incomplete data can bias downstream association or differential methylation studies.
+EpiData provides a modular and reproducible framework for preprocessing and imputation of BS-seq data.
+
+The main objectives of EpiData are:
+
+- to ensure data integrity and quality before statistical modeling
+
+- to provide parallelized and scalable computation for large methylome datasets
+
+- to allow flexible integration with downstream pipelines (e.g., differential methylation, EWAS, or multi-omics integration)
+
+
+## Installing the package
+
+Please install devtools and Bioconductor if you haven't them yet.
+
+Required Bioconductor/devtools packages:
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+install.packages("devtools")
+```
+
+Installing EpiData package:
+```{r}
+BiocManager::install("Epidata")
+```
+
+# Introduction
+
+This is a short vignette to give an example about how to read bisulfite sequencing data into `EpiData` package. 
+
+Let's load the package first. 
+
+```{r library}
 library(EpiData)
 ```
 
+# Preparing data 
 
+## Reading data
 
-This vignette demonstrated a complete pipeline for:
+The `EpiData` uses [`BSseq`](https://www.bioconductor.org/packages/release/bioc/vignettes/bsseq/inst/doc/bsseq.html#3_Using_objects_of_class_BSseq) object as the primary data input. Please refer to [this guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/bsseq/inst/doc/bsseq.html) for details about how to create and manipulate `BSseq` objects. Below is an example from our package:
 
-- Cleaning coverage and removing outliers
+```{r read_data, warning=F}
 
-- Computing methylation values
+# Data
+data_dir <- system.file("extdata", package = "EpiData")
+cov_files <- list.files(data_dir, pattern = "\\.cov\\.gz$", full.names = TRUE)
 
-- Calculating CpG-level statistics
+# Metadata (not necessary, but good to have)
+data_dir <- system.file("extdata", package = "EpiData")
+metadata_file <- list.files(data_dir, pattern = "\\.tsv\\.gz$", full.names = TRUE)
+metadata <- read.table(metadata_file, header = TRUE)
+rownames(metadata) <- metadata[, 2]
 
-- Imputing missing values and combining results
-
-
-We will go through each function step-by-step, from filtering and outlier removal to computing CpG statistics and imputing missing data. The workflow ensures high-quality methylation matrices ready for downstream analysis such as differential methylation or association studies.
-
-### Data import and description
-
-```{r}
-data("bs_list")
+# BSseq object
+bs <- bsseq::read.bismark(files = cov_files, 
+                          colData = metadata, 
+                          strandCollapse = TRUE,
+                          rmZeroCov = TRUE)
+bs
 ```
 
 
-The object bs_list contains example methylation data. It includes three assays: the total coverage count matrix, the methylated counts matrix, the unmethylated counts matrix for 150 CpG (150 rows) and 10 individuals. 
+## Filtering missing data
 
-Otherwise own data can be use, derived from object class such as **SummarizedExperiment** object or from .txt files of raw matrices (coverage, methylated counts matrix and unmethylated counts matrix) with the function **readBS()**.
+A high-quality set of CpG sites is essential before carrying out downstream imputation or modeling. To achieve this, we first retain CpGs that meet a minimum coverage threshold (`min_cov`) in at least a specified proportion of samples (`row_min`). After filtering the CpGs, we then retain only those samples that satisfy the same coverage requirement in at least a specified proportion of the remaining CpGs (`col_min`). This two-step filtering strategy ensures that both rows (CpGs) and columns (samples) contain sufficient, high-confidence coverage information, providing a robust foundation for subsequent imputation and analysis.
 
-```{r}
-coverage_file <- system.file("extdata/coverage.txt", package = "EpiData")
-met_file      <- system.file("extdata/methylated_counts.txt", package = "EpiData")
-unmet_file    <- system.file("extdata/unmethylated_counts.txt", package = "EpiData")
-file_paths <- c(coverage_file, met_file, unmet_file)
+```{r filter_data}
+# Filter low-coverage CpGs and samples
+bs_filt <- filterCov(bs = bs,
+                     min_cov = 10,
+                     row_min = 0.5, 
+                     col_min = 0.5)
+bs_filt
+```
 
-bs_list2<- readBS(file_paths)
+## Preparing `BSseq` object
+
+Before we proceed with the imputation step, we need to make sure that the CpG sites that has zero coverage is actually a missing value and therefore treated as `NA`.
+
+```{r process_data}
+bs_filt <- processBSseq(bs_filt)
 ```
 
 
-## Workflow
 
-This vignette guides you through the complete imputation workflow, demonstrating how to:
+## Preparing the required matrices
 
-- Clean coverage and remove outliers
+Various matrices are required for downstream imputation process. It includes:
 
-- Compute methylation proportions
+| Matrix / Object | Description                                                                       |
+|:----------------|:----------------------------------------------------------------------------------|
+| `coverage`      | Total CpG coverage                                                                |
+| `meth`          | Number of methylated reads                                                        |
+| `unmeth`        | Number of unmethylated reads                                                      |
+| `beta`          | Methylation percentages                                                           |
+| `m`             | M-values per CpG per sample, calculated as `log2(meth/unmeth)`                    |
+| `gr`            | `GRanges` object containing genomic coordinates (chromosome, start, end, strand)  |
 
-- Summarize CpG-level statistics
+```{r calc_matrices}
+bs_mat <- extractMethData(bs_filt)
+lapply(bs_mat, head, 5)
+```
 
-- Impute missing values using correlation-based methods
-
-- Combine results into ready-to-analyze methylation matrices
-
-The resulting datasets are high-quality, imputed methylation matrices suitable for downstream analyses such as differential methylation testing, clustering, or predictive modeling.
-
-### Step 1: Cleaning the coverage matrix
-
-We start by removing CpGs or individuals with too many missing values using **cleanCovMat()**.
-Missing or low-coverage CpGs can distort methylation estimates.
 
 
 ```{r}
-clean.coverage <- cleanCovMat(
-input.obj = bs_list,
-max_na_cpg = 0.5, # max 50% missing per CpG
-max_na_ind = 0.2, # max 20% missing per individual
-cpg_removal_threshold = 10 # minimum number of valid CpGs required
+
+m_mat <- bs_mat$m
+gr<- bs_mat$gr
+
+positions <- data.frame(
+  CpG = rownames(m_mat),      
+  chr = GenomicRanges::seqnames(gr),
+  pos = GenomicRanges::start(gr),
+  stringsAsFactors = FALSE)
+
+
+res <- positionClusterImpute(
+  m_values = m_mat,
+  positions = positions,
+  dist_threshold = 1000,
+  impute_method = "mean"   # or "knn"
 )
+
+
 ```
-
-This step returns a cleaned coverage object where low-quality CpGs or samples are excluded.
-The function automatically retains metadata compatibility with subsequent steps.
-
-
-
-
-### Step 2: Outlier detection and removal
-
-Extreme methylation or coverage values may arise from technical noise or sequencing artifacts.
-**cleanOutliers()** detects and optionally removes these points based on customizable thresholds.
-
-```{r}
-clean.out <- cleanOutliers(
-filtered.obj = clean.coverage,
-outlier_threshold = 0,
-remove_outliers = TRUE
-)
-```
-
-This step ensures that methylation values reflect biological rather than technical variation.
-
-### Step 3: Compute methylation values
-
-Methylation proportions are calculated as the ratio of methylated counts to total coverage.
-Convert the cleaned object into methylation proportion matrices with **methValues()**.
-
-```{r}
-mat.values <- methValues(clean.coverage)
-```
-
-### Step 4: Compute CpG-level statistics
-
-CpG-wise summary statistics (mean, variance, missingness) are computed in parallel using **statsCpG_parallel()**.
-This step provides an overview of methylation distribution and reliability across the dataset.
-
-
-```{r}
-stat.result <- statsCpG_parallel(mat.values)
-```
-
-The output is a list of chromosome-specific results, allowing scalable analysis of genome-wide data.
-
-
-### Step 5: Impute missing data
-
-Missing methylation values are imputed using correlation-based imputation via **imputeCorr_parallel()**.
-This approach uses CpG-level correlations and local methylation patterns to predict missing entries, preserving biological structure.
-
-```{r}
-imputed <- imputeCorr_parallel(stat.result)
-```
-
-Each chromosome’s imputed object retains both raw and imputed methylation matrices, enabling traceability.
-
-
-### Step 6: Combine imputed data frames
-
-Each chromosome result includes an imputed data frame.
-We combine all imputed data frames into a single object using the custom helper function below.
-
-```{r}
-combine_imputed <- function(chr_list) {
-  imputed_list <- lapply(chr_list, function(x) x[["imputed"]]) 
-  do.call(rbind, imputed_list)                                  
-}
-
-# Example use:
-combined_imputed_df <- combine_imputed(imputed)
-```
-
-This unified imputed dataset is now ready for downstream statistical analysis and visualization.
-
-
-
-
-
-
