@@ -1,13 +1,21 @@
-#' Filter a BSseq object based on minimum coverage across CpGs and samples
+#' @title filterCov
+#' @description
+#' \code{} This function performs basic quality filtering on bisulfite sequencing data stored in a **BSseq** object.
+#' CpG loci with insufficient read coverage across samples are removed, followed by optional filtering of CpGs and/or samples based on the proportion of missing or low-coverage values.
+#' The intent is to retain only the most informative sites and samples for downstream analysis (e.g., methylation modelling or differential methylation testing),
+#' while dropping loci with sparse data that may bias or reduce statistical power.
 #'
 #' @importFrom bsseq getCoverage
+#'
 #' @param bs A BSseq object.
 #' @param min_cov Minimum coverage required for a CpG in a sample.
-#' @param row_min The minimum percent missing data allowed in any row (CpG)
-#' @param col_min The minimum percent missing data allowed in any column (Samples)
+#' @param row_min The minimum percent missing data allowed in any row (CpG).
+#' @param col_min The minimum percent missing data allowed in any column (Samples).
+#'
+#' @name filterCov
 #'
 #' @return A filtered BSseq object with CpGs and samples removed.
-#' @export
+#'
 #'
 #' @examples
 #' library(bsseq)

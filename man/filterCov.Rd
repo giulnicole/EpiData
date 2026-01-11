@@ -2,7 +2,7 @@
 % Please edit documentation in R/filterCov.R
 \name{filterCov}
 \alias{filterCov}
-\title{Filter a BSseq object based on minimum coverage across CpGs and samples}
+\title{filterCov}
 \usage{
 filterCov(bs, min_cov = 10, row_min = 0.5, col_min = 0.5)
 }
@@ -11,15 +11,18 @@ filterCov(bs, min_cov = 10, row_min = 0.5, col_min = 0.5)
 
 \item{min_cov}{Minimum coverage required for a CpG in a sample.}
 
-\item{row_min}{The minimum percent missing data allowed in any row (CpG)}
+\item{row_min}{The minimum percent missing data allowed in any row (CpG).}
 
-\item{col_min}{The minimum percent missing data allowed in any column (Samples)}
+\item{col_min}{The minimum percent missing data allowed in any column (Samples).}
 }
 \value{
 A filtered BSseq object with CpGs and samples removed.
 }
 \description{
-Filter a BSseq object based on minimum coverage across CpGs and samples
+\code{} This function performs basic quality filtering on bisulfite sequencing data stored in a \strong{BSseq} object.
+CpG loci with insufficient read coverage across samples are removed, followed by optional filtering of CpGs and/or samples based on the proportion of missing or low-coverage values.
+The intent is to retain only the most informative sites and samples for downstream analysis (e.g., methylation modelling or differential methylation testing),
+while dropping loci with sparse data that may bias or reduce statistical power.
 }
 \examples{
 library(bsseq)

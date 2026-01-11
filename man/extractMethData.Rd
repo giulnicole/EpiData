@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractMethData.R
 \name{extractMethData}
 \alias{extractMethData}
-\title{Extract methylation counts, values, and genomic coordinates from a BSseq object}
+\title{extractMethData}
 \usage{
 extractMethData(bs, log2_offset = 2)
 }

@@ -1,10 +1,16 @@
 #' @title positionClusterImpute
+#'
 #' @description Cluster CpGs by genomic proximity and impute missing M-values.
+#'
+#' @import impute
+#'
 #' @param m_values Data frame or matrix of M-values (rows = CpGs, columns = samples).
 #' @param positions Data frame with columns: CpG, chr, pos.
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
 #' @param impute_method "mean" or "knn" (requires `impute` package).
+#'
 #' @return Imputed M-value matrix (rows = CpGs, columns = samples).
+#'
 #' @export
 positionClusterImpute <- function(m_values, positions,
                                   dist_threshold = 1000,

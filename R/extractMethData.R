@@ -1,10 +1,14 @@
-#' Extract methylation counts, values, and genomic coordinates from a BSseq object
+#' @title extractMethData
 #'
+#' @description
 #' This function extracts commonly used DNA methylation matrices from a
 #' \code{BSseq} object, including total coverage, methylated counts,
 #' unmethylated counts, beta values, M-values, and genomic coordinates
 #' (\code{GRanges}). It wraps \code{\link[bsseq]{getCoverage}} and
 #' \code{rowRanges}.
+#'
+#' @importFrom bsseq getCoverage
+#' @importFrom SummarizedExperiment rowRanges
 #'
 #' @param bs A \code{BSseq} object.
 #' @param log2_offset A numeric offset added to methylated and unmethylated
@@ -30,8 +34,6 @@
 #' @return A named list containing matrices (coverage, meth, unmeth, beta, m)
 #'   and a \code{GRanges} object with CpG coordinates.
 #'
-#' @importFrom bsseq getCoverage
-#' @importFrom SummarizedExperiment rowRanges
 #' @examples
 #'
 #' library(bsseq)
@@ -73,7 +75,4 @@ extractMethData <- function(bs, log2_offset = 2) {
 
 
 }
-
-
-
 

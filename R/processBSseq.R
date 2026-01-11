@@ -1,3 +1,4 @@
+#' #' @title processBSseq
 #' Process `BSseq` object
 #'
 #' @description
