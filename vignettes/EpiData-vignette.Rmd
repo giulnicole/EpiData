@@ -150,3 +150,23 @@ res <- positionClusterImpute(
 )
 
 ```
+
+
+
+
+```{r}
+report_qc<-methylationQC(res,
+                          beta_values = NULL,
+                          positions = NULL,
+                          sample_metadata = NULL,
+                          max_na_per_probe = 0.2,
+                          max_na_per_sample = 0.1,
+                          m_range = c(-10, 10),
+                          detect_outliers = TRUE,
+                          outlier_sd = 3,
+                          verbose = TRUE) 
+  
+```
+
+
+

@@ -3,6 +3,7 @@
 export(GRconversion)
 export(extractMethData)
 export(filterCov)
+export(methylationQC)
 export(positionClusterImpute)
 export(processBSseq)
 export(readBS)

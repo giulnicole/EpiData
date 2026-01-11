@@ -2,7 +2,8 @@
 % Please edit documentation in R/processBSseq.R
 \name{processBSseq}
 \alias{processBSseq}
-\title{Process \code{BSseq} object}
+\title{#' @title processBSseq
+Process \code{BSseq} object}
 \usage{
 processBSseq(bs, verbose = TRUE)
 }
