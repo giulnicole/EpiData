@@ -109,7 +109,7 @@ bs_mat <- extractMethData(bs_filt)
 lapply(bs_mat, head, 5)
 ```
 
-
+## Imputation
 
 ```{r}
 

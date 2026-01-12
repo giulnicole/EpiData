@@ -128,7 +128,7 @@ Various matrices are required for downstream imputation process. It includes:
 bs_mat <- extractMethData(bs_filt)
 lapply(bs_mat, head, 5)
 ```
-
+## Imputation
 
 ```{r}
 
@@ -151,8 +151,9 @@ res <- positionClusterImpute(
 
 ```
 
+## Post imputation quality control on methylation 
 
-
+It includes checks for outliers, data range, missing values, and sample/probe quality metrics.
 
 ```{r}
 report_qc<-methylationQC(res,

@@ -4,6 +4,10 @@
 #' after imputation, including checks for outliers, data range, missing values,
 #' and sample/probe quality metrics.
 #'
+#' @importFrom stats median
+#' @importFrom stats mad
+#' @importFrom stats var
+#'
 #' @param m_values Data frame or matrix of M-values (rows = CpGs, columns = samples).
 #' @param beta_values Optional. Data frame or matrix of beta-values for additional checks.
 #' @param positions Optional. Data frame with columns: CpG, chr, pos for genomic context.
