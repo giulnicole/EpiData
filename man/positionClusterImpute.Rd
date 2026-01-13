@@ -4,17 +4,10 @@
 \alias{positionClusterImpute}
 \title{positionClusterImpute}
 \usage{
-positionClusterImpute(
-  m_values,
-  positions,
-  dist_threshold = 1000,
-  impute_method = "mean"
-)
+positionClusterImpute(bs, dist_threshold = 1000, impute_method = "mean")
 }
 \arguments{
-\item{m_values}{Data frame or matrix of M-values (rows = CpGs, columns = samples).}
-
-\item{positions}{Data frame with columns: CpG, chr, pos.}
+\item{bs}{\code{BSseq} object.}
 
 \item{dist_threshold}{Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.}
 

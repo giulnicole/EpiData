@@ -4,34 +4,37 @@
 #'
 #' @import impute
 #'
-#' @param m_values Data frame or matrix of M-values (rows = CpGs, columns = samples).
-#' @param positions Data frame with columns: CpG, chr, pos.
+#' @param bs `BSseq` object.
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
 #' @param impute_method "mean" or "knn" (requires `impute` package).
 #'
 #' @return Imputed M-value matrix (rows = CpGs, columns = samples).
 #'
 #' @export
-positionClusterImpute <- function(m_values, positions,
+positionClusterImpute <- function(bs,
                                   dist_threshold = 1000,
                                   impute_method = "mean") {
 
-  if (!all(c("CpG", "chr", "pos") %in% colnames(positions))) {
-    stop("positions must have columns: CpG, chr, pos")
+  # Check if bs is processed
+  if(is.null(rownames(bs))){
+    bs <- processBSseq(bs)
   }
 
-  if (is.null(rownames(m_values))) stop("m_values must have CpG IDs as rownames")
+  # M-values
+  m_values <- bsseq::getCoverage(bs, type = "M")
 
-  # keep only CpGs in both
-  positions <- positions[positions$CpG %in% rownames(m_values), , drop = FALSE]
-  positions <- positions[order(positions$chr, positions$pos), , drop = FALSE]
-  m_values <- as.matrix(m_values[positions$CpG, , drop = FALSE])
+  # Calculate positions
+  positions <- as.data.frame(bsseq::granges(bs))
+  positions <- positions[,c("seqnames","start")]
+  rownames(positions) <- rownames(m_values)
+  colnames(positions) <- c("chr", "pos")
 
+  # Clusters
   cluster_ids <- integer(nrow(positions))
   cluster_num <- 1
   uniq_chr <- unique(positions$chr)
 
-  # cluster CpGs per chromosome
+  # Cluster CpGs per chromosome
   for (chr in uniq_chr) {
     idx <- which(positions$chr == chr)
     if (length(idx) == 0) next
@@ -45,6 +48,8 @@ positionClusterImpute <- function(m_values, positions,
   }
 
   positions$cluster <- cluster_ids
+
+  # Run imputations
   m_imp <- m_values
 
   for (cl in unique(positions$cluster)) {
@@ -71,4 +76,6 @@ positionClusterImpute <- function(m_values, positions,
 
   rownames(m_imp) <- positions$CpG
   return(as.data.frame(m_imp))
+
+  #TODO: Why don't we have a `BSseq` object to return? Then, the user can extract the imputed values by `extractMethData`
 }
