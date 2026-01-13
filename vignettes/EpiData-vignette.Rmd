@@ -131,43 +131,25 @@ lapply(bs_mat, head, 5)
 ## Imputation
 
 ```{r}
-
-m_mat <- bs_mat$m
-gr<- bs_mat$gr
-
-positions <- data.frame(
-  CpG = rownames(m_mat),      
-  chr = GenomicRanges::seqnames(gr),
-  pos = GenomicRanges::start(gr),
-  stringsAsFactors = FALSE)
-
-
-res <- positionClusterImpute(
-  m_values = m_mat,
-  positions = positions,
+res <- BSImpute(
+  bs = bs_filt,
   dist_threshold = 1000,
   impute_method = "mean"   # or "knn"
 )
-
 ```
+
+```{r}
+res2 <- knnBSImpute(
+  bs = bs_filt   # or "knn"
+)
+```
+
 
 ## Post imputation quality control on methylation 
 
 It includes checks for outliers, data range, missing values, and sample/probe quality metrics.
 
-```{r}
-report_qc<-methylationQC(res,
-                          beta_values = NULL,
-                          positions = NULL,
-                          sample_metadata = NULL,
-                          max_na_per_probe = 0.2,
-                          max_na_per_sample = 0.1,
-                          m_range = c(-10, 10),
-                          detect_outliers = TRUE,
-                          outlier_sd = 3,
-                          verbose = TRUE) 
-  
-```
+
 
 
 

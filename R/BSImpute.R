@@ -1,32 +1,41 @@
-#' @title positionClusterImpute
+#' @title BSImpute
 #'
 #' @description Cluster CpGs by genomic proximity and impute missing M-values.
 #'
 #' @import impute
+#' @import SummarizedExperiment
 #'
-#' @param m_values Data frame or matrix of M-values (rows = CpGs, columns = samples).
-#' @param positions Data frame with columns: CpG, chr, pos.
+#' @param bs `BSseq` object.
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
 #' @param impute_method "mean" or "knn" (requires `impute` package).
 #'
 #' @return Imputed M-value matrix (rows = CpGs, columns = samples).
 #'
 #' @export
-positionClusterImpute <- function(m_values, positions,
-                                  dist_threshold = 1000,
+BSImpute <- function(bs, dist_threshold = 1000,
                                   impute_method = "mean") {
 
-  if (!all(c("CpG", "chr", "pos") %in% colnames(positions))) {
-    stop("positions must have columns: CpG, chr, pos")
-  }
 
-  if (is.null(rownames(m_values))) stop("m_values must have CpG IDs as rownames")
+  bs_mat <- extractMethData(bs)
+
+  # Methylation values
+  m_mat <- bs_mat[["m"]]
+
+
+  # gr object
+  gr<- bs_mat$gr
 
   # keep only CpGs in both
-  positions <- positions[positions$CpG %in% rownames(m_values), , drop = FALSE]
-  positions <- positions[order(positions$chr, positions$pos), , drop = FALSE]
-  m_values <- as.matrix(m_values[positions$CpG, , drop = FALSE])
+  positions <- data.frame(
+    CpG = rownames(m_mat),
+    chr = GenomicRanges::seqnames(gr),
+    pos = GenomicRanges::start(gr),
+    stringsAsFactors = FALSE)
 
+  # m-values
+  m_values <- as.matrix(m_mat[positions$CpG, , drop = FALSE])
+
+  # Clusters
   cluster_ids <- integer(nrow(positions))
   cluster_num <- 1
   uniq_chr <- unique(positions$chr)
@@ -70,5 +79,8 @@ positionClusterImpute <- function(m_values, positions,
   }
 
   rownames(m_imp) <- positions$CpG
-  return(as.data.frame(m_imp))
+
+  SummarizedExperiment::assays(bs, withDimnames = FALSE)$M_values_imputed <- m_imp
+  return(bs)
+
 }

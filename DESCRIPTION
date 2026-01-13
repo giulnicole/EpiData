@@ -15,7 +15,8 @@ Imports:
     S4Vectors,
     GenomicRanges,
     SummarizedExperiment,  
-    impute
+    impute,
+    mice
 Suggests: 
     knitr,
     RefManageR,
