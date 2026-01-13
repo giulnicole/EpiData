@@ -130,43 +130,38 @@ lapply(bs_mat, head, 5)
 ```
 ## Imputation
 
-```{r}
-
-m_mat <- bs_mat$m
-gr<- bs_mat$gr
-
-positions <- data.frame(
-  CpG = rownames(m_mat),      
-  chr = GenomicRanges::seqnames(gr),
-  pos = GenomicRanges::start(gr),
-  stringsAsFactors = FALSE)
-
+```{r imputation}
+#TODO: 1) Why does user need to a new data.frame such as 'positions'? We already have all the information inf 'bs_mat' or 'bs_seq' object, which can be utilized inside positionClusterImpute. I updated the function accordingly. 
+#TODO: 2) Small suggestion: rename function to something easier to digest: positionClusterImpute >> bsImpute
+#TODO: 3) IMPORTANT: What happened to all the other imputation methods we had? 
 
 res <- positionClusterImpute(
-  m_values = m_mat,
-  positions = positions,
+  bs = bs_filt,
   dist_threshold = 1000,
-  impute_method = "mean"   # or "knn"
+  impute_method = "knn"   # or "knn"
 )
 
+#TODO: 4) Why don't we have a `BSseq` object to return? Then, the user can extract the imputed values by `extractMethData`
+#TODO: 5) I remember that you used to use a clustering approach to calculate the clusters. Why did you retire it? 
 ```
 
 ## Post imputation quality control on methylation 
 
 It includes checks for outliers, data range, missing values, and sample/probe quality metrics.
 
-```{r}
-report_qc<-methylationQC(res,
-                          beta_values = NULL,
-                          positions = NULL,
-                          sample_metadata = NULL,
-                          max_na_per_probe = 0.2,
-                          max_na_per_sample = 0.1,
-                          m_range = c(-10, 10),
-                          detect_outliers = TRUE,
-                          outlier_sd = 3,
-                          verbose = TRUE) 
-  
+```{r qc}
+report_qc <- methylationQC(res,
+                           beta_values = NULL,
+                           positions = NULL,
+                           sample_metadata = NULL,
+                           max_na_per_probe = 0.2,
+                           max_na_per_sample = 0.1,
+                           m_range = c(-10, 10),
+                           detect_outliers = TRUE,
+                           outlier_sd = 3,
+                           verbose = TRUE) 
+
+#TODO: 1) I really like the QC idea. Thanks for this. However, I cannot see the imputation metrics we used to use such as "RMSE", "MAE" etc. Can you please revive them? In fact, those metrics will tell us how the imputation performed...
 ```
 
 
