@@ -2,8 +2,10 @@
 
 export(BSImpute)
 export(GRconversion)
+export(evaluateImputation)
 export(extractMethData)
 export(filterCov)
+export(imputeWrapper)
 export(injectNA)
 export(knnBSImpute)
 export(methylationQC)
