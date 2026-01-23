@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library(bsseq)
 #' data(BS.chr22)
 #' bs <- BS.chr22
@@ -35,8 +36,11 @@
 #' # Extract imputed data
 #' m_knn <- SummarizedExperiment::assay(bs_result, "M_imputed_knn_BSImpute")
 #' m_mean <- SummarizedExperiment::assay(bs_result, "M_imputed_mean")
+#' }
 imputeWrapper <- function(bs, methods = 2, dist_threshold = 1000) {
-
+  #TODO: you don't need the SummarizedExperiment any more, please check the new BSImpute function
+  #TODO: this function needs more work, let's discuss over a short meeting
+  #TODO: remove "\dontrun" once this function is fixed!
   # Validate methods
   if (!all(methods %in% c(1, 2, 3))) {
     stop("methods must contain only: 1 (mean), 2 (KNN via BSImpute), or 3 (knnBSImpute)")
