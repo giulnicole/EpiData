@@ -131,23 +131,10 @@ lapply(bs_mat, head, 5)
 ## Imputation
 
 ```{r imputation}
-#TODO: 1) Why does user need to a new data.frame such as 'positions'? We already have all the information inf 'bs_mat' or 'bs_seq' object, which can be utilized inside positionClusterImpute. I updated the function accordingly. 
-#TODO: 2) Small suggestion: rename function to something easier to digest: positionClusterImpute >> bsImpute
-#TODO: 3) IMPORTANT: What happened to all the other imputation methods we had? 
-
-res <- BSImpute(
+bs_imp <- BSImpute(
   bs = bs_filt,
   dist_threshold = 1000,
-  impute_method = "knn"   # or "knn"
-)
-
-#TODO: 4) Why don't we have a `BSseq` object to return? Then, the user can extract the imputed values by `extractMethData`
-#TODO: 5) I remember that you used to use a clustering approach to calculate the clusters. Why did you retire it? 
-```
-
-```{r}
-res2 <- knnBSImpute(
-  bs = bs_filt   # or "knn"
+  impute_method = "mean"  # or "knn"
 )
 ```
 
