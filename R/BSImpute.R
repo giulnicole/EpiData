@@ -12,50 +12,27 @@
 #' @return Imputed M-value matrix (rows = CpGs, columns = samples).
 #'
 #' @export
-<<<<<<< HEAD:R/positionClusterImpute.R
-positionClusterImpute <- function(bs,
-                                  dist_threshold = 1000,
-                                  impute_method = "mean") {
-
-  # Check if bs is processed
-  if(is.null(rownames(bs))){
-    bs <- processBSseq(bs)
-  }
-
-  # M-values
-  m_values <- bsseq::getCoverage(bs, type = "M")
-
-  # Calculate positions
-  positions <- as.data.frame(bsseq::granges(bs))
-  positions <- positions[,c("seqnames","start")]
-  rownames(positions) <- rownames(m_values)
-  colnames(positions) <- c("chr", "pos")
-
-=======
-BSImpute <- function(bs, dist_threshold = 1000,
-                                  impute_method = "mean") {
-
+BSImpute <- function(bs, dist_threshold = 1000, impute_method = "mean") {
 
   bs_mat <- extractMethData(bs)
 
   # Methylation values
+  #TODO: The user should have the option to select between m-value or beta-value below
   m_mat <- bs_mat[["m"]]
 
-
   # gr object
-  gr<- bs_mat$gr
+  gr <- bs_mat$gr
 
   # keep only CpGs in both
   positions <- data.frame(
     CpG = rownames(m_mat),
-    chr = GenomicRanges::seqnames(gr),
-    pos = GenomicRanges::start(gr),
+    chr = gr@seqnames,
+    pos = gr@ranges@start,
     stringsAsFactors = FALSE)
 
   # m-values
   m_values <- as.matrix(m_mat[positions$CpG, , drop = FALSE])
 
->>>>>>> master:R/BSImpute.R
   # Clusters
   cluster_ids <- integer(nrow(positions))
   cluster_num <- 1
@@ -76,7 +53,7 @@ BSImpute <- function(bs, dist_threshold = 1000,
 
   positions$cluster <- cluster_ids
 
-  # Run imputations
+  # Run imputations (for m-value)
   m_imp <- m_values
 
   for (cl in unique(positions$cluster)) {
@@ -102,14 +79,43 @@ BSImpute <- function(bs, dist_threshold = 1000,
   }
 
   rownames(m_imp) <- positions$CpG
-<<<<<<< HEAD:R/positionClusterImpute.R
-  return(as.data.frame(m_imp))
 
-  #TODO: Why don't we have a `BSseq` object to return? Then, the user can extract the imputed values by `extractMethData`
-=======
+  # Run imputations (for coverage)
+  #TODO: We need the imputed coverage matrix as well. Since this is a repeatation with above, we need to build a function later
+  cov_values <- bsseq::getCoverage(bs, type = "Cov")
+  cov_imp <- cov_values
 
-  SummarizedExperiment::assays(bs, withDimnames = FALSE)$M_values_imputed <- m_imp
-  return(bs)
+  for (cl in unique(positions$cluster)) {
+    idx <- which(positions$cluster == cl)
+    block <- cov_values[idx, , drop = FALSE]
+    if (!any(is.na(block))) next
 
->>>>>>> master:R/BSImpute.R
+    if (impute_method == "knn" && requireNamespace("impute", quietly = TRUE)) {
+      block <- impute::impute.knn(block, colmax = 1)$data
+    } else {
+      # mean-based imputation
+      for (r in seq_len(nrow(block))) {
+        rowv <- block[r, ]
+        if (all(is.na(rowv))) {
+          block[r, ] <- colMeans(block, na.rm = TRUE)
+        } else {
+          nas <- is.na(rowv)
+          if (any(nas)) block[r, nas] <- mean(rowv, na.rm = TRUE)
+        }
+      }
+    }
+    cov_imp[idx, ] <- block
+  }
+
+  rownames(cov_imp) <- positions$CpG
+
+  # reconstruct BS
+  bs_imp <- reconstructBSseq(val_matrix = m_imp,
+                             cov_matrix = cov_imp,
+                             gr = bsseq::granges(bs),
+                             type = c("m", "beta")[1],
+                             log2_offset = 2,
+                             sampleNames = NULL)
+
+  return(bs_imp)
 }
