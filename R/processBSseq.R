@@ -13,7 +13,6 @@
 #' @return Returns the same \code{BSseq} object with zero-coverages assigned to NA and rownames with the genomic positions.
 #'
 #' @importFrom bsseq granges getCoverage
-#' @importFrom GenomicRanges seqnames ranges
 #'
 #' @examples
 #'
@@ -34,7 +33,7 @@ processBSseq <- function(bs, verbose = TRUE){
     message("Adding rownames to the BSseq object")
   }
   gr <- bsseq::granges(bs)
-  row_id <- paste(GenomicRanges::seqnames(gr), GenomicRanges::ranges(gr), sep = "_")
+  row_id <- paste(gr@seqnames, gr@ranges, sep = "_")
   rownames(bs) <- row_id
 
   if(verbose == TRUE){
