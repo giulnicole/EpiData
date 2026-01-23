@@ -1,8 +1,9 @@
-#' @title positionClusterImpute
+#' @title BSImpute
 #'
 #' @description Cluster CpGs by genomic proximity and impute missing M-values.
 #'
 #' @import impute
+#' @import SummarizedExperiment
 #'
 #' @param bs `BSseq` object.
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
@@ -11,6 +12,7 @@
 #' @return Imputed M-value matrix (rows = CpGs, columns = samples).
 #'
 #' @export
+<<<<<<< HEAD:R/positionClusterImpute.R
 positionClusterImpute <- function(bs,
                                   dist_threshold = 1000,
                                   impute_method = "mean") {
@@ -29,6 +31,31 @@ positionClusterImpute <- function(bs,
   rownames(positions) <- rownames(m_values)
   colnames(positions) <- c("chr", "pos")
 
+=======
+BSImpute <- function(bs, dist_threshold = 1000,
+                                  impute_method = "mean") {
+
+
+  bs_mat <- extractMethData(bs)
+
+  # Methylation values
+  m_mat <- bs_mat[["m"]]
+
+
+  # gr object
+  gr<- bs_mat$gr
+
+  # keep only CpGs in both
+  positions <- data.frame(
+    CpG = rownames(m_mat),
+    chr = GenomicRanges::seqnames(gr),
+    pos = GenomicRanges::start(gr),
+    stringsAsFactors = FALSE)
+
+  # m-values
+  m_values <- as.matrix(m_mat[positions$CpG, , drop = FALSE])
+
+>>>>>>> master:R/BSImpute.R
   # Clusters
   cluster_ids <- integer(nrow(positions))
   cluster_num <- 1
@@ -75,7 +102,14 @@ positionClusterImpute <- function(bs,
   }
 
   rownames(m_imp) <- positions$CpG
+<<<<<<< HEAD:R/positionClusterImpute.R
   return(as.data.frame(m_imp))
 
   #TODO: Why don't we have a `BSseq` object to return? Then, the user can extract the imputed values by `extractMethData`
+=======
+
+  SummarizedExperiment::assays(bs, withDimnames = FALSE)$M_values_imputed <- m_imp
+  return(bs)
+
+>>>>>>> master:R/BSImpute.R
 }
