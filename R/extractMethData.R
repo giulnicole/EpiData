@@ -54,7 +54,6 @@ extractMethData <- function(bs, log2_offset = 2) {
   meth <- bsseq::getCoverage(bs, type = "M")
   unmeth <- cov - meth
 
-
   # Beta values
   beta <- meth / cov
   beta[cov == 0] <- NA
@@ -71,8 +70,6 @@ extractMethData <- function(bs, log2_offset = 2) {
        m = m,
        gr = gr
   )
-
-
 
 }
 
