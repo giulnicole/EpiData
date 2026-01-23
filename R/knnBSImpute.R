@@ -12,7 +12,7 @@
 #'
 #' @export
 knnBSImpute <- function(bs, dist_threshold = 1000) {
-
+  #TODO: please check the function BSImpute to see how to generate the imputed BSseq object and revise this function (if necessary) accordingly
   # Check if impute package is available
   if (!requireNamespace("impute", quietly = TRUE)) {
     stop("Package 'impute' is required. Install it with: BiocManager::install('impute')")

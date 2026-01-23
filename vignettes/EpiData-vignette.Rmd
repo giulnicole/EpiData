@@ -130,17 +130,11 @@ lapply(bs_mat, head, 5)
 ```
 ## Imputation
 
-```{r}
-res <- BSImpute(
+```{r imputation}
+bs_imp <- BSImpute(
   bs = bs_filt,
   dist_threshold = 1000,
-  impute_method = "mean"   # or "knn"
-)
-```
-
-```{r}
-res2 <- knnBSImpute(
-  bs = bs_filt   # or "knn"
+  impute_method = "mean"  # or "knn"
 )
 ```
 
@@ -148,8 +142,5 @@ res2 <- knnBSImpute(
 ## Post imputation quality control on methylation 
 
 It includes checks for outliers, data range, missing values, and sample/probe quality metrics.
-
-
-
 
 

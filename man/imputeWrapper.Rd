@@ -32,6 +32,7 @@ BSseq object with imputed M-values stored in assay slots:
 Apply imputation method(s) to a BSseq object and return it with imputed M-values.
 }
 \examples{
+\dontrun{
 library(bsseq)
 data(BS.chr22)
 bs <- BS.chr22
@@ -48,4 +49,5 @@ bs_result <- imputeWrapper(bs, methods = c(1, 2, 3))
 # Extract imputed data
 m_knn <- SummarizedExperiment::assay(bs_result, "M_imputed_knn_BSImpute")
 m_mean <- SummarizedExperiment::assay(bs_result, "M_imputed_mean")
+}
 }
