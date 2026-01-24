@@ -131,7 +131,7 @@ lapply(bs_mat, head, 5)
 ## Imputation
 
 ```{r}
-res <- BSImpute2(
+res <- BSImpute(
   bs = bs_filt,
   dist_threshold = 1000,
   impute_method = "mean"   # or "knn"
