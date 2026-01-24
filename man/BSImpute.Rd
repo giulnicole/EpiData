@@ -4,7 +4,7 @@
 \alias{BSImpute}
 \title{BSImpute}
 \usage{
-BSImpute(bs, dist_threshold = 1000, impute_method = "mean")
+BSImpute(bs, dist_threshold = 1000, impute_method = "mean", min_cpgs = 10)
 }
 \arguments{
 \item{bs}{\code{BSseq} object.}
@@ -12,9 +12,11 @@ BSImpute(bs, dist_threshold = 1000, impute_method = "mean")
 \item{dist_threshold}{Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.}
 
 \item{impute_method}{"mean" or "knn" (requires \code{impute} package).}
+
+\item{min_cpgs}{Minimum number of CpGs per cluster. Default 10.}
 }
 \value{
-Imputed M-value matrix (rows = CpGs, columns = samples).
+BSseq object with imputed M-values.
 }
 \description{
 Cluster CpGs by genomic proximity and impute missing M-values.

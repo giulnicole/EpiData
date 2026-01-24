@@ -131,18 +131,13 @@ lapply(bs_mat, head, 5)
 ## Imputation
 
 ```{r}
-res <- BSImpute(
+res <- BSImpute2(
   bs = bs_filt,
   dist_threshold = 1000,
   impute_method = "mean"   # or "knn"
 )
 ```
 
-```{r}
-res2 <- knnBSImpute(
-  bs = bs_filt   # or "knn"
-)
-```
 
 
 ## Post imputation quality control on methylation 

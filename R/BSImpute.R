@@ -8,42 +8,37 @@
 #' @param bs `BSseq` object.
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
 #' @param impute_method "mean" or "knn" (requires `impute` package).
+#' @param min_cpgs Minimum number of CpGs per cluster. Default 10.
 #'
-#' @return Imputed M-value matrix (rows = CpGs, columns = samples).
+#' @return BSseq object with imputed M-values.
 #'
 #' @export
-BSImpute <- function(bs, dist_threshold = 1000,
-                                  impute_method = "mean") {
-
+BSImpute <- function(bs,
+                      dist_threshold = 1000,
+                      impute_method = "mean",
+                      min_cpgs = 10) {
 
   bs_mat <- extractMethData(bs)
-
-  # Methylation values
   m_mat <- bs_mat[["m"]]
+  gr <- bs_mat$gr
 
-
-  # gr object
-  gr<- bs_mat$gr
-
-  # keep only CpGs in both
   positions <- data.frame(
     CpG = rownames(m_mat),
     chr = GenomicRanges::seqnames(gr),
     pos = GenomicRanges::start(gr),
-    stringsAsFactors = FALSE)
+    stringsAsFactors = FALSE
+  )
 
-  # m-values
   m_values <- as.matrix(m_mat[positions$CpG, , drop = FALSE])
 
-  # Clusters
+  ## Initial clustering by distance
   cluster_ids <- integer(nrow(positions))
   cluster_num <- 1
-  uniq_chr <- unique(positions$chr)
 
-  # cluster CpGs per chromosome
-  for (chr in uniq_chr) {
+  for (chr in unique(positions$chr)) {
     idx <- which(positions$chr == chr)
     if (length(idx) == 0) next
+
     cluster_ids[idx[1]] <- cluster_num
     for (i in 2:length(idx)) {
       dist_bp <- positions$pos[idx[i]] - positions$pos[idx[i - 1]]
@@ -54,6 +49,29 @@ BSImpute <- function(bs, dist_threshold = 1000,
   }
 
   positions$cluster <- cluster_ids
+
+  ## Introducing minimum CpGs per cluster
+  for (chr in unique(positions$chr)) {
+    chr_idx <- which(positions$chr == chr)
+    chr_clusters <- unique(positions$cluster[chr_idx])
+
+    i <- 1
+    while (i < length(chr_clusters)) {
+      cl <- chr_clusters[i]
+      next_cl <- chr_clusters[i + 1]
+
+      cl_idx <- chr_idx[positions$cluster[chr_idx] == cl]
+
+      if (length(cl_idx) < min_cpgs) {
+        positions$cluster[cl_idx] <- next_cl
+        chr_clusters <- unique(positions$cluster[chr_idx])
+      } else {
+        i <- i + 1
+      }
+    }
+  }
+
+  ## Imputation
   m_imp <- m_values
 
   for (cl in unique(positions$cluster)) {
@@ -64,7 +82,6 @@ BSImpute <- function(bs, dist_threshold = 1000,
     if (impute_method == "knn" && requireNamespace("impute", quietly = TRUE)) {
       block <- impute::impute.knn(block, colmax = 1)$data
     } else {
-      # mean-based imputation
       for (r in seq_len(nrow(block))) {
         rowv <- block[r, ]
         if (all(is.na(rowv))) {
@@ -79,8 +96,7 @@ BSImpute <- function(bs, dist_threshold = 1000,
   }
 
   rownames(m_imp) <- positions$CpG
-
   SummarizedExperiment::assays(bs, withDimnames = FALSE)$M_values_imputed <- m_imp
-  return(bs)
 
+  return(bs)
 }
