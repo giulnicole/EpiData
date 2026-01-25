@@ -7,11 +7,12 @@
 #'
 #' @param bs `BSseq` object.
 #' @param dist_threshold Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.
+#' @param k Number of nearest neighbors for KNN imputation.
 #'
 #' @return BSseq object with imputed M-values in assay slot "M_values_imputed".
 #'
 #' @export
-knnBSImpute <- function(bs, dist_threshold = 1000) {
+knnBSImpute <- function(bs, dist_threshold = 1000, k = 10) {
 
   # Check if impute package is available
   if (!requireNamespace("impute", quietly = TRUE)) {
@@ -59,7 +60,11 @@ knnBSImpute <- function(bs, dist_threshold = 1000) {
     idx <- which(positions$cluster == cl)
     block <- m_values[idx, , drop = FALSE]
     if (any(is.na(block))) {
-      m_imp[idx, ] <- impute::impute.knn(block, colmax = 1)$data
+      m_imp[idx, ] <- impute::impute.knn(
+        block,
+        k = k,
+        colmax = 1
+      )$data
     }
   }
 

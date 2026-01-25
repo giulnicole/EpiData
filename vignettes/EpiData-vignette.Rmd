@@ -139,12 +139,15 @@ res <- BSImpute(
 ```
 
 
-
 ## Post imputation quality control on methylation 
 
 It includes checks for outliers, data range, missing values, and sample/probe quality metrics.
 
 
+```{r}
+score_knn <- BSImputeScore(res , conditioning="cluster")
+
+```
 
 
 

@@ -95,8 +95,14 @@ BSImpute <- function(bs,
     m_imp[idx, ] <- block
   }
 
+
   rownames(m_imp) <- positions$CpG
+  # saving imputed matrix
   SummarizedExperiment::assays(bs, withDimnames = FALSE)$M_values_imputed <- m_imp
 
+  # saving clusters fpr downstream
+  SummarizedExperiment::rowData(bs)$cluster <- positions$cluster
+
   return(bs)
+
 }

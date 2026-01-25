@@ -4,12 +4,14 @@
 \alias{knnBSImpute}
 \title{knnBSImpute}
 \usage{
-knnBSImpute(bs, dist_threshold = 1000)
+knnBSImpute(bs, dist_threshold = 1000, k = 10)
 }
 \arguments{
 \item{bs}{\code{BSseq} object.}
 
 \item{dist_threshold}{Maximum genomic distance (bp) between CpGs in same cluster. Default 1000.}
+
+\item{k}{Number of nearest neighbors for KNN imputation.}
 }
 \value{
 BSseq object with imputed M-values in assay slot "M_values_imputed".
