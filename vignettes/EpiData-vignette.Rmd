@@ -146,8 +146,7 @@ It includes checks for outliers, data range, missing values, and sample/probe qu
 This means each CpG position is evaluated separately, and for each CpG, the predictive distribution is estimated from observed samples, then used to score the imputed values in originally missing samples. This is the correct interpretation of sample-wise I-score (Näf et al. 2022, 2023).
 
 ```{r}
-score_knn <- BSImputeScore(res , conditioning="cluster")
-
+score_with_mean <- BSImputeScore(res , conditioning="cluster")
 ```
 
 
